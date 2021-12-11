@@ -6,7 +6,6 @@
 # 2: import of known third party lib
 
 # 3:  imports of odoo
-from typing_extensions import Required
 from odoo import models, fields, api, _
 
 # 4:  imports from odoo modules
