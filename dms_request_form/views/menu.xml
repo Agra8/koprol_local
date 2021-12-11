@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<menuitem id="dms_request_form_top_menu" name="Request Form" sequence="100" web_icon="website,static/description/icon.png"/>
+		<menuitem id="dms_request_form_sub_menu" name="JRF/ARF" sequence="40" parent="dms_request_form.dms_request_form_top_menu" />
+		<menuitem id="dms_master_jrf_arf_sub_menu" name="Configuration" sequence="40" parent="dms_request_form.dms_request_form_top_menu" />
+	</data>
+</odoo>

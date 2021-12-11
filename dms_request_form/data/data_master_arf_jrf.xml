@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="arf_network" model="master.jrf.arf">
+            <field name="name">Network Access Account</field>
+            <field name="type_form">arf</field>
+        </record>
+        <record id="arf_internal_email" model="master.jrf.arf">
+            <field name="name">Internal E-mail Account</field>
+            <field name="type_form">arf</field>
+        </record>
+        <record id="arf_eksternal_email" model="master.jrf.arf">
+            <field name="name">	External E-mail account</field>
+            <field name="type_form">arf</field>
+        </record>
+        <record id="arf_internet_access" model="master.jrf.arf">
+            <field name="name">Internet Access</field>
+            <field name="type_form">arf</field>
+        </record>
+        <record id="arf_application_access" model="master.jrf.arf">
+            <field name="name">Application Access</field>
+            <field name="type_form">arf</field>
+        </record>
+        <record id="arf_folder_sharing" model="master.jrf.arf">
+            <field name="name">Folder Sharing</field>
+            <field name="type_form">arf</field>
+        </record>
+        <record id="jrf_cpu_error" model="master.jrf.arf">
+            <field name="name">CPU Error</field>
+            <field name="type_form">jrf</field>
+        </record>
+        <record id="jrf_printer_error" model="master.jrf.arf">
+            <field name="name">Printer Error</field>
+            <field name="type_form">jrf</field>
+        </record>
+        <record id="jrf_network" model="master.jrf.arf">
+            <field name="name">Network</field>
+            <field name="type_form">jrf</field>
+        </record>
+    </data>
+</odoo>

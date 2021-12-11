@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="custom_footer" inherit_id="website.layout" name="Footer" active="True">
+            <xpath expr="//div[@id='footer']" position="inside">
+                <script src="/website_request_form/static/src/js/jrf.js"></script>
+            </xpath>
+        </template>
+    </data>
+</odoo>

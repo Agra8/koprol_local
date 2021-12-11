@@ -1,0 +1,78 @@
+<odoo>
+    <data>
+    <!-- Departement -->  
+    <record id="view_department_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.department.tree.inherit</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">1</attribute>
+                <attribute name="edit">0</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='manager_id']" position="attributes">
+                <attribute name="string">Department Head</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='manager_id']" position="after">
+                <field name="code"/>
+            </xpath>
+
+             <!-- Hilangin -->
+            <xpath expr="//field[@name='parent_id']" position="attributes">
+                  <attribute name="invisible">1</attribute>   
+            </xpath> 
+        </field>
+    </record>
+
+    <record id="view_dms_kanban_department_inherit" model="ir.ui.view">
+        <field name="name">hr.department.kanban.inherit</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.hr_department_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="create">0</attribute>
+                <attribute name="edit">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id='view_dms_department_form' model='ir.ui.view'>
+              <field name='name'>dms.department.form</field>
+              <field name='model'>hr.department</field>
+              <field name="inherit_id" ref="hr.view_department_form"/>
+              <field name="arch" type="xml">
+                    <group>
+                    </group>
+
+                    <!-- No Open/Create -->
+                    <xpath expr="//field[@name='manager_id']" position="attributes">
+                        <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                        <attribute name="string">Department Head</attribute>
+                    </xpath>
+
+                    <xpath expr="//field[@name='manager_id']" position="after">
+                        <field name="code"/>
+                    </xpath>
+
+                    <!--hilangin bawaan -->
+
+                    <xpath expr="//field[@name='parent_id']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+                </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_dms_department_list_action">
+          <field name="name">Department</field>
+          <field name="res_model">hr.department</field>
+          <field name="view_mode">tree,form</field>
+    </record>
+
+    
+    <!-- Department -->
+    <menuitem id="dms_departemen_menuitem" parent="dms_menu.dms_master_top_menu" sequence="2" action="action_dms_department_list_action"/>
+    
+    </data>
+</odoo>

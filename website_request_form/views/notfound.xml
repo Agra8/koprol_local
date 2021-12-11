@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="not_found" model="website.page">
+            <field name="is_published">True</field>
+            <field name="website_indexed" eval="False"/>
+            <field name="name">Data Not Found Page</field>
+            <field name="type">qweb</field>
+            <field name="key">website_request_form.not_found</field>
+            <field name="arch" type="xml">
+                <t name="Data Not Found Page" t-name="website_request_form.not_found">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="oe_structure">
+                                <section class="s_picture pt48 pb24 o_colored_level undefined o_cc o_cc1" data-snippet="s_picture" data-name="Picture" style="">
+                                    <div class="o_container_small">
+                                      <h2 style="text-align: center;">
+                                        <font style="font-size: 62px;">&amp;nbsp;</font>
+                                      </h2>
+                                      <p style="text-align: center;">
+                                        <br/>
+                                      </p>
+                                      <div class="row s_nb_column_fixed">
+                                        <div class="col-lg-10 offset-lg-1 pb24 o_colored_level" style="text-align: center;">
+                                          <figure class="figure">
+                                            <lord-icon trigger="loop" scale="500" src="/website_request_form/static/src/images/notfound.json"></lord-icon>
+                                            <figcaption class="figure-caption text-muted py-3">Maaf Data tidak ditemukan.</figcaption>
+                                          </figure>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </section>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+    </data>
+</odoo>

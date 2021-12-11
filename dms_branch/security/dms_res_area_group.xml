@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="dms_res_branch_access_read" model="ir.model.access">
+            <field name="model_id" ref="model_res_branch" />
+            <field name="name">dms_res_branch read</field>
+            <field name="group_id" ref="dms_area.dms_res_area_group_read" />
+            <field name="perm_read">1</field>
+        </record>
+
+        <record id="dms_res_branch_access_update" model="ir.model.access">
+            <field name="model_id" ref="model_res_branch" />
+            <field name="name">dms_res_branch update</field>
+            <field name="group_id" ref="dms_area.dms_res_area_group_update" />
+            <field name="perm_create">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_unlink">1</field>
+        </record>
+        
+        <record id="dms_res_branch_access_delete" model="ir.model.access">
+            <field name="model_id" ref="model_res_branch" />
+            <field name="name">dms_res_branch delete</field>
+            <field name="group_id" ref="dms_area.dms_res_area_group_delete" />
+            <field name="perm_unlink">1</field>
+        </record>
+
+        <record id="dms_res_branch_master_access_read" model="ir.model.access">
+            <field name="model_id" ref="model_res_branch" />
+            <field name="name">dms_res_branch_master read</field>
+            <field name="group_id" ref="dms_area.dms_res_area_master_group_read" />
+            <field name="perm_read">1</field>
+        </record>
+
+        <record id="dms_res_branch_master_access_update" model="ir.model.access">
+            <field name="model_id" ref="model_res_branch" />
+            <field name="name">dms_res_branch_master update</field>
+            <field name="group_id" ref="dms_area.dms_res_area_master_group_update" />
+            <field name="perm_create">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_unlink">1</field>
+        </record>
+        
+        <record id="dms_res_branch_master_access_delete" model="ir.model.access">
+            <field name="model_id" ref="model_res_branch" />
+            <field name="name">dms_res_branch_master delete</field>
+            <field name="group_id" ref="dms_area.dms_res_area_master_group_delete" />
+            <field name="perm_unlink">1</field>
+        </record>
+    
+
+    </data>
+</odoo>
