@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail','email_template_qweb','dms_branch'],
+    'depends': ['base','mail','email_template_qweb','dms_branch','dms_employee'],
 
     # always loaded
     'data': [
