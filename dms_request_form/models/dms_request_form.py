@@ -4,12 +4,15 @@
 # 1: imports of python lib
 
 # 2: import of known third party lib
-import string, random
+import string, random, cryptocode, os
+from cryptography.fernet import Fernet
 
 # 3:  imports of odoo
 from typing import Sequence
 from odoo import models, fields, api
 from odoo.http import request
+import logging
+_logger = logging.getLogger(__name__)
 
 # 4:  imports from odoo modules
 from odoo.exceptions import Warning
@@ -75,10 +78,6 @@ class RequestForm(models.Model):
     @api.model_create_multi
     def create(self,vals_list):
         for vals in vals_list:
-            if 'request_line_ids' in vals:
-                request_line = []
-                request_line = vals['request_line_ids']
-                del vals['request_line_ids']
             branch_obj = self.env['res.branch'].suspend_security().browse(vals['branch_id'])
             doc_code = branch_obj.code
             vals['name'] = self.env['ir.sequence'].suspend_security().get_per_doc_code(doc_code,'RF')
@@ -114,44 +113,54 @@ class RequestForm(models.Model):
                 record['request_form_id'] = create_super.id
                 record['user_id'] = create.employee_id.user_id.id
                 create.suspend_security().write(record)
-            
-            if request_line:
-                # import ipdb; ipdb.set_trace()
-                i = 0
-                while (i < len(request_line)):
-                    request_line[i]['request_form_id'] = create_super.id
-                    create_line = self.env['dms.request.form.line'].suspend_security().create(request_line[i])
-                    i = i+1
-                
-        
+                  
         return create_super
+    
+    def unlink(self):
+        raise Warning('Request Form tidak bisa di delete !')
+    
+    def copy(self):
+        raise Warning('Perhatian!\nData tidak bisa diduplikasi.')
 
 
-    # @api.onchange('branch_id','department_id')
-    # def get_approval_name(self):
-    #     self.branch_id.kacab_id.user_id
+    def get_url(self):
+        urls = request.httprequest.url.replace('//','/').split('/')
+        base_url = urls[0] + "//" + urls[1]
+        return base_url
+    
+    def generate_key(self):
+        key = Fernet.generate_key()
+        with open("secret.key", "wb") as key_file:
+            key_file.write(key)
+    
+    def load_key(self):
+         file_exist = os.path.exists('./secret.key')
+         if file_exist:
+            return open("secret.key", "rb").read()
+         else:
+            return False
 
-
+    def create_token(self, id_request_form, id_penerima):
+        if not self.load_key():
+            self.generate_key()
+        token = self._key_gen()+str(id_request_form)+'n'+str(id_penerima)
+        key = self.load_key()
+        f = Fernet(key)
+        token_encoded = f.encrypt(bytes(token,encoding='utf8'))
+        return token_encoded
 
     def action_rfa(self):
         template = self.env.ref('dms_request_form.template_mail_request_form_result')
         mail = self.env['mail.template'].suspend_security().browse(template.id)
-        urls = request.httprequest.url.replace('//','/').split('/')
-        base_url = urls[0] + "//" + urls[1]
         for user in self.approval_ids.employee_id:
             self.email_penerima = user.work_email
             self.penerima = user.name
-            self.token_penerima = self._key_gen()+str(self.id)+'n'+str(user.id)
+            self.token_penerima = self.create_token(self.id, user.id)
             path = "/approval/%s" % self.token_penerima
             path_reject = "/reject/%s" % self.token_penerima
-            self.approval_url = base_url + path
-            self.reject_url = base_url + path_reject
+            self.approval_url = self.get_url() + path
+            self.reject_url = self.get_url() + path_reject
             mail.send_mail(self.id, force_send=True)
-            self.email_penerima = False
-            self.penerima = False
-            self.token_penerima = False
-            self.approval_url = False
-            self.reject_url = False
         if mail:
             self.write({
                 'state': 'rfa',
@@ -246,7 +255,6 @@ class RequestForm(models.Model):
         
             
     def _check_user_groups(self):
-        # import ipdb; ipdb.set_trace()
         approval_obj = self.approval_ids.search([
             ('request_form_id', '=', self.id),
             ('state','=','open')
@@ -324,6 +332,20 @@ class RequestFormLine(models.Model):
     def _get_default_date(self):
         return self.env['res.branch'].get_default_date()
 
+    
+    def compute_filename(self):
+        for record in self:
+            if record.filename_upload:
+                try:
+                    image_lampiran = self.env['dms.conf.image'].suspend_security().get_img(record.filename_upload)
+                    record.file_show = image_lampiran
+                except FileNotFoundError as err:
+                    _logger.error(err)
+                    record.file_show = False
+            
+            else:
+                record.file_show = False
+
     # 8: fields
 
     name=fields.Char(string='Name')
@@ -331,8 +353,27 @@ class RequestFormLine(models.Model):
     keterangan = fields.Text(string='Keterangan')
     form_id = fields.Many2one(comodel_name='master.jrf.arf', string='Master Request')
     request_form_id = fields.Many2one(comodel_name='dms.request.form', string='Request Form')
+    
+    file_upload = fields.Binary(string='Upload Lampiran')
+    filename_upload = fields.Char(string='Nama Lampiran Upload')
+    filename = fields.Char(string='Nama Lampiran')
+    file_show = fields.Binary(string='lampiran_show', compute='compute_filename')
+    file_download = fields.Binary(string='Download Lampiran', related='file_show')
 
     
+    @api.model
+    def write(self, vals: dict):
+        if vals.get('type_file'):
+            type_file = vals.pop('type_file')
+        
+        if vals.get('file_upload'):
+            file_upload = vals['file_upload']
+            vals['file_upload'] = False
+            tmp_lampiran = vals['filename'].split('.')
+            filename_up = f'[{self.id}]{type_file}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
+            self.env['dms.conf.image'].suspend_security().upload_file(filename_up, file_upload)
+            vals['filename_upload'] = filename_up
+        return super(RequestFormLine, self).write(vals)
     
 class RequestFormLineWizard(models.TransientModel):
     _name="dms.request.form.line.wizard"
@@ -349,6 +390,8 @@ class RequestFormLineWizard(models.TransientModel):
     keterangan = fields.Text(string='Keterangan')
     form_id = fields.Many2one(comodel_name='master.jrf.arf', string='Master Request')
     request_form_id = fields.Many2one(comodel_name='dms.request.form', string='Request Form')
+    attachment_line_ids = fields.One2many(comodel_name='request.form.attachment', inverse_name='request_line_id')
+
 
     def action_add_only(self):
         self.ensure_one()
@@ -417,16 +460,9 @@ class RequestFormApproval(models.Model):
     # 9: constraints & sql constraints
 
     # 10: compute/depends & on change methods
-    # @api.model
-    # def create(self):
-    #     import ipdb; ipdb.set_trace()
-    #     if not self.user_id:
-    #         self.user_id = self.employee_id.user_id.id
 
     @api.onchange('employee_id')
     def _change_job_user(self):
-        # import ipdb; ipdb.set_trace()
-
         self.user_id = self.employee_id.user_id.id
         self.job_id = self.employee_id.job_id.id
         self.job_level = self.employee_id.job_id.job_level
@@ -475,3 +511,67 @@ class RequestFormApproval(models.Model):
             self.env['dms.request.form'].suspend_security().write({
                 'state': 'rejected'
             })
+
+class RequestFormAttachment(models.Model):
+    _name = "request.form.attachment"
+
+    def compute_filename(self):
+        for record in self:
+            if record.filename_upload:
+                try:
+                    image_lampiran = self.env['dms.conf.image'].suspend_security().get_img(record._filename_upload)
+                    record.file_show = image_lampiran
+                except FileNotFoundError as err:
+                    _logger.error(err)
+                    record.file_show = False
+            
+            else:
+                record.file_show = False
+    
+    file_upload = fields.Binary(string='Upload Lampiran')
+    filename_upload = fields.Char(string='Nama Lampiran Upload')
+    file = fields.Binary(string='Lampiran')
+    filename = fields.Char(string='Nama Lampiran')
+    file_show = fields.Binary(string='lampiran_show', compute='compute_filename')
+    file_download = fields.Binary(string='Download Lampiran', related='file_show')
+
+    request_line_id = fields.Many2one(comodel_name='dms.request.form.line',string='Request Line', index=True)
+
+    @api.model
+    def create(self, vals: dict):
+        if not vals.get('file_upload'):
+            raise Warning('File tidak boleh kosong !')
+        if not vals.get('filename'):
+            raise Warning('Filename_upload tidak boleh kosong!')
+        
+        type_file = ''
+        if vals.get('type_file'):
+            type_file = vals.pop('type_file')
+        
+        file_upload = False
+        if vals.get('file_upload'):
+            file_upload = vals['file_upload']
+            vals['file_upload'] = False
+        
+        ids = super(RequestFormAttachment, self).create(vals)
+
+        if file_upload:
+            tmp_lampiran = vals['filename'].split('.')
+            filename_up = f'[{ids.id}]{type_file}-{str(vals["request_line_id"])}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
+            self.env['dms.conf.image'].suspend_security().upload_file(filename_up, file_upload)
+            ids.filename_upload = filename_up
+        return ids
+    
+    @api.model
+    def write(self, vals: dict):
+        if vals.get('type_file'):
+            type_file = vals.pop('type_file')
+        
+        if vals.get('file_upload'):
+            file_upload = vals['file_upload']
+            vals['file_upload'] = False
+            tmp_lampiran = vals['filename'].split('.')
+            filename_up = f'[{self.id}]{type_file}-{str(vals["request_form"])}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
+            self.env['dms.conf.image'].suspend_security().upload_file(filename_up, file_upload)
+            vals['filename_upload'] = filename_up
+        return super(RequestFormAttachment, self).write(vals)

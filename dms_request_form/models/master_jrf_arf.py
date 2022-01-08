@@ -25,7 +25,6 @@ class MasterJrfArf(models.Model):
     # 8: fields
     name = fields.Char(string='Name')
     type_form = fields.Selection(string='Type Form', selection=[('jrf','Job Request'),('arf','Access Request')])
-    # keterangan = fields.Text(string='Keterangan')
 
     # Audit Trail
 
