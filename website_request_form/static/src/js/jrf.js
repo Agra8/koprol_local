@@ -40,7 +40,7 @@ function addRow(value) {
 													</select>
                                               	</td>
                                               <td>
-												<select id="request_id_${index}" name="request_line_ids[]" class="form-control s_website_form_input" placeholder="" required="true">
+												<select id="request_id_${index}" name="request_line_ids" class="form-control s_website_form_input" placeholder="" required="true">
 													<option value="">(Silahkan Pilih)</option>
 												</select>
                                               </td>
@@ -50,6 +50,18 @@ function addRow(value) {
                                                 <textarea class="text-area form-control s_website_form_input s_website_form_model_required" name="request_line_keterangan[]" placeholder="Keterangan" required="true"></textarea>
                                               </td>
                                               </tr>
+											   <tr>
+                                                    <td>
+                                                      <div class="form-group row form-field s_website_form_custom">
+                                                        <div class="col-lg-3 col-md-4 text-left">
+                                                            <label class="col-form-label" for="Scan Ijazah Terakhir">Lampiran</label>
+                                                        </div>
+                                                        <div class="col-lg-7 col-md-8">
+                                                            <input type="file" class="form-control s_website_form_input" name="attachment" required=""/>
+                                                        </div>
+                                                        </div>
+                                                    </td>
+                                                  </tr>
                                             </table>
                                           </td>
                                               <td class="td-custom" style="width:6%;">
