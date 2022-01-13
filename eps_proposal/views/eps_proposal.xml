@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+		<record model="ir.ui.view" id="eps_proposal_tree_view">
+			<field name="name">eps.proposal.tree</field>
+			<field name="model">eps.proposal</field>
+			<field name="arch" type="xml">
+				<tree string="Proposal">
+                    <field name='name'/>
+                    <field name='company_id'/>
+                    <field name='department_id'/>
+                    <field name='nama_proposal'/>
+                    <field name='total'/>
+                    <field name='state'/>
+				</tree>
+			</field>
+		</record>
+			
+		<record model="ir.ui.view" id="eps_proposal">
+			<field name="name">eps.proposal.form</field>
+			<field name="model">eps.proposal</field>
+			<field name="arch" type="xml">
+				<form string="Proposal">
+                    <header>
+                        <button name="button_print" type="object" string="Print" states="draft,wfa,approved,done" icon="fa-print"/>
+                    	<button name="action_request_approval" class="oe_highlight" states="draft" string="RFA" type="object"/>
+                    	<button name="action_approve" class="oe_highlight" states="waiting_for_approval" string="Approve" type="object"/>
+                    	<button string="Reject" name="%(eps_approval.eps_reject_approval_wizard_action)d" type="action" attrs="{'invisible': [('state','!=','waiting_for_approval')]}" context="{'model_name':'eps.proposal','update_value':{'approval_state':'r','state':'draft'}}" />
+	            		<button name="%(eps_approval.eps_cancel_approval_wizard_action)d" states="waiting_for_approval" string="Cancel Approval" type="action" context="{'model_name':'eps.proposal','update_value':{'approval_state':'b','state':'draft'}}"/>
+						<!-- <button name="%(eps_approval.eps_cancel_approved_wizard_action)d" states="approved" string="Cancel Approval" type="action" context="{'model_name':'eps.proposal','update_value':{'approval_state':'b','state':'draft'}}"/> -->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting_for_approval,approved,done"/>
+                    </header>
+					<sheet>
+						<div class="oe_button_box" name="button_box">
+	                        <button type="object"  name="action_view_initiatives"
+	                            class="oe_stat_button"
+	                            icon="fa-pencil-square-o" attrs="{'invisible':[('state', 'in', ('draft','waiting_for_approval'))]}"
+	                            context="{'company_id':company_id, 'branch_id': branch_id, 'divisi_id': divisi_id, 'department_id': department_id}"
+	                            >
+	                            <field name="initiatives_count" widget="statinfo" string="Initiatives"/>
+	                            <field name='initiatives_ids' invisible="1"/>
+	                        </button>
+	                    </div>
+                        <h2>
+                            <field name='name' readonly="1"/>
+                        </h2>
+						<group col="4" colspan="4">
+                            <field name='date' readonly="1"/>
+                            <field name='nama_proposal' attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='company_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='branch_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='divisi_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='department_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='employee_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='pic_contact' attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='latar_belakang' widget='html' attrs="{'readonly': [('state','!=','draft')]}" colspan="4"/>
+                            <field name='sasaran_tujuan' widget='html' attrs="{'readonly': [('state','!=','draft')]}" colspan="4"/>
+                            <field name='rencana_pengajuan' widget='html' attrs="{'readonly': [('state','!=','draft')]}" colspan="4"/>
+                            <!-- <field name='estimasi_biaya' attrs="{'readonly': [('state','!=','draft')]}"/> -->
+                            <label for="file_document_show" string="File Document"/>
+                            <div>
+                                <field name="filename_document" invisible="1"/>
+                                <field name="file_document_show" filename="filename_document" />
+                                <field name="file_document" filename="filename_document" />
+                            </div>
+						</group>
+						<notebook>
+                            <page string="Proposal Lines">
+								<field name="proposal_line_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}">
+									<form>
+                                        <sheet>
+											<group>
+												<field name="categ_id" options="{'no_create': True,'no_open': True}"/>
+												<field name="price"/>
+												<label for="file_penawaran" string="File Penawaran"/>
+												<div>
+													<field name="filename_penawaran" invisible="1"/>
+													<field name="file_penawaran" filename="filename_penawaran" />
+												</div>
+											</group>
+											<field name="filename_upload_penawaran" invisible="1"/>
+                                            <field name="file_penawaran_show" widget="pdf_viewer" attrs="{'invisible':[('filename_penawaran','=',False)]}"/>
+                                        </sheet>
+                                    </form>
+                                    <tree>
+                                        <field name="categ_id"/>
+                                        <field name="price"/>
+                                        <field name="filename_penawaran"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="work_total">
+	                                <div class="oe_subtotal_footer_seperator oe_inline">
+	                             	<label for="total"/>
+	                             	
+	                             	</div>
+	                             	<field name="total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+	                             </group>
+							</page>
+							<page string="Approval">
+								<field name="approval_ids">
+									<tree string="Approval" editable="bottom" create="false" edit="false" delete="false" >
+										<field name="matrix_sequence"/>
+										<field name="group_id"/>
+										<field name="limit"/>
+										<field name="state"/>
+										<field name="reason"/>
+										<field name="user_id"/>
+										<field name="tanggal"/>
+									</tree>
+								</field>
+							</page>
+							<page string="Audit Trail">
+								<group>
+									<group>
+										<field name="requested_by" readonly="1"></field>
+										<field name="requested_on" readonly="1"></field>
+										<field name="closed_by" readonly="1"></field>
+										<field name="closed_on" readonly="1"></field>
+									</group>
+									<group>
+                                        <field name="create_uid" readonly="1"></field>
+										<field name="create_date" readonly="1"></field>
+										<field name="write_uid" readonly="1"></field>
+										<field name="write_date" readonly="1"></field>
+									</group>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids"/>
+						<field name="message_ids"/>
+					</div>
+				</form>
+			</field>
+		</record> 
+
+		<record id="eps_proposal_search_view" model="ir.ui.view">
+            <field name="name">eps.proposal.search</field>
+            <field name="model">eps.proposal</field>
+            <field name="arch" type="xml">
+                <search string="Search Proposal">
+                    <field name="name"/>
+                    <field name="company_id"/>
+                    <field name="branch_id"/>
+                    <field name="department_id"/>
+					<filter string="Draft" name="state_draft" domain="[('state','=','draft')]" />
+					<filter string="Waiting for Approval" name="state_wfa" domain="[('state','=','waiting_for_approval')]" />
+					<filter string="Approved" name="state_approved" domain="[('state','=','approved')]" />
+                    <group expand="0" string="Group By">
+                        <filter string="Company" name="company_group" icon="terp-personal" domain="[]" context="{'group_by':'company_id'}"/>
+                        <filter string="Branch" name="branch_group" icon="terp-folder-orange" domain="[]" context="{'group_by':'branch_id'}"/>
+                        <filter string="Status" name="state_group" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+                    </group> 
+                </search>
+            </field>
+        </record>
+
+		<record model="ir.actions.act_window" id="eps_proposal_action">
+			<field name="name">Proposal</field>
+			<field name="res_model">eps.proposal</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{"search_default_state_draft":1}</field>
+		</record>
+
+		<menuitem id="eps_proposal_menuitem" name="Proposal" sequence="1" parent="eps_menu.eps_proposal_top_menu" action="eps_proposal_action"/>  
+	</data>
+</odoo> 

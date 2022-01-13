@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_branch_read,access.res.branch.read,model_res_branch,group_res_branch_read,1,0,0,0
+access_res_branch_update,access.res.branch.update,model_res_branch,group_res_branch_update,0,1,1,0
+access_res_branch_delete,access.res.branch.delete,model_res_branch,group_res_branch_delete,0,0,0,1
+access_res_area_read,access.res.area.read,model_res_area,group_res_area_read,1,0,0,0
+access_res_area_update,access.res.area.update,model_res_area,group_res_area_update,0,1,1,0
+access_res_area_delete,access.res.area.delete,model_res_area,group_res_area_delete,0,0,0,1
+access_eps_divisi_read,access.eps.divisi.read,model_eps_divisi,group_eps_divisi_read,1,0,0,0
+access_eps_divisi_update,access.eps.divisi.update,model_eps_divisi,group_eps_divisi_update,0,1,1,0
+access_eps_divisi_delete,access.eps.divisi.delete,model_eps_divisi,group_eps_divisi_delete,0,0,0,1
+access_eps_business_read,access.eps.business.read,model_eps_business,group_eps_business_read,1,0,0,0
+access_eps_business_update,access.eps.business.update,model_eps_business,group_eps_business_update,0,1,1,0
+access_eps_business_delete,access.eps.business.delete,model_eps_business,group_eps_business_delete,0,0,0,1
