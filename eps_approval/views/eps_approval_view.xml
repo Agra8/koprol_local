@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>   	
+    
+    	<record model="ir.ui.view" id="eps_reject_approval_wizard_view">
+		    <field name="name">eps.reject.approval.wizard</field>
+		    <field name="model">eps.reject.approval</field>
+		    <field name="arch" type="xml">
+		        <form string="REASON" version="7.0">
+		            <group>
+		                <field name="reason" required="1"/>
+		            </group>
+		            <footer>
+		                <button name="eps_reject_approval" string="Reject" type="object" class="oe_highlight"/>
+		                or
+		                <button string="Cancel" class="oe_link" special="cancel" />
+		            </footer>
+		        </form>
+		    </field>
+		</record>
+		
+		
+		<record model="ir.actions.act_window" id="eps_reject_approval_wizard_action">
+		    <field name="name">Reason Reject Approval</field>
+		    <field name="res_model">eps.reject.approval</field>
+		    <field name="view_mode">form</field>
+		    <field name="target">new</field>
+		</record>
+		
+		<record model="ir.ui.view" id="eps_cancel_approval_wizard_view">
+		    <field name="name">eps.cancel.approval.wizard</field>
+		    <field name="model">eps.cancel.approval</field>
+		    <field name="arch" type="xml">
+		        <form string="REASON" version="7.0">
+		            <group>
+		                <field name="reason" required="1"/>
+		            </group>
+		            <footer>
+		                <button name="eps_cancel_approval" string="Reject" type="object" class="oe_highlight"/>
+		                or
+		                <button string="Cancel" class="oe_link" special="cancel" />
+		            </footer>
+		        </form>
+		    </field>
+		</record>
+		
+		<record model="ir.ui.view" id="eps_cancel_approved_wizard_view">
+		    <field name="name">eps.cancel.approved.wizard</field>
+		    <field name="model">eps.cancel.approved</field>
+		    <field name="arch" type="xml">
+		        <form string="REASON" version="7.0">
+		            <group>
+		                <field name="reason" required="1"/>
+		            </group>
+		            <footer>
+		                <button name="eps_cancel_approved" string="Reject" type="object" class="oe_highlight"/>
+		                or
+		                <button string="Cancel" class="oe_link" special="cancel" />
+		            </footer>
+		        </form>
+		    </field>
+		</record>
+		
+		
+		<record model="ir.actions.act_window" id="eps_cancel_approved_wizard_action">
+		    <field name="name">Reason Cancel Approved</field>
+		    <field name="res_model">eps.cancel.approved</field>
+		    <field name="view_mode">form</field>
+		    <field name="target">new</field>
+		</record>
+		
+		
+		<record model="ir.actions.act_window" id="eps_cancel_approval_wizard_action">
+		    <field name="name">Reason Cancel Approval</field>
+		    <field name="res_model">eps.cancel.approval</field>
+		    <field name="view_mode">form</field>
+		    <field name="target">new</field>
+		</record>
+    	    
+		<record model="ir.ui.view" id="eps_approval_tree_view">
+		    <field name="name">eps.matrix.approval.tree</field>
+		    <field name="model">eps.matrix.approval</field>
+		    <field name="arch" type="xml">
+		        <tree string="Matrix Approval">
+					<field name="company_id"/>
+		        	<field name="branch_id"/>
+					<field name="divisi_id"/>
+					<field name="department_id"/>
+		        	<field name="view_id"/>
+					<field name="model_id"/>
+		        </tree>
+		     </field>
+		</record>
+
+		 <record id="view_eps_matrix_approval_filter" model="ir.ui.view">
+            <field name="name">eps.matrix.approval.filter</field>
+            <field name="model">eps.matrix.approval</field>
+            <field name="arch" type="xml">
+                <search string="Search Approval">
+					<field name="company_id"/>
+                	<field name="branch_id"/>
+					<field name="divisi_id"/>
+					<field name="department_id"/>
+                    <field name="view_id"/>
+					<field name="model_id"/> 
+                    </search>
+            </field>
+        </record> 
+            
+		<record id="eps_matrix_approval_form_view" model="ir.ui.view">
+		     <field name="name">eps.matrix.approval.form</field>
+		     <field name="model">eps.matrix.approval</field>
+		     <field name="arch" type="xml">
+		     	<form string="Matrix Approval">
+		     		<sheet>
+		         	<group>
+					 	<field name="company_id" required="1" options="{'no_show':True,'no_create':True,'no_open':True}"/>
+						<field name="branch_id" required="1" options="{'no_show':True,'no_create':True,'no_open':True}"/>
+						<field name="divisi_id" required="1" options="{'no_show':True,'no_create':True,'no_open':True}"/>
+						<field name="department_id" options="{'no_show':True,'no_create':True,'no_open':True}"/>
+						<field name="view_id" required="1" options="{'no_show':True,'no_create':True,'no_open':True}"/>
+						<field name="model_id" required="1" options="{'no_show':True,'no_create':True,'no_open':True}"/>
+		            </group>
+		            <notebook>
+		                 	<page string="Matrix">
+		                 		<field name="approval_line">
+		                 			<tree editable="top">
+		                 				<field name="group_id" options="{'no_show':True,'no_create':True,'no_open':True}" required="1"/>
+									 	<field name="matrix_sequence" required="1"/>
+									 	<field name="limit" required="1"/>
+		                 			</tree>
+		                 		</field>
+		                 	</page>
+							<page string="Audit Trail">
+								<group>
+									<group>
+										<field name="create_uid" readonly="1"></field>
+										<field name="create_date" readonly="1"></field>
+									</group>
+									<group>							
+										<field name="write_uid" readonly="1"></field>
+										<field name="write_date" readonly="1"></field>
+									</group>
+								</group>
+							</page>			                 	
+                 </notebook>
+	                <!-- <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>    -->
+	               </sheet>              
+		        </form>
+		   	 </field>																														
+		</record> 	
+
+		<record model="ir.actions.act_window" id="eps_matrix_approval_action">
+		    <field name="name">Matrix Approval</field>
+		    <field name="res_model">eps.matrix.approval</field>
+		    <field name="view_mode">tree,form</field>
+		    <field name="search_view_id" ref="view_eps_matrix_approval_filter"/>		
+		</record>
+		
+		<menuitem id="eps_matrix_approval_menu" name="Matrix Approval" sequence="3" parent="eps_menu.eps_master_top_menu" action="eps_matrix_approval_action"/>
+
+   	
+    	          
+ 	</data>
+ </odoo>
+       		
+       		
+	

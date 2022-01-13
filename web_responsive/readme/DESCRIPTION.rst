@@ -10,6 +10,12 @@ Features for all devices:
 
   .. image:: https://user-images.githubusercontent.com/973709/48417213-17576600-e74a-11e8-846a-57691e82636b.gif
 
+* Increase the size of the labels in extra large screens
+
+  .. image:: ../static/img/label_size_small.png
+
+  .. image:: ../static/img/label_size_large.png
+
 Features for mobile:
 
 * App-specific submenus are shown on full screen when toggling them from the
@@ -34,6 +40,10 @@ Features for mobile:
 * Breadcrumbs navigation is collapsed with a "back arrow" button.
 
   .. image:: https://user-images.githubusercontent.com/973709/50965168-1d0ec500-14c9-11e9-82a0-dfee82ed0861.gif
+
+* Search panel is hidden on small screens.
+
+  .. image:: ../static/img/search_panel.gif
 
 Features for computers:
 
@@ -81,3 +91,11 @@ Features for computers:
   width preview clicking on the new maximize button.
 
   .. image:: ../static/img/document_viewer.gif
+
+* Bigger checkboxes in list view
+
+  .. image:: ../static/img/big_checkboxes.gif
+
+* Scrollable dropdowns
+
+  .. image:: ../static/img/dropdown_scroll.gif

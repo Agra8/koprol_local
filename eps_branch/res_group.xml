@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">  	
+    	
+<!-- Eps Divisi -->	
+
+        <record id="group_eps_divisi_read" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Divisi Read</field> 
+            <field name="menu_access" eval="[(4, ref('eps_divisi_menuitem'))]"/>  
+        </record> 
+
+        <record id="group_eps_divisi_update" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Divisi Update</field> 
+            <field name="implied_ids" eval="[(4, ref('group_eps_divisi_read'))]"/>
+        </record>
+
+        <record id="group_eps_divisi_delete" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Divisi Delete</field> 
+            <field name="implied_ids" eval="[(4, ref('group_eps_divisi_read'))]"/>
+        </record>
+
+        <record id="eps_menu.group_sys_admin" model="res.groups">
+            <field name="implied_ids" eval="[
+                (4,ref('group_eps_divisi_read')),
+                (4,ref('group_eps_divisi_update')),
+                (4,ref('group_eps_divisi_delete')),
+                ]" />
+        </record>
+    </data>
+</odoo>
