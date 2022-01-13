@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	
+  	<record id="view_dms_conf_image_tree" model="ir.ui.view">
+      <field name="name">view.dms.conf.image.tree</field>
+      <field name="model">dms.conf.image</field>
+      <field name="arch" type="xml">
+        <tree string="Saved Files Directory" editable="top">
+          <field name="folder_path_local"/>
+        </tree>
+      </field>
+    </record>
+       
+  	<record id="view_dms_conf_image_form" model="ir.ui.view">
+      <field name="name">view.dms.conf.image.form</field>
+      <field name="model">dms.conf.image</field>            
+      <field name="arch" type="xml">
+        <form string="Saved Files Directory">
+          <sheet>
+         		<group>
+              <field name="folder_path_local"/>
+         		</group>
+            <notebook>
+              <page string="Audit Trail">
+                  <group>
+                      <group>
+                          <field name="create_uid" readonly="1"></field>
+                          <field name="create_date" readonly="1"></field>
+                      </group>
+                      <group>							
+                          <field name="write_uid" readonly="1"></field>
+                          <field name="write_date" readonly="1"></field>
+                      </group>
+                  </group>
+              </page>
+            </notebook>
+          </sheet>   	                    
+        </form>
+       </field>
+    </record>
+        
+  	<record model="ir.actions.act_window" id="view_dms_conf_image_action">
+	    <field name="name">Direktori Penyimpanan Files</field>
+	    <field name="res_model">dms.conf.image</field>
+	    <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Configuration Saved Images" parent="dms_menu.dms_configuration_sub_menu" id="dms_conf_image_menu_sub" action="view_dms_conf_image_action" sequence="100" groups="dms_config_image.group_dms_config_image_read"/>
+	</data>
+</odoo>

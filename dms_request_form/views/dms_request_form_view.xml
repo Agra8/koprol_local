@@ -55,7 +55,7 @@
                         </group>
                         <div>
                             <br />
-                            <button name="action_request" attrs="{'invisible':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" string="Form Request" style="margin-bottom:3px" class="oe_stat_button alert alert-info" icon="fa-file-text-o" type="object" context="{'default_active_id': active_id}"/>
+                            <button name="action_request" attrs="{'invisible':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" string="Form Request" style="margin-bottom:3px" class="oe_stat_button oe_edit_only alert alert-info" icon="fa-file-text-o" type="object" context="{'default_active_id': active_id}"/>
                         </div>
                         <notebook>
                             <page string="Request">
@@ -183,6 +183,8 @@
                             <field name="form_id" readonly="1"/>
                             <field name="keterangan" readonly="1"/>
                             <field name="date" readonly="1"/>
+                            <field name="type_file" invisible="1"/>
+                            <field name="file_pdf" widget="pdf_viewer" attrs="{'invisible': [('type_file', 'in', ('png', 'jpg','jpeg', 'tiff', 'tif', 'drawio','pdf','xls','xlsx','doc','docx','zip','rar', 'NULL'))]}" />
                             <field name="file_download"/>
                         </group>
                     </group>

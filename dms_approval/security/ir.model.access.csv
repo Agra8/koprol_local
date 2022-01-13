@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dms_approval_config,dms_approval.dms_approval_config,model_dms_approval_config,base.group_user,1,1,1,1
+access_dms_approval_type,dms_approval.dms_approval_type,model_dms_approval_type,base.group_user,1,1,1,1
+access_dms_approval,dms_approval.dms_approval,model_dms_approval,base.group_user,1,1,1,1
+access_dms_approval_line,dms_approval.dms_approval_line,model_dms_approval_line,base.group_user,1,1,1,1

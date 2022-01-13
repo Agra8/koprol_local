@@ -339,6 +339,10 @@ class RequestFormLine(models.Model):
                 try:
                     image_lampiran = self.env['dms.conf.image'].suspend_security().get_img(record.filename_upload)
                     record.file_show = image_lampiran
+                    if record.type_file == 'pdf':
+                        record.file_pdf = image_lampiran
+                    else:
+                        record.file_pdf = False
                 except FileNotFoundError as err:
                     _logger.error(err)
                     record.file_show = False
@@ -359,6 +363,8 @@ class RequestFormLine(models.Model):
     filename = fields.Char(string='Nama Lampiran')
     file_show = fields.Binary(string='lampiran_show', compute='compute_filename')
     file_download = fields.Binary(string='Download Lampiran', related='file_show')
+    file_pdf = fields.Binary(string='file pdf', compute='compute_filename')
+    type_file = fields.Char(string='Tipe File')
 
     
     @api.model
@@ -521,6 +527,10 @@ class RequestFormAttachment(models.Model):
                 try:
                     image_lampiran = self.env['dms.conf.image'].suspend_security().get_img(record._filename_upload)
                     record.file_show = image_lampiran
+                    if record.type_file == 'pdf':
+                        record.file_pdf = image_lampiran
+                    else:
+                        record.file_pdf = False
                 except FileNotFoundError as err:
                     _logger.error(err)
                     record.file_show = False
@@ -534,6 +544,8 @@ class RequestFormAttachment(models.Model):
     filename = fields.Char(string='Nama Lampiran')
     file_show = fields.Binary(string='lampiran_show', compute='compute_filename')
     file_download = fields.Binary(string='Download Lampiran', related='file_show')
+    file_pdf = fields.Binary(string='file pdf', compute='compute_filename')
+    type_file = fields.Char(string='Tipe File')
 
     request_line_id = fields.Many2one(comodel_name='dms.request.form.line',string='Request Line', index=True)
 

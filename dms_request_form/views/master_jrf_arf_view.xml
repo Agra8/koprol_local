@@ -26,9 +26,13 @@
                 <form string="Master JRF / ARF">
                     <sheet>
                         <group>
-                            <field name="name"/>
-                            <field name="type_form"/>
-                            <!-- <field name="keterangan"/> -->
+                            <group>
+                                <field name="name"/>
+                                <field name="company_id"/>
+                            </group>
+                            <group>
+                                <field name="approval_default"/>
+                            </group>
                         </group>
                         <notebook>
                             <page string="Audit Trail">
@@ -77,6 +81,83 @@
             </field>
         </record>
 
-        <menuitem id="master_jrf_arf_menu" name="Master JRF / ARF" parent="dms_master_jrf_arf_sub_menu" action="master_jrf_arf_action" sequence="20"/>
+        <!-- Master Type Request -->
+        <record id="master_type_reqeust_tree" model="ir.ui.view">
+            <field name="name">Master Type Request</field>
+            <field name="model">master.type.request</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Master Type Request">
+                    <field name="name"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="master_type_request_form" model="ir.ui.view">
+            <field name="name">Master Type Request Form</field>
+            <field name="model">master.type.request</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="company_id"/>
+                            </group>
+                            <group>
+                                <field name="approval_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Audit Trail">
+                                <group>
+                                    <group>
+                                        <field name="create_uid" readonly="1"/>
+                                        <field name="create_date" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="write_uid" readonly="1"/>
+                                        <field name="write_date" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="master_type_request_search" model="ir.ui.view">
+            <field name="name">Master Type Request Search</field>
+            <field name="model">master.type.request</field>
+            <field name="arch" type="xml">
+                <search string="Master Type Request">
+                    <field name="name"/>
+                    <field name="company_id"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- action window -->
+        <record id="master_type_request_action" model="ir.actions.act_window">
+            <field name="name">Master Type Request </field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">master.type.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_fieldname":1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a new Type Request
+                </p><p>
+                    Click the Create button to add a new Type Request
+                </p>
+            </field>
+         </record>
+
+         <menuitem id="master_jrf_arf_menu" name="Master JRF / ARF" parent="dms_master_jrf_arf_sub_menu" action="master_jrf_arf_action" sequence="20"/>
+         
+         <menuitem id="master_type_request_menu" name="Master Type Request" parent="dms_master_jrf_arf_sub_menu" action="master_type_request_action" sequence="20"/>
     </data>
 </odoo>

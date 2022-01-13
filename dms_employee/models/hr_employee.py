@@ -46,7 +46,7 @@ class Employee(models.Model):
 
     # 8: relation fields
     job_id = fields.Many2one(comodel_name='hr.job',  string='Job',  readonly=True, states={'draft' : [('readonly',False)]},  help='',domain=[])
-    branch_id = fields.Many2one(comodel_name='res.branch', default=_get_default_branch, string='Branch', readpnly=True, states={'draft' : [('readonly',False)]},  help='' )
+    branch_id = fields.Many2one(comodel_name='res.branch', default=_get_default_branch, string='Branch', readonly=True, states={'draft' : [('readonly',False)]},  help='' )
     area_id = fields.Many2one(comodel_name='res.area', string='Area',  states={'draft' : [('readonly',False)]},  help='')
     group_id = fields.Many2one(comodel_name='res.groups', string='Group',  readonly=True, states={'draft' : [('readonly',False)]},  help='')
 

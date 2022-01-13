@@ -68,12 +68,12 @@ class WebsiteForm(Home):
         except ValidationError as e:
             return json.dumps({'error_fields': e.args[0]})
 
-        extension = {0:['drawio','pdf','xls','xlsx','doc','docx','zip','rar']}
+        extension = {0:['drawio','pdf','xls','xlsx','doc','docx','zip','rar', 'jpg', 'png', 'jpeg']}
         max_size = {0:100000000}
         file_name = {0:'Lampiran'}
 
         value = data['record']
-        attachment = data['attachments']
+       
        
         if not value.get('no_telp').isdigit() or len(value.get('no_telp')) < 11 or len(value.get('no_telp')) > 14:
             request._cr.rollback()
@@ -99,22 +99,25 @@ class WebsiteForm(Home):
         if 'request_line_keterangan[]' in value:
             del value['request_line_keterangan[]']
 
-        request_id = request.env[model_record.model].sudo().create(value)
+        if data['attachments']:
+            attachment = data['attachments']
+            request_id = request.env[model_record.model].sudo().create(value)
 
-        attachment_status, result = self.insert_attachment(
-            model_record,
-            request_id.id,
-            request_id.request_line_ids.id,
-            attachment,
-            extension,
-            max_size,
-            file_name
-        )
-        if not attachment_status:
-            request._cr.rollback()
-            return json.dumps({
-                'error': _(result)
-            })
+            id_record = [id_record.id for id_record in request_id.request_line_ids]
+            attachment_status, result = self.insert_attachment(
+                model_record,
+                request_id.id,
+                id_record,
+                attachment,
+                extension,
+                max_size,
+                file_name
+            )
+            if not attachment_status:
+                request._cr.rollback()
+                return json.dumps({
+                    'error': _(result)
+                })
 
         request.session['form_builder_model_model'] = model_record.model
         request.session['form_builder_model'] = model_record.name
@@ -178,7 +181,7 @@ class WebsiteForm(Home):
         list_size = [size for size in max_size.values()]
         list_name = [name for name in file_name.values()]
 
-        for file_, ext, size, name in zip(files, list_ext, list_size, list_name):
+        for file_, ext, size, name, id_record in zip(files, list_ext, list_size, list_name, id_record):
             value = file_.read()
             file_length = file_.tell()
             
@@ -389,12 +392,43 @@ class WebsiteForm(Home):
             });
 
             self.addEventListener("fetch", fetchEvent => {
-                fetchEvent.responWith(
+                fetchEvent.respondWith(
                     caches.match(fetchEvent.request).then(res => {
                         return res || fetch(fetchEvent.request)
                     })
                 )
-            })
+            });
+        """
+
+        return request.make_response(
+            js_code,
+            [('Content-Type', "text/javascript; charset=utf-8"),
+             ('Content-Length', len(js_code))]
+        )
+    
+    @http.route("/web/service_worker.js", type="http", auth="public")
+    def render_service_worker_backend(self):
+        js_code = """
+            const aktiv_CACHE = "Backend-Cache"
+            const assets = [
+                "/",
+            ]
+
+            self.addEventListener("install", installEvent => {
+                installEvent.waitUntil (
+                    caches.open(aktiv_CACHE).then(cache => {
+                        cache.addAll(assets)
+                    })
+                )
+            });
+
+            self.addEventListener("fetch", fetchEvent => {
+                fetchEvent.respondWith(
+                    caches.match(fetchEvent.request).then(res => {
+                        return res || fetch(fetchEvent.request)
+                    })
+                )
+            });
         """
 
         return request.make_response(

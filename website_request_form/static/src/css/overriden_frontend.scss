@@ -104,6 +104,14 @@ lord-icon {
     background-color: #00a2ff !important;
 }
 
+.custom-row {
+    padding-left: 5px;
+    padding-top: 0px;
+}
+
+.custom-btn-close {
+    float: right;
+}
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
@@ -116,6 +124,20 @@ lord-icon {
       .custom_width {
         margin-left: -15px !important;
     }
+
+    .custom-row {
+        padding-left: 0px;
+        padding-top: 20px;
+    }
+
+    .w3-container {
+        padding: 1em 0px !important;
+    }
+
+    .custom-btn-close {
+        float: left;
+    }
+    
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -129,6 +151,7 @@ lord-icon {
       .custom_width {
         margin-left: -15px !important;
     }
+
 }
 
 /* Medium devices (landscape tablets, 768px and up) */

@@ -25,11 +25,18 @@ class MasterJrfArf(models.Model):
     # 8: fields
     name = fields.Char(string='Name')
     type_form = fields.Selection(string='Type Form', selection=[('jrf','Job Request'),('arf','Access Request')])
-
+    approval_default = fields.Selection(string='Default Approval',
+    selection=[
+        ('0', '0'),
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4')
+        ])
     # Audit Trail
 
     # 8: Relational Fields
-
+    company_id = fields.Many2one(comodel_name='res.company', string='Company')
     
     def name_get(self):
         res = []

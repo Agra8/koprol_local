@@ -19,57 +19,59 @@ function initEvent() {
 }
 
 function addRow(value) {
-	var table = document.getElementById(value);
-	var row = table.insertRow();
-	var index = document.getElementById('request_tbl').children[1].children.length;
-	console.log(index);
+	var newDiv = document.getElementById(value);
+	var index = document.querySelectorAll('.w3-row').length;
+	console.log(newDiv);
 	if (value == 'request_tbl') {
-		row.innerHTML = `        <tr>
-                                          <td class="td-custom">
-                                            <table class="table responsive text-center" >
-                                              <tr>
-                                                <th scope="col">Type Request</th>
-                                                <th scope="col">Request</th>
-                                              </tr>
-                                              <tr>
-                                                <td>
-													<select id="requestform_id_${index}" name="requestform_id" class="form-control s_website_form_input input-types" placeholder="" required="true">
-														<option value="">(Silahkan Pilih)</option>
-														<option value="arf">Access Request</option>
-														<option value="jrf">Job Request</option>
-													</select>
-                                              	</td>
-                                              <td>
-												<select id="request_id_${index}" name="request_line_ids" class="form-control s_website_form_input" placeholder="" required="true">
-													<option value="">(Silahkan Pilih)</option>
-												</select>
-                                              </td>
-                                              </tr>
-                                              <tr> 
-                                              <td class="td-custom" colspan="2">
-                                                <textarea class="text-area form-control s_website_form_input s_website_form_model_required" name="request_line_keterangan[]" placeholder="Keterangan" required="true"></textarea>
-                                              </td>
-                                              </tr>
-											   <tr>
-                                                    <td>
-                                                      <div class="form-group row form-field s_website_form_custom">
-                                                        <div class="col-lg-3 col-md-4 text-left">
-                                                            <label class="col-form-label" for="Scan Ijazah Terakhir">Lampiran</label>
-                                                        </div>
-                                                        <div class="col-lg-7 col-md-8">
-                                                            <input type="file" class="form-control s_website_form_input" name="attachment" required=""/>
-                                                        </div>
-                                                        </div>
-                                                    </td>
-                                                  </tr>
-                                            </table>
-                                          </td>
-                                              <td class="td-custom" style="width:6%;">
-												<button type="button" class="btn custom-btn-primary rounded-circle buttonx" style="font-size: 0.75rem;" onclick="deleteRow(this.parentElement.parentElement)">X</button>
-											  </td>
-                                        </tr>
-					`;
-		document.getElementById(value).insertRow(row);
+		newDiv.insertAdjacentHTML(
+			'afterend',
+			`        				<div>
+									<div class="w3-row">
+                                      <label class="w3-col m1 s_website_form_label" style="width: 200px" for="2hvgthz7mmr">
+                                        <span class="s_website_form_label_content">Request</span>
+                                        <span class="s_website_form_mark"> *</span>
+                                      </label>
+                                      <button type="button" class="btn custom-btn-primary rounded-circle buttonx custom-btn-close" style="font-size: 0.75rem;" onclick="deleteRow(this.parentElement.parentElement)">X</button>
+                                      <div class="w3-col m1 w3-center w3-container m4 l3">
+                                        <select id="requestform_id_${index +
+											1}" name="requestform_id" class="form-control s_website_form_input input-types"  placeholder="" required="true">
+                                           <option value="">Pilih Tipe Request</option>
+                                           <option value="arf">Access Request</option>
+                                           <option value="jrf">Job Request</option>
+                                        </select>
+                                      </div>
+                                      <div class="w3-col m1 w3-center w3-container m4 l6 custom-row">
+                                        <select id="request_id_${index +
+											1}" name="request_line_ids" class="form-control s_website_form_input" placeholder="" required="true">
+                                           <option value="">(Silahkan Pilih)</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <div class="form-group s_website_form_field col-12 s_website_form_custom s_website_form_required" data-name="Field" style="padding-top: 15px;">
+                                      <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
+                                          <span class="s_website_form_label_content"></span>
+                                          <span class="s_website_form_mark"> </span>
+                                        </label>
+                                        <div class="col-sm">
+                                          <textarea class="text-area form-control s_website_form_input s_website_form_model_required" name="request_line_keterangan[]" placeholder="Keterangan" required="1"></textarea>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="form-group s_website_form_field col-12 s_website_form_custom" data-name="Field" style="padding-top: 15px;">
+                                      <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
+                                          <span class="s_website_form_label_content">Lampiran</span>
+                                          <span class="s_website_form_mark"> </span>
+                                        </label>
+                                        <div class="col-sm">
+                                          <input type="file" class="form-control s_website_form_input" name="attachment" required=""/>
+                                        </div>
+                                      </div>
+                                    </div>
+									</div>
+					`
+		);
 		initEvent();
 		tbl('#request_tbl', 'keyup', "input[name='requestform_id']");
 	}

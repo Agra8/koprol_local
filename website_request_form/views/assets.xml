@@ -5,6 +5,7 @@
                 <link rel="stylesheet" type="text/scss" href="/website_request_form/static/src/css/overriden_frontend.scss"/>
                 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
                 <link rel="manifest" href="/website_request_form/static/src/js/manifest.json"/>
+                <link rel="stylesheet" type="text/scss" href="/website_request_form/static/src/css/w3.scss"/>
                 <script src="/website_request_form/static/src/js/registerserviceworker.js"></script>
 
 
@@ -17,6 +18,25 @@
                     if ('serviceWorker' in navigator) {
                         try {
                             navigator.serviceWorker.register('service_worker.js');
+                        } catch (e) {
+                            console.log('Service registration failed !');
+                        }
+                    }                 
+                    
+                </script>       
+            </xpath>
+        </template>
+
+        <template id="assets_overriden_backend" name="website_hoku assets" inherit_id="web.assets_backend">
+            <xpath expr="link[last()]" position="after">
+                <link rel="manifest" href="/website_request_form/static/src/js/manifest.json"/>
+                <script src="/website_request_form/static/src/js/registerserviceworker.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', init, false);
+
+                    if ('serviceWorker' in navigator) {
+                        try {
+                            navigator.serviceWorker.register('web/service_worker.js');
                         } catch (e) {
                             console.log('Service registration failed !');
                         }
