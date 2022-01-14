@@ -95,19 +95,16 @@ class Branch(models.Model):
     @api.onchange('state_id')
     def _onchange_province(self):
         self.kabupaten_id = False
-        return {'domain' : {'kabupaten_id':[('state_id','=',self.state_id.id)],},}
 
     @api.onchange('kabupaten_id')    
     def _onchange_city(self):
         self.kecamatan_id = False
-        return {'domain' : {'kecamatan_id':[('city_id','=',self.kabupaten_id.id)],},}
 
     @api.onchange('kecamatan_id')
     def _onchange_kecamatan(self):
         self.kelurahan_id = False
         if self.kecamatan_id:
             self.kecamatan = self.kecamatan_id.name
-        return {'domain' : {'kelurahan_id':[('kecamatan_id','=',self.kecamatan_id.id)],},}
 
     @api.onchange('kelurahan_id')    
     def _onchange_kelurahan(self):
