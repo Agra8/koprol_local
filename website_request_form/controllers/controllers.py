@@ -58,7 +58,7 @@ class WebsiteForm(Home):
         )
 
         model_record_attachment = request.env['ir.model'].sudo().search(
-            [('model','=','dms.request.form.line')]
+            [('model','=','eps.request.form.line')]
         )
         if not model_record:
             return json.dumps(False)
@@ -200,7 +200,7 @@ class WebsiteForm(Home):
             if file_length > size:
                 return False, f"ukuran file ({file_length}) melebehi batas!"
             
-            attachment = request.env['dms.request.form.line'].sudo().search([
+            attachment = request.env['eps.request.form.line'].sudo().search([
                 ('id', '=', id_record)
             ], limit=1)
             if attachment:
@@ -224,7 +224,7 @@ class WebsiteForm(Home):
         
         if attachment_value:
             try:
-                attachment_id = request.env['dms.request.form.line'].sudo().create(attachment_value)
+                attachment_id = request.env['eps.request.form.line'].sudo().create(attachment_value)
                 return True, attachment_id
             
             except Exception as err:
@@ -240,7 +240,7 @@ class WebsiteForm(Home):
         if kwargs:
             message = ''
 
-            request_form = request.env['dms.request.form'].sudo().search([('name','=', kwargs['search'])])
+            request_form = request.env['eps.request.form'].sudo().search([('name','=', kwargs['search'])])
 
             if not request_form:
                 message += 'Maaf, nomor request tidak ditemukan mohon cek kembali nomor request Anda'
@@ -263,9 +263,9 @@ class WebsiteForm(Home):
         get_token = decrypt_token[5:]
         get_token = get_token.decode("utf-8") 
         token_split = str(get_token).split("n")
-        request_form = request.env['dms.request.form'].sudo().search([('id','=',int(token_split[0]))])
+        request_form = request.env['eps.request.form'].sudo().search([('id','=',int(token_split[0]))])
         if request_form:
-            approval_line = request.env['dms.request.form.approval'].sudo().search([('request_form_id','=',request_form.id),('employee_id','=',int(token_split[1]))])
+            approval_line = request.env['eps.request.form.approval'].sudo().search([('request_form_id','=',request_form.id),('employee_id','=',int(token_split[1]))])
             if approval_line.state == 'approved' or approval_line.state == 'rejected':
                 return http.request.render('website_request_form.sorry_page', {
                     'approval_line': approval_line
@@ -300,9 +300,9 @@ class WebsiteForm(Home):
         get_token = decrypt_token[5:]
         get_token = get_token.decode("utf-8") 
         token_split = get_token.split("n")
-        request_form = request.env['dms.request.form'].sudo().search([('id','=',int(token_split[0]))])
+        request_form = request.env['eps.request.form'].sudo().search([('id','=',int(token_split[0]))])
         if request_form:
-            approval_line = request.env['dms.request.form.approval'].sudo().search([('request_form_id','=',request_form.id),('employee_id','=',int(token_split[1]))])
+            approval_line = request.env['eps.request.form.approval'].sudo().search([('request_form_id','=',request_form.id),('employee_id','=',int(token_split[1]))])
             if approval_line.state == 'approved' or approval_line.state == 'rejected':
                 return http.request.render('website_request_form.sorry_page', {
                     'approval_line': approval_line
@@ -332,7 +332,7 @@ class WebsiteForm(Home):
 
 
         if 'request_form' in value:
-            request_form = request.env['dms.request.form'].sudo().search([('id','=',int(value.get('request_form')))])
+            request_form = request.env['eps.request.form'].sudo().search([('id','=',int(value.get('request_form')))])
             line_id = int(value.get('approval_line'))
             alasan_reject = value.get('alasan_reject')
             approval_line = request.env[model_record.model].sudo().search([('id','=', line_id)])

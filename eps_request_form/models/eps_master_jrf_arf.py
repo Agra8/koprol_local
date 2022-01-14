@@ -16,29 +16,37 @@ from odoo.exceptions import Warning
 
 # 6: Import of unknown third party lib
 
-class MasterTypeRequest(models.Model):
-    _name="master.type.request"
-    _description="Master Tipe Request"
+class MasterJrfArf(models.Model):
+    _name="eps.master.jrf.arf"
+    _description="Master JRF / ARF"
 
     # 7: defaults methods
 
     # 8: fields
     name = fields.Char(string='Name')
+    type_form = fields.Selection(string='Type Form', selection=[('jrf','Job Request'),('arf','Access Request')])
+    approval_default = fields.Selection(string='Default Approval',
+    selection=[
+        ('0', '0'),
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4')
+        ])
     # Audit Trail
 
     # 8: Relational Fields
-    approval_id = fields.Many2one(comodel_name='dms.approval', string='Default Approval')
-    # TODO: create TIM / company fields many2one
     company_id = fields.Many2one(comodel_name='res.company', string='Company')
-
+    
     def name_get(self):
         res = []
         for record in self:
             name = record.name
+            type_form = record.type_form
             if not record.name:
-                name = '%s' % (name)
+                name = '%s - %s' % (name,type_form)
             else:
-                name = '%s' % (record.name)
+                name = '%s - %s' % (record.name,record.type_form)
             res.append((record.id,name))
         return res            
     
@@ -46,6 +54,6 @@ class MasterTypeRequest(models.Model):
     def name_search(self, name='', args=None, operator='ilike', limit=100):
         args = args or []
         if name:
-            args = [('name', operator, name)] + args
+            args = ['|',('name', operator, name),('type_form',operator,name)] + args
         categories = self.search(args,limit=limit)
         return categories.name_get()

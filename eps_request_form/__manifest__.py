@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "dms_request_form",
+    'name': "Request Form",
 
     'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+        in this module you can create, view and edit JRF / ARF Data and the request came from website ARF / JRF.
+        don't forget to check what module depends on. """,
 
     'description': """
-        Long description of module's purpose
+        The module is Backend for JRF / ARF Online.
     """,
 
-    'author': "My Company",
-    'website': "http://www.yourcompany.com",
+    'author': "Tunas Honda",
+    'website': "http://www.honda-ku.com",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/14.0/odoo/addons/base/data/ir_module_category_data.xml
@@ -20,18 +20,21 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail','email_template_qweb','dms_branch','dms_employee'],
+    'depends': ['base','mail','email_template_qweb','eps_branch','eps_hr_employee'],
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
-        'security/ir_rule.xml',
+        
         'views/menu.xml',
-        'views/dms_request_form_view.xml',
-        'views/master_jrf_arf_view.xml',
-        'data/data_master_arf_jrf.xml',
+        'views/eps_request_form_view.xml',
+        'views/eps_master_jrf_arf_view.xml',
+        
+        # 'data/data_master_arf_jrf.xml',
         'data/ir_ui_view.xml',
         'data/mail_template.xml',
+
+        'security/ir.model.access.csv',
+        'security/ir_rule.xml',
         'security/res_groups.xml',
     ],
     # only loaded in demonstration mode

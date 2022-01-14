@@ -19,7 +19,7 @@
                                                 <lord-icon trigger="loop" scale="500" src="/website_request_form/static/src/images/reject.json"></lord-icon>
                                             </div>
                                             <div class="col-lg-6 pt16 pb16 o_colored_level">
-                                                <form id="reject_form" action="/reject_request_form/" method="post" enctype="multipart/form-data" data-mark="*" data-success-mode="redirect" data-success-page="/thank_you_reject" data-model_name="dms.request.form.approval" class="o_mark_required">
+                                                <form id="reject_form" action="/reject_request_form/" method="post" enctype="multipart/form-data" data-mark="*" data-success-mode="redirect" data-success-page="/thank_you_reject" data-model_name="eps.request.form.approval" class="o_mark_required">
                                                     <input type="hidden" name="request_form" t-attf-value="#{request_form.id}"></input>
                                                     <input type="hidden" name="approval_line" t-attf-value="#{approval_line.id}"></input>
                                                     <h2 class="o_default_snippet_text"><b>Silahkan isi Alasan Reject</b></h2>

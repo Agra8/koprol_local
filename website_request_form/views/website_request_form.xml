@@ -137,7 +137,7 @@
                           <p class="card-text">Jika anda ingin melakukan request, Silahkan isi formulir dibawah ini :</p>
                           <section class="s_website_form pt16 pb16 o_colored_level" data-vcss="001" data-snippet="s_website_form" data-name="Form" style="">
                             <div class="container-fluid">
-                              <form id="main_form" action="/create_website_form/" method="post" enctype="multipart/form-data" data-mark="*" data-success-mode="redirect" data-success-page="/thank-you" data-model_name="dms.request.form" class="o_mark_required">
+                              <form id="main_form" action="/create_website_form/" method="post" enctype="multipart/form-data" data-mark="*" data-success-mode="redirect" data-success-page="/thank-you" data-model_name="eps.request.form" class="o_mark_required">
                                 <div class="row s_col_no_bgcolor s_website_form_rows">
                                   <div class="form-group s_website_form_field col-12 s_website_form_custom s_website_form_required" data-type="many2one" data-name="Field">
                                     <div class="row s_col_no_resize s_col_no_bgcolor">

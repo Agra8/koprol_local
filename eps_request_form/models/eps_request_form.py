@@ -22,7 +22,7 @@ from odoo.exceptions import Warning
 # 6: Import of unknown third party lib
 
 class RequestForm(models.Model):
-    _name="dms.request.form"
+    _name="eps.request.form"
     _description="Request Form for JRF / ARF"
 
     # 7: defaults methods
@@ -67,8 +67,8 @@ class RequestForm(models.Model):
     branch_id = fields.Many2one(comodel_name='res.branch', string='Branch')
     department_id = fields.Many2one(comodel_name='hr.department', string='Department')
     employee_id = fields.Many2one(comodel_name='hr.employee',string='Employee')
-    approval_ids = fields.One2many(comodel_name='dms.request.form.approval',inverse_name='request_form_id', string='Approval JRF/ARF')
-    request_line_ids = fields.One2many(comodel_name='dms.request.form.line',inverse_name='request_form_id', string='Request')
+    approval_ids = fields.One2many(comodel_name='eps.request.form.approval',inverse_name='request_form_id', string='Approval JRF/ARF')
+    request_line_ids = fields.One2many(comodel_name='eps.request.form.line',inverse_name='request_form_id', string='Request')
     job_title = fields.Many2one(comodel_name='hr.job',string='Job Title')
 
 
@@ -94,7 +94,7 @@ class RequestForm(models.Model):
                     'state': 'open',
                 }
                 create_super = super(RequestForm, self).create(vals)
-                create = self.env['dms.request.form.approval'].suspend_security().create(record)
+                create = self.env['eps.request.form.approval'].suspend_security().create(record)
                 record['request_form_id'] = create_super.id
                 record['user_id'] = create.employee_id.user_id.id
                 create.suspend_security().write(record)
@@ -109,7 +109,7 @@ class RequestForm(models.Model):
                     'state': 'open',
                 }
                 create_super = super(RequestForm, self).create(vals)
-                create = self.env['dms.request.form.approval'].suspend_security().create(record)
+                create = self.env['eps.request.form.approval'].suspend_security().create(record)
                 record['request_form_id'] = create_super.id
                 record['user_id'] = create.employee_id.user_id.id
                 create.suspend_security().write(record)
@@ -150,7 +150,7 @@ class RequestForm(models.Model):
         return token_encoded
 
     def action_rfa(self):
-        template = self.env.ref('dms_request_form.template_mail_request_form_result')
+        template = self.env.ref('eps_request_form.template_mail_request_form_result')
         mail = self.env['mail.template'].suspend_security().browse(template.id)
         for user in self.approval_ids.employee_id:
             self.email_penerima = user.work_email
@@ -194,14 +194,14 @@ class RequestForm(models.Model):
     
     def action_request(self):
         self.ensure_one()
-        form_id = self.env.ref('dms_request_form.dms_request_form_line_form_wizard').id
+        form_id = self.env.ref('eps_request_form.eps_request_form_line_form_wizard').id
         return {
             'type': 'ir.actions.act_window',
             'name': 'Request Form Line',
             'view_id': False,
             'views': [(form_id,'form')],
             'view_mode': 'form',
-            'res_model': 'dms.request.form.line.wizard',
+            'res_model': 'eps.request.form.line.wizard',
             'target': 'new',
             'view_type': 'form',
             'context': {
@@ -235,10 +235,10 @@ class RequestForm(models.Model):
     
     def action_reject(self):
         approval = self._check_user_groups()
-        form_id = self.env.ref('dms_request_form.dms_request_form_approval_reject_form').id
+        form_id = self.env.ref('eps_request_form.eps_request_form_approval_reject_form').id
         return {
             'name': ('Alasan Reject'),
-            'res_model': 'dms.request.form.approval',
+            'res_model': 'eps.request.form.approval',
             'type': 'ir.actions.act_window',
             'view_id': False,
             'views': [(form_id, 'form')],
@@ -304,15 +304,15 @@ class RequestForm(models.Model):
             name_job_level = False
         return vals
     
-    def dms_request_form_view(self):
+    def eps_request_form_view(self):
         name= 'Request Form'
-        tree_id = self.env.ref('dms_request_form.dms_request_form_view_tree').id
-        form_id = self.env.ref('dms_request_form.dms_request_form_view_form').id
-        search_id = self.env.ref('dms_request_form.dms_request_form_search').id
+        tree_id = self.env.ref('eps_request_form.eps_request_form_view_tree').id
+        form_id = self.env.ref('eps_request_form.eps_request_form_view_form').id
+        search_id = self.env.ref('eps_request_form.eps_request_form_search').id
         return {
             'name': name,
             'type': 'ir.actions.act_window',
-            'res_model': 'dms.request.form',
+            'res_model': 'eps.request.form',
             'view_type': 'form',
             'view_mode': 'tree,form',
             'views': [(tree_id, 'tree'), (form_id, 'form')],
@@ -325,7 +325,7 @@ class RequestForm(models.Model):
         }
      
 class RequestFormLine(models.Model):
-    _name="dms.request.form.line"
+    _name="eps.request.form.line"
     _description="Request Form Line"
 
     # 7: defaults methods
@@ -337,7 +337,7 @@ class RequestFormLine(models.Model):
         for record in self:
             if record.filename_upload:
                 try:
-                    image_lampiran = self.env['dms.conf.image'].suspend_security().get_img(record.filename_upload)
+                    image_lampiran = self.env['eps.conf.image'].suspend_security().get_img(record.filename_upload)
                     record.file_show = image_lampiran
                     if record.type_file == 'pdf':
                         record.file_pdf = image_lampiran
@@ -356,7 +356,7 @@ class RequestFormLine(models.Model):
     date=fields.Date(string='Date', default=_get_default_date)
     keterangan = fields.Text(string='Keterangan')
     form_id = fields.Many2one(comodel_name='master.jrf.arf', string='Master Request')
-    request_form_id = fields.Many2one(comodel_name='dms.request.form', string='Request Form')
+    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
     
     file_upload = fields.Binary(string='Upload Lampiran')
     filename_upload = fields.Char(string='Nama Lampiran Upload')
@@ -377,12 +377,12 @@ class RequestFormLine(models.Model):
             vals['file_upload'] = False
             tmp_lampiran = vals['filename'].split('.')
             filename_up = f'[{self.id}]{type_file}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
-            self.env['dms.conf.image'].suspend_security().upload_file(filename_up, file_upload)
+            self.env['eps.conf.image'].suspend_security().upload_file(filename_up, file_upload)
             vals['filename_upload'] = filename_up
         return super(RequestFormLine, self).write(vals)
     
 class RequestFormLineWizard(models.TransientModel):
-    _name="dms.request.form.line.wizard"
+    _name="eps.request.form.line.wizard"
     _description="Request Form Line"
 
     # 7: defaults methods
@@ -395,7 +395,7 @@ class RequestFormLineWizard(models.TransientModel):
     date=fields.Date(string='Date', default=_get_default_date)
     keterangan = fields.Text(string='Keterangan')
     form_id = fields.Many2one(comodel_name='master.jrf.arf', string='Master Request')
-    request_form_id = fields.Many2one(comodel_name='dms.request.form', string='Request Form')
+    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
     attachment_line_ids = fields.One2many(comodel_name='request.form.attachment', inverse_name='request_line_id')
 
 
@@ -406,7 +406,7 @@ class RequestFormLineWizard(models.TransientModel):
             'request_form_id': self._context['active_id'],
             'keterangan': self.keterangan,
         }
-        self.env['dms.request.form.line'].suspend_security().create(vals)
+        self.env['eps.request.form.line'].suspend_security().create(vals)
     
     def action_add_and_more(self):
         self.ensure_one()
@@ -416,14 +416,14 @@ class RequestFormLineWizard(models.TransientModel):
             'keterangan': self.keterangan,
         }
         self.create(vals)
-        form_id = self.env.ref('dms_request_form.dms_request_form_line_form_wizard').id
+        form_id = self.env.ref('eps_request_form.eps_request_form_line_form_wizard').id
         return {
             'type': 'ir.actions.act_window',
             'name': 'Request Form Line',
             'view_id': False,
             'views': [(form_id,'form')],
             'view_mode': 'form',
-            'res_model': 'dms.request.form.line',
+            'res_model': 'eps.request.form.line',
             'target': 'new',
             'view_type': 'form',
             'context': {
@@ -433,7 +433,7 @@ class RequestFormLineWizard(models.TransientModel):
         }
 
 class RequestFormApproval(models.Model):
-    _name = "dms.request.form.approval"
+    _name = "eps.request.form.approval"
     _description = "Approval Request Form"
 
     # 7: defaults methods
@@ -461,7 +461,7 @@ class RequestFormApproval(models.Model):
     employee_id = fields.Many2one(comodel_name='hr.employee',string='Name')
     job_id = fields.Many2one(comodel_name='hr.job',string='Jabatan')
     group_id = fields.Many2one(comodel_name='res.groups')
-    request_form_id = fields.Many2one(comodel_name='dms.request.form', string='Request Form')
+    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
 
     # 9: constraints & sql constraints
 
@@ -514,7 +514,7 @@ class RequestFormApproval(models.Model):
             'alasan_reject': self.alasan_reject
         })
         if write:
-            self.env['dms.request.form'].suspend_security().write({
+            self.env['eps.request.form'].suspend_security().write({
                 'state': 'rejected'
             })
 
@@ -525,7 +525,7 @@ class RequestFormAttachment(models.Model):
         for record in self:
             if record.filename_upload:
                 try:
-                    image_lampiran = self.env['dms.conf.image'].suspend_security().get_img(record._filename_upload)
+                    image_lampiran = self.env['eps.conf.image'].suspend_security().get_img(record._filename_upload)
                     record.file_show = image_lampiran
                     if record.type_file == 'pdf':
                         record.file_pdf = image_lampiran
@@ -547,7 +547,7 @@ class RequestFormAttachment(models.Model):
     file_pdf = fields.Binary(string='file pdf', compute='compute_filename')
     type_file = fields.Char(string='Tipe File')
 
-    request_line_id = fields.Many2one(comodel_name='dms.request.form.line',string='Request Line', index=True)
+    request_line_id = fields.Many2one(comodel_name='eps.request.form.line',string='Request Line', index=True)
 
     @api.model
     def create(self, vals: dict):
@@ -570,7 +570,7 @@ class RequestFormAttachment(models.Model):
         if file_upload:
             tmp_lampiran = vals['filename'].split('.')
             filename_up = f'[{ids.id}]{type_file}-{str(vals["request_line_id"])}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
-            self.env['dms.conf.image'].suspend_security().upload_file(filename_up, file_upload)
+            self.env['eps.conf.image'].suspend_security().upload_file(filename_up, file_upload)
             ids.filename_upload = filename_up
         return ids
     
@@ -584,6 +584,6 @@ class RequestFormAttachment(models.Model):
             vals['file_upload'] = False
             tmp_lampiran = vals['filename'].split('.')
             filename_up = f'[{self.id}]{type_file}-{str(vals["request_form"])}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
-            self.env['dms.conf.image'].suspend_security().upload_file(filename_up, file_upload)
+            self.env['eps.conf.image'].suspend_security().upload_file(filename_up, file_upload)
             vals['filename_upload'] = filename_up
         return super(RequestFormAttachment, self).write(vals)

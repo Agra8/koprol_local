@@ -17,7 +17,7 @@
                                     <div class="container">
                                       <div class="row align-items-center">
                                         <div class="col-lg-6 pt16 pb16 o_colored_level">
-                                          <t t-if="request.session.get('form_builder_model_model','') == 'dms.request.form'">
+                                          <t t-if="request.session.get('form_builder_model_model','') == 'eps.request.form'">
                                             <t t-set="request_form" t-value="request.website._website_form_last_record().sudo()"/>
                                             <t t-if="request_form">
                                                 <h1 class="o_default_snippet_text"><b><t t-esc="request_form.name"/></b></h1>

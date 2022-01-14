@@ -2,9 +2,9 @@
 <odoo>
     <data>
         <!-- tree view -->
-        <record id="master_jrf_arf_tree" model="ir.ui.view">
-            <field name="name">master.jrf.arf</field>
-            <field name="model">master.jrf.arf</field>
+        <record id="eps_master_jrf_arf_tree" model="ir.ui.view">
+            <field name="name">eps.master.jrf.arf</field>
+            <field name="model">eps.master.jrf.arf</field>
             <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
@@ -17,9 +17,9 @@
         </record>
 
         <!-- Form View -->
-        <record id="master_jrf_arf_form" model="ir.ui.view">
-            <field name="name">master.jrf.arf.form</field>
-            <field name="model">master.jrf.arf</field>
+        <record id="eps_master_jrf_arf_form" model="ir.ui.view">
+            <field name="name">eps.master.jrf.arf.form</field>
+            <field name="model">eps.master.jrf.arf</field>
             <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
@@ -54,9 +54,9 @@
         </record>
 
         <!-- search view -->
-        <record id="master_jrf_arf_search" model="ir.ui.view">
-            <field name="name">master.jrf.arf.search</field>
-            <field name="model">master.jrf.arf</field>
+        <record id="eps_master_jrf_arf_search" model="ir.ui.view">
+            <field name="name">eps.master.jrf.arf.search</field>
+            <field name="model">eps.master.jrf.arf</field>
             <field name="arch" type="xml">
                 <search string="Master JRF / ARF">
                     <field name="name"/>
@@ -66,10 +66,10 @@
         </record>
 
         <!-- action window -->
-        <record id="master_jrf_arf_action" model="ir.actions.act_window">
+        <record id="eps_master_jrf_arf_action" model="ir.actions.act_window">
             <field name="name">Master JRF / ARF</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">master.jrf.arf</field>
+            <field name="res_model">eps.master.jrf.arf</field>
             <field name="view_mode">tree,form</field>
             <field name="context">{"search_default_fieldname":1}</field>
             <field name="help" type="html">
@@ -82,9 +82,9 @@
         </record>
 
         <!-- Master Type Request -->
-        <record id="master_type_reqeust_tree" model="ir.ui.view">
+        <record id="eps_master_type_reqeust_tree" model="ir.ui.view">
             <field name="name">Master Type Request</field>
-            <field name="model">master.type.request</field>
+            <field name="model">eps.master.type.request</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Master Type Request">
@@ -94,9 +94,9 @@
             </field>
         </record>
 
-        <record id="master_type_request_form" model="ir.ui.view">
+        <record id="eps_master_type_request_form" model="ir.ui.view">
             <field name="name">Master Type Request Form</field>
-            <field name="model">master.type.request</field>
+            <field name="model">eps.master.type.request</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form>
@@ -129,9 +129,9 @@
             </field>
         </record>
 
-        <record id="master_type_request_search" model="ir.ui.view">
+        <record id="eps_master_type_request_search" model="ir.ui.view">
             <field name="name">Master Type Request Search</field>
-            <field name="model">master.type.request</field>
+            <field name="model">eps.master.type.request</field>
             <field name="arch" type="xml">
                 <search string="Master Type Request">
                     <field name="name"/>
@@ -141,10 +141,10 @@
         </record>
 
         <!-- action window -->
-        <record id="master_type_request_action" model="ir.actions.act_window">
+        <record id="eps_master_type_request_action" model="ir.actions.act_window">
             <field name="name">Master Type Request </field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">master.type.request</field>
+            <field name="res_model">eps.master.type.request</field>
             <field name="view_mode">tree,form</field>
             <field name="context">{"search_default_fieldname":1}</field>
             <field name="help" type="html">
@@ -156,8 +156,8 @@
             </field>
          </record>
 
-         <menuitem id="master_jrf_arf_menu" name="Master JRF / ARF" parent="dms_master_jrf_arf_sub_menu" action="master_jrf_arf_action" sequence="20"/>
+         <menuitem id="eps_master_jrf_arf_menu" name="Master JRF / ARF" parent="eps_master_jrf_arf_sub_menu" action="eps_master_jrf_arf_action" sequence="20"/>
          
-         <menuitem id="master_type_request_menu" name="Master Type Request" parent="dms_master_jrf_arf_sub_menu" action="master_type_request_action" sequence="20"/>
+         <menuitem id="eps_master_type_request_menu" name="Master Type Request" parent="eps_master_jrf_arf_sub_menu" action="eps_master_type_request_action" sequence="20"/>
     </data>
 </odoo>
