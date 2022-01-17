@@ -157,7 +157,9 @@
                 <form string="eps Request Form Line">
                     <group>
                         <group>
-                            <field name="form_id"/>
+                            <field name="form_id" required="1"/>
+                            <field name="tipe_form" readonly="1" invisible="1"/>
+                            <field name="sistem_id" attrs="{'invisible':[('tipe_form','!=', 'Sistem')], 'required': [('tipe_form','=', 'Sistem')]}"/>
                             <field name="keterangan"/>
                             <field name="date" readonly="1"/>
                         </group>

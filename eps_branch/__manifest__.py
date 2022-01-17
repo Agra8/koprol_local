@@ -17,6 +17,8 @@ Branch
         'views/res_company_views.xml',
         'views/eps_divisi_views.xml',
         'views/eps_business_views.xml',
+        'data/res_branch.xml',
+        'data/res_area.xml',
         # 'security/ir_rule.xml',
         'security/res_group.xml',
         'security/ir.model.access.csv',

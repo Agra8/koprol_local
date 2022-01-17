@@ -332,7 +332,7 @@ class RequestFormLine(models.Model):
     def _get_default_date(self):
         return self.env['res.branch'].get_default_date()
 
-    
+    @api.depends('filename_upload')
     def compute_filename(self):
         for record in self:
             if record.filename_upload:
@@ -346,27 +346,27 @@ class RequestFormLine(models.Model):
                 except FileNotFoundError as err:
                     _logger.error(err)
                     record.file_show = False
-            
-            else:
-                record.file_show = False
+       
 
     # 8: fields
 
     name=fields.Char(string='Name')
     date=fields.Date(string='Date', default=_get_default_date)
     keterangan = fields.Text(string='Keterangan')
-    form_id = fields.Many2one(comodel_name='master.jrf.arf', string='Master Request')
-    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
     
     file_upload = fields.Binary(string='Upload Lampiran')
     filename_upload = fields.Char(string='Nama Lampiran Upload')
     filename = fields.Char(string='Nama Lampiran')
     file_show = fields.Binary(string='lampiran_show', compute='compute_filename')
     file_download = fields.Binary(string='Download Lampiran', related='file_show')
-    file_pdf = fields.Binary(string='file pdf', compute='compute_filename')
+    file_pdf = fields.Binary(string='file pdf', related='file_show')
     type_file = fields.Char(string='Tipe File')
 
-    
+    # 9: Relations Fields
+    form_id = fields.Many2one(comodel_name='eps.master.jrf.arf', string='Master Request')
+    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
+    sistem_id = fields.Many2one(comodel_name='eps.sistem.master', string='Master Sistem')
+
     @api.model
     def write(self, vals: dict):
         if vals.get('type_file'):
@@ -394,10 +394,13 @@ class RequestFormLineWizard(models.TransientModel):
     name=fields.Char(string='Name')
     date=fields.Date(string='Date', default=_get_default_date)
     keterangan = fields.Text(string='Keterangan')
-    form_id = fields.Many2one(comodel_name='master.jrf.arf', string='Master Request')
-    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
-    attachment_line_ids = fields.One2many(comodel_name='request.form.attachment', inverse_name='request_line_id')
+    tipe_form = fields.Char(string='Sistem', related='form_id.type_form_id.name')
 
+    # 9: Relations Fields
+    form_id = fields.Many2one(comodel_name='eps.master.jrf.arf', string='Master Request')
+    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
+    sistem_id = fields.Many2one(comodel_name='eps.sistem.master', string='Sistem')
+    attachment_line_ids = fields.One2many(comodel_name='eps.request.form.attachment', inverse_name='request_line_id')
 
     def action_add_only(self):
         self.ensure_one()
@@ -519,7 +522,7 @@ class RequestFormApproval(models.Model):
             })
 
 class RequestFormAttachment(models.Model):
-    _name = "request.form.attachment"
+    _name = "eps.request.form.attachment"
 
     def compute_filename(self):
         for record in self:
