@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-	<data>
-		<menuitem id="dms_job_top_menu" name="Dms job" sequence="20" />
-		<menuitem id="dms_job_sub_menu" name="Dms job" sequence="40" parent="dms_job_top_menu" />
-	</data>
-</odoo>

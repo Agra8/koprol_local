@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_eps_matrix_approval_all,eps_matrix_approval all,model_eps_matrix_approval,,1,1,1,1
-access_eps_matrix_approval_line_all,eps_matrix_approval_line all,model_eps_matrix_approval_line,,1,1,1,1
-access_eps_approval_transaction_all,eps_eps_approval_transaction all,model_eps_approval_transaction,,1,1,1,1
-access_eps_approval_reject_all,eps_eps_approval_reject all,model_eps_reject_approval,,1,1,1,1
-access_eps_approval_cancel_all,eps_eps_approval_cancel all,model_eps_cancel_approval,,1,1,1,1
-access_eps_cancel_approved_all,access_eps_cancel_approved all,model_eps_cancel_approved,,1,1,1,1
