@@ -22,7 +22,7 @@
 			<field name="arch" type="xml">
 				<form string="Proposal">
                     <header>
-                        <button name="button_print" type="object" string="Print" states="draft,wfa,approved,done" icon="fa-print"/>
+                        <button name="button_print" type="object" string="Print" states="draft,waiting_for_approval,approved,done" icon="fa-print"/>
                     	<button name="action_request_approval" class="oe_highlight" states="draft" string="RFA" type="object"/>
                     	<button name="action_approve" class="oe_highlight" states="waiting_for_approval" string="Approve" type="object"/>
                     	<button string="Reject" name="%(eps_approval.eps_reject_approval_wizard_action)d" type="action" attrs="{'invisible': [('state','!=','waiting_for_approval')]}" context="{'model_name':'eps.proposal','update_value':{'approval_state':'r','state':'draft'}}" />

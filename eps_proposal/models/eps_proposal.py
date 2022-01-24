@@ -1,15 +1,12 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
-from docxtpl import DocxTemplate, R, InlineImage
 import subprocess
 import base64
 import os
 import platform
 from odoo.tools import config
-from docx2pdf import convert
 from datetime import datetime
 import qrcode
-from docx.shared import Mm
 from werkzeug.urls import url_encode
 from io import BytesIO
 import pytz
@@ -31,20 +28,20 @@ class Proposal(models.Model):
 
     name = fields.Char(string='Proposal Name', required=True, default='/')
     date = fields.Date(string='Tanggal Proposal', required=True, default=_get_default_date)
-    nama_proposal = fields.Char(string='Nama Proposal', required=True)
-    state = fields.Selection(selection=[('draft','Draft'),('waiting_for_approval','Waiting for Approval'),('approved','Approved'),('rejected','Rejected'),('done','Done')],default='draft',  string='State',  help='')
-    company_id = fields.Many2one('res.company', string='Company', required=True)
-    branch_id = fields.Many2one('res.branch', domain="[('company_id','=',company_id)]", string='Branch', required=True)
-    divisi_id = fields.Many2one('eps.divisi', string='Divisi', required=True)
-    department_id = fields.Many2one('hr.department', domain="[('company_id','=',company_id)]", string='Department', required=True)
-    employee_id = fields.Many2one('hr.employee', string='PIC', required=True)
-    pic_contact = fields.Char(related='employee_id.mobile_phone', string="PIC's Contact")
-    latar_belakang = fields.Text(string='Latar Belakang')
-    sasaran_tujuan = fields.Text(string='Sasaran dan Tujuan')
-    rencana_pengajuan = fields.Text(string='Rencana Pengajuan')
+    nama_proposal = fields.Char(string='Nama Proposal', required=True, tracking=True)
+    state = fields.Selection(selection=[('draft','Draft'),('waiting_for_approval','Waiting for Approval'),('approved','Approved'),('rejected','Rejected'),('done','Done')],default='draft',  string='State',  help='', tracking=True)
+    company_id = fields.Many2one('res.company', string='Company', required=True, tracking=True)
+    branch_id = fields.Many2one('res.branch', domain="[('company_id','=',company_id)]", string='Branch', required=True, tracking=True)
+    divisi_id = fields.Many2one('eps.divisi', string='Divisi', required=True, tracking=True)
+    department_id = fields.Many2one('hr.department', domain="[('company_id','=',company_id)]", string='Department', required=True, tracking=True)
+    employee_id = fields.Many2one('hr.employee', string='PIC', required=True, tracking=True)
+    pic_contact = fields.Char(related='employee_id.mobile_phone', string="PIC's Contact", tracking=True)
+    latar_belakang = fields.Text(string='Latar Belakang', tracking=True)
+    sasaran_tujuan = fields.Text(string='Sasaran dan Tujuan', tracking=True)
+    rencana_pengajuan = fields.Text(string='Rencana Pengajuan', tracking=True)
     # estimasi_biaya = fields.Text(string='Estimasi Biaya')
     proposal_line_ids = fields.One2many('eps.proposal.line', 'proposal_id', string='Lines')
-    total = fields.Float(string='Total(grandtotal)', compute='_compute_total')
+    total = fields.Float(string='Total(grandtotal)', compute='_compute_total', tracking=True)
     file_document = fields.Binary(string="File Document")
     filename_document = fields.Char(string="File Document")
     filename_upload_document = fields.Char(string="Filename upload Document")
@@ -128,7 +125,9 @@ class Proposal(models.Model):
             'action': self.env.ref('eps_proposal.eps_proposal_action').id,
         }
         params = '/web?#%s' % url_encode(url_params)
-        return base_url + params
+        full_url = base_url + params
+        full_url = full_url.replace('#','%23').replace('&','%26')
+        return full_url
 
     def generate_qr_code(self, text, img_name, template):
         qr = qrcode.QRCode(
@@ -150,6 +149,9 @@ class Proposal(models.Model):
         return img
 
     def button_print(self):
+        return self.env.ref('eps_proposal.action_report_eps_proposal').report_action(self)
+
+    def button_print_old(self):
         self.ensure_one()
         data_dir = config['data_dir']
         working_dir = os.path.dirname(__file__)
@@ -290,6 +292,23 @@ class Proposal(models.Model):
         #     result = {'type': 'ir.actions.act_window_close'}
 
         return result
+
+    def get_aging(self, approval_date):
+        aging = 0
+        if approval_date :
+            delta = datetime.now() - approval_date
+            aging = delta.days
+        if aging :
+            if aging == 1 :
+                aging = f'{aging} day'
+            else :
+                aging = f'{aging} days'
+        return aging
+
+    def get_state(self):
+        state = (dict(self._fields['state'].selection).get(self.state)).upper()
+        state = state.replace('WAITING FOR APPROVAL', 'WFA')
+        return state
 
 class ProposalLine(models.Model):
     _name = 'eps.proposal.line'
