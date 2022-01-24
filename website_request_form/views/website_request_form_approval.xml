@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="website_request_form_approval" model="website.page">
+            <field name="is_published">True</field>
+            <field name="website_indexed" eval="False"/>
+            <field name="name">Approval Page</field>
+            <field name="type">qweb</field>
+            <field name="key">website_request_form.website_request_form_approval</field>
+            <field name="arch" type="xml">
+                <t name="Approval Page" t-name="website_request_form.website_request_form_approval">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="oe_structure">
+                                <section class="s_picture pt48 pb24 o_colored_level undefined o_cc o_cc1" data-snippet="s_picture" data-name="Picture" style="">
+                                    <div class="o_container_small">
+                                      <h2 style="text-align: center;">
+                                        <font style="font-size: 62px;">&amp;nbsp;</font>
+                                      </h2>
+                                      <p style="text-align: center;">
+                                        <br/>
+                                      </p>
+                                      <div class="row s_nb_column_fixed">
+                                        <div class="col-lg-10 offset-lg-1 pb24 o_colored_level" style="text-align: center;">
+                                            <lord-icon trigger="loop" scale="500" src="/website_request_form/static/src/images/thanks.json"></lord-icon>
+                                            <p>Terima kasih <b><t t-esc="nama_employee"/></b> sudah melakukan Approval terhadap transaksi request
+                                              dengan nomor transaksi <b><t t-esc="nama_transaksi"/></b>, dan berikut list request tersebut.</p>
+                                            <p></p>
+                                            <table style="border: 1px; border-color:#555555; font-size: 11px; font-family: Liberation Mono;" cellpadding="5">
+                                              <thead>
+                                                <tr>
+                                                  <td style="border: 1px solid black; text-align: left">no</td>
+                                                  <td style="border: 1px solid black; text-align: left">Keterangan Request</td>
+                                                </tr>
+                                              </thead>
+                                              <t t-set="nomor" t-value="1"/>
+                                              <tbody>
+                                                <t t-foreach="request_form" t-as="line">
+                                                  <tr>
+                                                    <td style="border: 1px solid black; text-align: left"><t t-esc="nomor"/></td>
+                                                    <td style="border: 1px solid black; text-align: left"><t t-esc="line.request_line_ids.keterangan"/></td>
+                                                  </tr>
+                                                  <t t-set="nomor" t-value="nomor+1"/>
+                                                </t>
+                                              </tbody>
+                                            </table>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </section>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+    </data>
+</odoo>

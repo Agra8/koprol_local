@@ -1,0 +1,1215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="groups_co_driver" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Co Driver</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_clerk'))]"/>
+        </record>
+            
+        <record id="groups_driver" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Driver</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_clerk'))]"/>
+        </record>
+            
+        <record id="groups_office_boy" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Office Boy</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_clerk'))]"/>
+        </record>
+            
+        <record id="groups_part_driver" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Part Driver</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_clerk'))]"/>
+        </record>
+            
+        <record id="groups_part_logistic_driver" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Part Logistic Driver</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_clerk'))]"/>
+        </record>
+            
+        <record id="groups_pre_delivery_inspection" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Pre Delivery Inspection</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_clerk'))]"/>
+        </record>
+
+        <record id="groups_deleveryman" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Deleveryman</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_clerk'))]"/>
+        </record>
+
+        <record id="groups_massangger" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Massangger</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_clerk'))]"/>
+        </record>
+            
+        <record id="groups_ar_controller_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">AR Controller Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_administration_helpdesk_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Administration Helpdesk Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_administration_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Administration Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_area_and_sales_administration_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Area and Sales Administration Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_area_and_sales_support_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Area and Sales Support Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_bbn_centralization_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">BBN Centralization Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_bpkb_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">BPKB Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_brand_activation_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Brand Activation Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_building_and_facilities_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Building and Facilities Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_cashier" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Cashier</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_claim_kpb_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Claim Kpb Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_claim_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Claim Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_courier" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Courier</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_creative_communication_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Creative Communication Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_creative_communication_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Creative Communication Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_crm_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Crm Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_customer_relation_management" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Customer Relation Management</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_customer_relation_officer" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Customer Relation Officer</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_data_center_and_dba_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Data Center and DBA Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_employee_support_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Employee Support Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_faktur_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Faktur Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_filing_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Filing Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_finance_2w_budget_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Finance 2W Budget Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_finance_2w_payment_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Finance 2W Payment Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_front_desk" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Front Desk</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_general_affairs_administration_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">General Affairs Administration Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_general_affairs_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">General Affairs Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_hc3_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">HC3 Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_hotline_administration_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Hotline Administration Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_hotline_mechanic" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Hotline Mechanic</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_it_helpdesk_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">IT Helpdesk Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_it_operations_and_support_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">IT Operations and Support Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_it_network_and_security_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">IT Network and Security</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_application_support_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Application Support Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_sales_force_management_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Sales Force Management</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_it_project_management_officer" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">IT Project Management Officer</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_logistic_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Logistic Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_marketing_research_development_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Marketing Research Development Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_marketing_support_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Marketing Support Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_mechanic" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Mechanic</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_mechanic_head" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Mechanic Head</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_operation_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Operation Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_packing_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Packing Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_part_control_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Part Control Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_part_coordinator" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Part Coordinator</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_part_hotline_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Part Hotline Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_part_logistic_support_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Part Logistic Support Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_part_sales" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Part Sales</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_partman" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Partman</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_pdca_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">PDCA Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_pdi_mechanic" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">PDI Mechanic</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_pqm_processor_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">PQM Processor Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_receiving_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Receiving Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_recruitment_and_selection_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Recruitment and Selection Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_salesman" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Salesman</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_sales_coordinator" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Sales Coordinator</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_sales_counter" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Sales Counter</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_salesman_magang" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Salesman Magang</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_sales_counter_coordinator" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Sales Counter Coordinator</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_sales_swat" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Sales Swat</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_sales_wing" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Sales Wing</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+
+        <record id="groups_sales_partner" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Sales Partner</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+
+        <record id="groups_sales_digital" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Sales Digital</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+        
+        <record id="groups_secretary" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Secretary</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_senior_administration" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Senior Administration</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_service_advisor" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Service Advisor</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_system_developer_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">System Developer Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_system_developer_clerk" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">System Developer Clerk</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_clerk'))]"/>
+        </record>
+            
+        <record id="groups_tax_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Tax Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_technical_support_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Technical Support Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_verificator_administration" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Verificator Administration</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_warehouse_part_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Warehouse Part Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_warehouse_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Warehouse Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_warehouse_support_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Warehouse Support Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_warehouse_unit_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Warehouse unit Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+
+        <record id="groups_stank_and_bpkb_administration" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">STNK and BPKB Administration</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+
+        <record id="groups_marketing_research_development_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Marketing Research Development Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+
+        <record id="groups_promotion_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Promotion Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+
+        <record id="groups_finance_staff" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Finance Staff</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_staff'))]"/>
+        </record>
+            
+        <record id="groups_ar_controller_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">AR Controller Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_academy_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Academy Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_administration_head" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Administration Head</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_administration_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Administration Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_advertising_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Advertising Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_area_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Area Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_branch_head" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Branch Head</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_brand_activation_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Brand Activation Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_claim_administration_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Claim Administration Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_compliance_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Compliance Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_customer_servce_analyst_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Customer Servce Analyst Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_customer_service_and_people_development_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Customer Service and People Development Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_finance_2w_operation_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Finance 2W Operation Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_finance_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Finance Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_general_affairs_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">General Affairs Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_group_customer_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Group Customer Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_hc3_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">HC3 Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_human_resources_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Human Resources Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_information_technology_assistant_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Information Technology Assistant Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_internal_and_wme_development_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Internal and WME Development Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_it_operations_and_support_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">IT Operations and Support Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_legal_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Legal Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_logistic_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Logistic Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_marketing_planning_and_development_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Marketing Planning and Development Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_part_logistic_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Part Logistic Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_part_sales_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Part Sales Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_part_warehouse_head" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Part Warehouse Head</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_pdca_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">PDCA Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_people_development_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">People Development Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_promotion_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Promotion Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_sales_operation_head" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Sales Operation Head</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_payroll_and_personal_services_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Payroll and Personal Services SPV</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_service_engineer_and_ahass_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Service Engineer and Ahass Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_service_engineer_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Service Engineer Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_service_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Service Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_technical_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Technical Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_training_analyst_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Training Analyst Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_warehouse_part_head" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Warehouse Part Head</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_warehouse_unit_head" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Warehouse unit Head</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_workshop_head" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Workshop Head</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_workshop_operation_support_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Workshop Operation Support Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+
+        <record id="groups_crm_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">CRM Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+
+        <record id="groups_warehouse_spv" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Warehouse Spv</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_supervisor'))]"/>
+        </record>
+            
+        <record id="groups_administration_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Administration Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_area_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Area Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_area_manager'))]"/>
+        </record>
+                
+        <record id="groups_area_operation_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Area Operation Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_compliance_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Compliance Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_group_customer_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Group Customer Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_hc3_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">HC3 Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_human_resources_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Human Resources Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_logistic_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Logistic Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_marketing_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Marketing Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_network_development_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Network Development Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_organization_and_people_development_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Organization and People Development Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_part_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Part Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_promotion_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Promotion Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_sales_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Sales Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_service_and_after_sales_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Service and After Sales Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_technical_service_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Technical Service Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+
+        <record id="groups_information_technology_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Information Technology Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_manager'))]"/>
+        </record>
+            
+        <record id="groups_operation_after_sales_general_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Operation After Sales General Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_gm'))]"/>
+        </record>
+            
+        <record id="groups_operation_marketing_general_manager" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+			<field name="name">Operation Marketing General Manager</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_gm'))]"/>
+        </record>
+
+        <record id="groups_owner" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms"/>
+			<field name="name">Owner</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_branch_head'))]"/>
+        </record>
+            
+        <record id="groups_chief_operating_officer" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_ho"/>
+			<field name="name">Chief Operating Officer</field>
+			<field name="implied_ids" eval="[(4,ref('base.group_user')),
+                                            (4,ref('dms_job.groups_chief'))]"/>
+        </record>
+        
+    </data>
+
+    <data>
+        <record id="group_job_md_admin" model="res.groups">
+            <field name="category_id" ref="dms_menu.module_category_dms_md"/>
+            <field name="name">Dms Md Administrator</field>
+            <field name="implied_ids" eval="[
+
+                (4,ref('groups_co_driver')),
+                (4,ref('groups_driver')),
+                (4,ref('groups_office_boy')),
+                (4,ref('groups_part_driver')),
+                (4,ref('groups_part_logistic_driver')),
+                (4,ref('groups_pre_delivery_inspection')),
+                (4,ref('groups_deleveryman')),
+                (4,ref('groups_massangger')),
+                (4,ref('groups_ar_controller_staff')),
+                (4,ref('groups_administration_helpdesk_staff')),
+                (4,ref('groups_administration_staff')),
+                (4,ref('groups_area_and_sales_administration_staff')),
+                (4,ref('groups_area_and_sales_support_staff')),
+                (4,ref('groups_bbn_centralization_staff')),
+                (4,ref('groups_bpkb_staff')),
+                (4,ref('groups_brand_activation_staff')),
+                (4,ref('groups_building_and_facilities_staff')),
+                (4,ref('groups_cashier')),
+                (4,ref('groups_claim_kpb_staff')),
+                (4,ref('groups_claim_staff')),
+                (4,ref('groups_courier')),
+                (4,ref('groups_creative_communication_staff')),
+                (4,ref('groups_crm_staff')),
+                (4,ref('groups_customer_relation_management')),
+                (4,ref('groups_customer_relation_officer')),
+                (4,ref('groups_data_center_and_dba_staff')),
+                (4,ref('groups_employee_support_staff')),
+                (4,ref('groups_faktur_staff')),
+                (4,ref('groups_filing_staff')),
+                (4,ref('groups_finance_2w_budget_staff')),
+                (4,ref('groups_finance_2w_payment_staff')),
+                (4,ref('groups_front_desk')),
+                (4,ref('groups_general_affairs_administration_staff')),
+                (4,ref('groups_general_affairs_staff')),
+                (4,ref('groups_hc3_staff')),
+                (4,ref('groups_hotline_administration_staff')),
+                (4,ref('groups_hotline_mechanic')),
+                (4,ref('groups_it_helpdesk_staff')),
+                (4,ref('groups_it_operations_and_support_staff')),
+                (4,ref('groups_it_project_management_officer')),
+                (4,ref('groups_logistic_staff')),
+                (4,ref('groups_marketing_research_development_staff')),
+                (4,ref('groups_marketing_support_staff')),
+                (4,ref('groups_mechanic')),
+                (4,ref('groups_mechanic_head')),
+                (4,ref('groups_operation_staff')),
+                (4,ref('groups_packing_staff')),
+                (4,ref('groups_part_control_staff')),
+                (4,ref('groups_part_coordinator')),
+                (4,ref('groups_part_hotline_staff')),
+                (4,ref('groups_part_logistic_support_staff')),
+                (4,ref('groups_part_sales')),
+                (4,ref('groups_partman')),
+                (4,ref('groups_pdca_staff')),
+                (4,ref('groups_pdi_mechanic')),
+                (4,ref('groups_pqm_processor_staff')),
+                (4,ref('groups_receiving_staff')),
+                (4,ref('groups_recruitment_and_selection_staff')),
+                (4,ref('groups_salesman')),
+                (4,ref('groups_sales_coordinator')),
+                (4,ref('groups_sales_counter')),
+                (4,ref('groups_sales_counter_coordinator')),
+                (4,ref('groups_sales_swat')),
+                (4,ref('groups_sales_wing')),
+                (4,ref('groups_secretary')),
+                (4,ref('groups_senior_administration')),
+                (4,ref('groups_service_advisor')),
+                (4,ref('groups_system_developer_staff')),
+                (4,ref('groups_tax_staff')),
+                (4,ref('groups_technical_support_staff')),
+                (4,ref('groups_verificator_administration')),
+                (4,ref('groups_warehouse_part_staff')),
+                (4,ref('groups_warehouse_staff')),
+                (4,ref('groups_warehouse_support_staff')),
+                (4,ref('groups_warehouse_unit_staff')),
+                (4,ref('groups_stank_and_bpkb_administration')),
+                (4,ref('groups_marketing_research_development_staff')),
+                (4,ref('groups_promotion_staff')),
+                (4,ref('groups_finance_staff')),
+                (4,ref('groups_ar_controller_spv')),
+                (4,ref('groups_academy_spv')),
+                (4,ref('groups_administration_head')),
+                (4,ref('groups_administration_spv')),
+                (4,ref('groups_advertising_spv')),
+                (4,ref('groups_area_spv')),
+                (4,ref('groups_branch_head')),
+                (4,ref('groups_brand_activation_spv')),
+                (4,ref('groups_claim_administration_spv')),
+                (4,ref('groups_compliance_spv')),
+                (4,ref('groups_customer_servce_analyst_spv')),
+                (4,ref('groups_customer_service_and_people_development_spv')),
+                (4,ref('groups_finance_2w_operation_spv')),
+                (4,ref('groups_finance_spv')),
+                (4,ref('groups_general_affairs_spv')),
+                (4,ref('groups_group_customer_spv')),
+                (4,ref('groups_hc3_spv')),
+                (4,ref('groups_human_resources_spv')),
+                (4,ref('groups_information_technology_assistant_manager')),
+                (4,ref('groups_internal_and_wme_development_spv')),
+                (4,ref('groups_it_operations_and_support_spv')),
+                (4,ref('groups_legal_spv')),
+                (4,ref('groups_logistic_spv')),
+                (4,ref('groups_marketing_planning_and_development_spv')),
+                (4,ref('groups_part_logistic_spv')),
+                (4,ref('groups_part_sales_spv')),
+                (4,ref('groups_part_warehouse_head')),
+                (4,ref('groups_pdca_spv')),
+                (4,ref('groups_people_development_spv')),
+                (4,ref('groups_promotion_spv')),
+                (4,ref('groups_sales_operation_head')),
+                (4,ref('groups_service_engineer_and_ahass_spv')),
+                (4,ref('groups_service_engineer_spv')),
+                (4,ref('groups_service_spv')),
+                (4,ref('groups_technical_spv')),
+                (4,ref('groups_training_analyst_spv')),
+                (4,ref('groups_warehouse_part_head')),
+                (4,ref('groups_warehouse_unit_head')),
+                (4,ref('groups_workshop_head')),
+                (4,ref('groups_workshop_operation_support_spv')),
+                (4,ref('groups_crm_spv')),
+                (4,ref('groups_warehouse_spv')),
+                (4,ref('groups_administration_manager')),
+                (4,ref('groups_area_manager')),
+                (4,ref('groups_area_operation_manager')),
+                (4,ref('groups_compliance_manager')),
+                (4,ref('groups_group_customer_manager')),
+                (4,ref('groups_hc3_manager')),
+                (4,ref('groups_human_resources_manager')),
+                (4,ref('groups_logistic_manager')),
+                (4,ref('groups_marketing_manager')),
+                (4,ref('groups_network_development_manager')),
+                (4,ref('groups_organization_and_people_development_manager')),
+                (4,ref('groups_part_manager')),
+                (4,ref('groups_promotion_manager')),
+                (4,ref('groups_sales_manager')),
+                (4,ref('groups_service_and_after_sales_manager')),
+                (4,ref('groups_technical_service_manager')),
+                (4,ref('groups_information_technology_manager')),
+                (4,ref('groups_operation_after_sales_general_manager')),
+                (4,ref('groups_operation_marketing_general_manager')),
+                (4,ref('groups_chief_operating_officer')),
+                (4,ref('groups_chief_operating_officer')),
+                ]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="res_branch_view_tree" model="ir.ui.view">
+			<field name="name">res.branch.tree</field>
+			<field name="model">res.branch</field>
+			<field name="priority">1</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="company_id"/>
+					<field name="code"/>
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="res_branch_view_form" model="ir.ui.view">
+			<field name="name">res.branch.form</field>
+			<field name="model">res.branch</field>
+			<field name="priority">1</field>
+			<field name="arch" type="xml">
+				<form string="Branches">
+					<sheet>
+						<group>
+							<group>
+								<field name="create_date" invisible="1"/>
+								<field name="code" attrs="{'readonly': [('create_date','!=',False)]}"/>
+								<field name="name" required="1"/>
+								<field name="company_id" required="1" options="{'no_open':True,'no_create':True}"/>
+								<field name="profit_centre" required="1"/>
+								<field name="interco_account_id" options="{'no_open':True,'no_create':True}"/>
+								<field name="interco_match_account_id" options="{'no_open':True,'no_create':True}"/>
+								<!-- <field name="area_id"/> -->
+							</group>
+							<group>
+								<field name="street" placeholder="Street..."/>
+			                    <label for="rt" string="Rt/Rw"/>
+			                    <div>
+			                        <field name="rt" placeholder="RT" style="width: 25%%"/>
+			                        <field name="rw" placeholder="RW" style="width: 25%%"/>
+			                    </div>
+			                        <field name="state_id" class="oe_no_button" placeholder="Province" style="width: 50%%" options='{"no_open": True}'/>
+			                        <field name="kabupaten_id" placeholder="City" style="width: 50%%" options="{'no_create': True,'no_open': True}" domain="[('state_id','=',state_id)]"/>
+			                    <label for="kecamatan_id" string="Kecamatan"/>
+			                    <div>            
+			                        <field name="kecamatan_id" placeholder="Kecamatan" style="width: 50%%" options="{'no_create': True,'no_open': True}" domain="[('city_id','=',kabupaten_id)]"/>
+			                        <field name="kecamatan" placeholder="Kecamatan" style="width: 50%%" />
+			                    </div>
+			                    <label for="kelurahan_id" string="Kelurahan"/>
+			                    <div>                   
+			                        <field name="kelurahan_id" placeholder="Kelurahan" style="width: 50%%" options="{'no_create': True,'no_open': True}" domain="[('kecamatan_id','=',kecamatan_id)]"/>                              
+			                        <field name="kelurahan" class="oe_no_button" placeholder="Kelurahan" style="width: 50%%"/>
+			                    </div>
+			                    <field name="kode_pos"/>
+								<field name="phone"/>
+		                        <field name="mobile"/>
+		                        <field name="fax"/>
+		                        <field name="email"/>
+		                        <field name="is_pkp"/>
+		                        <field name="pimpinan_id"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_dms_branch_filter" model="ir.ui.view">
+            <field name="name">dms.branch.filter</field>
+            <field name="model">res.branch</field>
+            <field name="arch" type="xml">
+                <search string="Search Branch">
+                    <field name="code" string="Code Branch"/>
+                    <field name="name" string="Branch"/>				
+                </search>
+            </field>
+        </record> 
+
+		<record id="action_res_branch_tree" model="ir.actions.act_window">
+			<field name="name">Branches</field>
+			<field name="res_model">res.branch</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="action_res_branch_tree" id="menu_action_res_branch_tree" parent="base.menu_users"/>
+</odoo>

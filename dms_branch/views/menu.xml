@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<menuitem id="dms_branch_top_menu" name="Dms branch" sequence="20" web_icon="dms_branch,static/description/icon.png" />
+		<menuitem id="dms_branch_sub_menu" name="Dms branch" sequence="40" parent="dms_branch_top_menu"/>
+	</data>
+</odoo>

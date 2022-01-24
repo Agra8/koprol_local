@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+		<record model="ir.ui.view" id="eps_business_tree_view">
+			<field name="name">eps.business.tree</field>
+			<field name="model">eps.business</field>
+			<field name="arch" type="xml">
+				<tree string="Business">
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+			
+		<record model="ir.ui.view" id="eps_business">
+			<field name="name">eps.business.form</field>
+			<field name="model">eps.business</field>
+			<field name="arch" type="xml">
+				<form string="Business">
+					<sheet>
+						<group col="4" colspan="4">
+							<field name="name" required="1"/>
+						</group>
+						<notebook>
+							<page string="Audit Trail">
+								<group>
+									<group>
+										<field name="create_uid" readonly="1"></field>
+										<field name="create_date" readonly="1"></field>
+									</group>
+									<group>
+										<field name="write_uid" readonly="1"></field>
+										<field name="write_date" readonly="1"></field>
+									</group>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record> 
+
+		<record model="ir.actions.act_window" id="eps_business_action">
+			<field name="name">Business</field>
+			<field name="res_model">eps.business</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="eps_business_menuitem" name="Business" sequence="21" parent="base.menu_users" action="eps_business_action"/>  
+	</data>
+</odoo> 

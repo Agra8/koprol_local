@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="dept_administration_department" model="hr.department">
+            <field name="name">Administration Department</field>
+            <field name="complete_name">Administration Department</field>
+        </record>
+    
+        <record id="dept_area_marketing_department" model="hr.department">
+            <field name="name">Area Marketing Department</field>
+            <field name="complete_name">Area Marketing Department</field>
+        </record>
+    
+        <record id="dept_area_operation_department" model="hr.department">
+            <field name="name">Area Operation Department</field>
+            <field name="complete_name">Area Operation Department</field>
+        </record>
+    
+        <record id="dept_compliance_department" model="hr.department">
+            <field name="name">Compliance Department</field>
+            <field name="complete_name">Compliance Department</field>
+        </record>
+    
+        <record id="dept_finance_2w_department" model="hr.department">
+            <field name="name">Finance 2W Department</field>
+            <field name="complete_name">Finance 2W Department</field>
+        </record>
+    
+        <record id="dept_general_affairs_department" model="hr.department">
+            <field name="name">General Affairs Department</field>
+            <field name="complete_name">General Affairs Department</field>
+        </record>
+    
+        <record id="dept_group_customer_department" model="hr.department">
+            <field name="name">Group Customer Department</field>
+            <field name="complete_name">Group Customer Department</field>
+        </record>
+    
+        <record id="dept_hc3_department" model="hr.department">
+            <field name="name">HC3 Department</field>
+            <field name="complete_name">HC3 Department</field>
+        </record>
+    
+        <record id="dept_human_resources_department" model="hr.department">
+            <field name="name">Human Resources Department</field>
+            <field name="complete_name">Human Resources Department</field>
+        </record>
+    
+        <record id="dept_information_technology_department" model="hr.department">
+            <field name="name">Information Technology Department</field>
+            <field name="complete_name">Information Technology Department</field>
+        </record>
+    
+        <record id="dept_logistic_department" model="hr.department">
+            <field name="name">Logistic Department</field>
+            <field name="complete_name">Logistic Department</field>
+        </record>
+    
+        <record id="dept_marketing_department" model="hr.department">
+            <field name="name">Marketing Department</field>
+            <field name="complete_name">Marketing Department</field>
+        </record>
+    
+        <record id="dept_network_development_department" model="hr.department">
+            <field name="name">Network Development Department</field>
+            <field name="complete_name">Network Development Department</field>
+        </record>
+    
+        <record id="dept_operation_after_sales_business_unit_division" model="hr.department">
+            <field name="name">Operation After Sales Business Unit Division</field>
+            <field name="complete_name">Operation After Sales Business Unit Division</field>
+        </record>
+    
+        <record id="dept_operation_marketing_business_unit_division" model="hr.department">
+            <field name="name">Operation Marketing Business Unit Division</field>
+            <field name="complete_name">Operation Marketing Business Unit Division</field>
+        </record>
+    
+        <record id="dept_operation_marketing_division" model="hr.department">
+            <field name="name">Operation Marketing Division</field>
+            <field name="complete_name">Operation Marketing Division</field>
+        </record>
+    
+        <record id="dept_organization_and_people_development_department" model="hr.department">
+            <field name="name">Organization and People Development Department</field>
+            <field name="complete_name">Organization and People Development Department</field>
+        </record>
+    
+        <record id="dept_part_department" model="hr.department">
+            <field name="name">Part Department</field>
+            <field name="complete_name">Part Department</field>
+        </record>
+    
+        <record id="dept_payroll_and_personal_services_section_department" model="hr.department">
+            <field name="name">Payroll and Personal Services Section Department</field>
+            <field name="complete_name">Payroll and Personal Services Section Department</field>
+        </record>
+    
+        <record id="dept_promotion_department" model="hr.department">
+            <field name="name">Promotion Department</field>
+            <field name="complete_name">Promotion Department</field>
+        </record>
+    
+        <record id="dept_sales_department" model="hr.department">
+            <field name="name">Sales Department</field>
+            <field name="complete_name">Sales Department</field>
+        </record>
+    
+        <record id="dept_service_and_after_sales_department" model="hr.department">
+            <field name="name">Service and After Sales Department</field>
+            <field name="complete_name">Service and After Sales Department</field>
+        </record>
+    
+        <record id="dept_tax_2w_department" model="hr.department">
+            <field name="name">Tax 2W Department</field>
+            <field name="complete_name">Tax 2W Department</field>
+        </record>
+    
+        <record id="dept_tdm_honda_motor_cycle_main_dealer_business_unit" model="hr.department">
+            <field name="name">TDM Honda Motor Cycle Main Dealer Business Unit</field>
+            <field name="complete_name">TDM Honda Motor Cycle Main Dealer Business Unit</field>
+        </record>
+    
+        <record id="dept_tdm_honda_motor_cycle_retail_business_unit" model="hr.department">
+            <field name="name">TDM Honda Motor Cycle Retail Business Unit</field>
+            <field name="complete_name">TDM Honda Motor Cycle Retail Business Unit</field>
+        </record>
+    
+        <record id="dept_technical_service_department" model="hr.department">
+            <field name="name">Technical Service Department</field>
+            <field name="complete_name">Technical Service Department</field>
+        </record>
+    
+    </data>
+</odoo>

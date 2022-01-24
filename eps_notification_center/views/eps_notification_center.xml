@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+        <record model="ir.ui.view" id="eps_notification_center_tree_view">
+			<field name="name">eps.notification.center.tree</field>
+			<field name="model">eps.notification.center</field>
+			<field name="arch" type="xml">
+				<tree string="Notification Center">
+                    <!-- <field name="approval_transaction_id"/> -->
+                    <field name="form_id"/>
+                    <field name="transaction_id"/>
+                    <field name="tipe"/>
+                    <field name="subject"/>
+                    <field name="notify_to"/>
+                    <field name="state"/>
+                    <!-- <field name="cc_to"/> -->
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="eps_notification_center_form_view">
+			<field name="name">eps.notification.center.form</field>
+			<field name="model">eps.notification.center</field>
+			<field name="arch" type="xml">
+				<form string="Notification Center">
+                    <header>
+                        <button name="action_sent_notif" class="oe_highlight" states="draft" string="Sent Notification" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="approval_transaction_ids" widget="many2many_tags"/>
+                            <field name="form_id"/>
+                            <field name="transaction_id"/>
+                            <field name="tipe"/>
+                            <field name="subject"/>
+                            <field name="message" widget="html"/>
+                            <field name="notify_to" options="{'no_create': True,'no_open': True}"/>
+                            <field name="cc_to" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="eps_notification_center_action">
+			<field name="name">Notification Center</field>
+			<field name="res_model">eps.notification.center</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="eps_notification_center_menuitem" name="Notification Center" sequence="9" parent="eps_menu.eps_master_top_menu" action="eps_notification_center_action"/>  
+    </data>
+</odoo>

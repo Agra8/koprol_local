@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="master_jrf_arf_tree" model="ir.ui.view">
+            <field name="name">master.jrf.arf</field>
+            <field name="model">master.jrf.arf</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Master JRF / ARF">
+                    <field name="name"/>
+                    <field name="type_form"/>
+                    <!-- <field name="keterangan"/> -->
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="master_jrf_arf_form" model="ir.ui.view">
+            <field name="name">master.jrf.arf.form</field>
+            <field name="model">master.jrf.arf</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Master JRF / ARF">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="type_form"/>
+                            <!-- <field name="keterangan"/> -->
+                        </group>
+                        <notebook>
+                            <page string="Audit Trail">
+                                <group>
+                                    <group>
+                                        <field name="create_uid" readonly="1"/>
+                                        <field name="create_date" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="write_uid" readonly="1"/>
+                                        <field name="write_date" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- search view -->
+        <record id="master_jrf_arf_search" model="ir.ui.view">
+            <field name="name">master.jrf.arf.search</field>
+            <field name="model">master.jrf.arf</field>
+            <field name="arch" type="xml">
+                <search string="Master JRF / ARF">
+                    <field name="name"/>
+                    <field name="type_form"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- action window -->
+        <record id="master_jrf_arf_action" model="ir.actions.act_window">
+            <field name="name">Master JRF / ARF</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">master.jrf.arf</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_fieldname":1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a new JRF / ARF
+                </p><p>
+                    Click the Create button to add a new JRF / ARF
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="master_jrf_arf_menu" name="Master JRF / ARF" parent="dms_master_jrf_arf_sub_menu" action="master_jrf_arf_action" sequence="20"/>
+    </data>
+</odoo>
