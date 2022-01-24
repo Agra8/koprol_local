@@ -3,8 +3,7 @@
     'version':'10.0.1.0.0',
     'depends':['eps_menu', 'eps_approval'],
     'author':"TRA",
-    'website':"http://www.eleos.id",
-    'category':"Uncategorized",
+    'category':"KOPROL",
     'description':"""
 Notification Center
 ======

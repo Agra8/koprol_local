@@ -2,11 +2,10 @@
     'name':"EPS - Menu",
     'version':'10.0.1.0.0',
     'depends':['hr'],
-    'author':"Eleos Putra Solusi",
-    'website':"http://www.eleos.id",
-    'category':'Menu',
+    'author':"EPS",
+    'category':'KOPROL',
     'description':"""
-Eleos ERP Menu.
+KOPROL Menu.
     """,
     'demo':[],
     'data':[
