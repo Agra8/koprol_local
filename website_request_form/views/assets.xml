@@ -1,6 +1,7 @@
 <odoo>
     <data>
-        <template id="assets_overriden_frontend" name="website_hoku assets" inherit_id="web.assets_frontend">
+        <!-- inherit frontend assets -->
+        <template id="assets_overriden_frontend" name="website_request_form assets" inherit_id="web.assets_frontend">
             <xpath expr="link[last()]" position="after">
                 <link rel="stylesheet" type="text/scss" href="/website_request_form/static/src/css/overriden_frontend.scss"/>
                 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -27,9 +28,11 @@
             </xpath>
         </template>
 
-        <template id="assets_overriden_backend" name="website_hoku assets" inherit_id="web.assets_backend">
+        <!-- inherit backend assets -->
+        <template id="assets_overriden_backend" name="website_request_form assets" inherit_id="web.assets_backend">
             <xpath expr="link[last()]" position="after">
                 <link rel="manifest" href="/website_request_form/static/src/js/manifest.json"/>
+                <link rel="stylesheet" type="text/scss" href="/website_request_form/static/src/css/overriden_backend.scss"/>
                 <script src="/website_request_form/static/src/js/registerserviceworker.js"></script>
                 <script>
                     document.addEventListener('DOMContentLoaded', init, false);

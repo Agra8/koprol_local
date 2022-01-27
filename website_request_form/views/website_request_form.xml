@@ -146,7 +146,7 @@
                                         <span class="s_website_form_mark"> *</span>
                                       </label>
                                       <div class="col-sm">
-                                        <select class="form-control s_website_form_input select_field input-company" name="company_id" id="imwez0wfsx" style="" required="true">
+                                        <select class="form-control s_website_form_input select_field input-company" name="company_id" id="imwez0wfsx" style="" required="" onchange="changeByCompany()">
                                           <option value="">(Silahkan Pilih)</option>
                                           <t t-foreach="company" t-as="company">
                                               <option t-attf-value="#{company.id}">
@@ -230,22 +230,39 @@
                                   </div>
                                   </div>
                                   <div id="request_tbl" class="">
+                                    <div id="wrap" class="oe_structure oe_empty">
+                                      <div class="s_hr text-left pt32 pb18" data-snippet="s_hr" data-name="Separator">
+                                        <hr class="w-100 mx-auto" style="border-top-style: double !important; border-top-width: 5px !important;"/>
+                                      </div>
+
+                                      <div class="s_alert clearfix s_alert_sm w-100" data-snippet="s_alert" data-name="Alert" style="background-color: rgba(120, 210, 252, 0.71) !important;">
+                                        <i class="fa fa-2x s_alert_icon fa-info-circle"/>
+                                        <div class="s_alert_content">
+                                          <p>
+                                            <font style="font-size: 18px;">Silahkan isi&amp;nbsp;</font>
+                                            <b>
+                                              <font style="font-size: 18px;">Request</font>
+                                            </b>
+                                            <font style="font-size: 18px;">&amp;nbsp;anda</font>
+                                            <br/>
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
                                     <div>
                                     <div class="w3-row">
-                                      <label class="w3-col m1 s_website_form_label" style="width: 200px" for="2hvgthz7mmr">
+                                      <label class="w3-col m1 s_website_form_label s_website_form_required" style="width: 200px" for="2hvgthz7mmr">
                                         <span class="s_website_form_label_content">Request</span>
                                         <span class="s_website_form_mark"> *</span>
                                       </label>
                                       <div class="w3-col m1 w3-center w3-container m4 l3">
-                                        <select id="requestform_id_1" name="requestform_id" class="form-control s_website_form_input input-types"  placeholder="" required="true">
+                                        <select id="requestform_id_1" name="request_line_ids" class="form-control s_website_form_input input-types"  placeholder="" required="true">
                                            <option value="">Pilih Tipe Request</option>
-                                           <option value="arf">Access Request</option>
-                                           <option value="jrf">Job Request</option>
                                         </select>
                                       </div>
                                       <div class="w3-col m1 w3-center w3-container m4 l6 custom-row">
-                                        <select id="request_id_1" name="request_line_ids" class="form-control s_website_form_input" placeholder="" required="true">
-                                           <option value="">(Silahkan Pilih)</option>
+                                        <select id="request_id_1" name="request_sistem_ids" class="form-control s_website_form_input" placeholder="" required="1" style="display: none">
+                                          <option value="">Pilih Sistem</option>
                                         </select>
                                       </div>
                                     </div>
@@ -267,7 +284,7 @@
                                           <span class="s_website_form_mark"> </span>
                                         </label>
                                         <div class="col-sm">
-                                          <input type="file" class="form-control s_website_form_input" name="attachment" required=""/>
+                                          <input type="file" class="form-control s_website_form_input" name="attachment"/>
                                         </div>
                                       </div>
                                     </div>
@@ -296,12 +313,21 @@
                           </div>
                           </div>
                         </div>
+                        <!-- TODO: rubah tipe request dan tambahkan input sistem jika request tersebut berkaitan dengan sistem -->
                     <div hidden="">
-                      <select class="form-control s_website_form_input s_website_form_required_custom" id="requestjrf_" placeholder="Request" required="true">
+                      <select id="requestform_id" name="requestform_id" class="form-control s_website_form_input input-types"  placeholder="" required="true">
+                        <option value="">Pilih Tipe Request</option>
+                        <t t-foreach="requestjrf" t-as="requestjrf">
+                         <option t-attf-value="#{requestjrf.id}-#{requestjrf.type_form_id.name}-#{requestjrf.company_id.id}">
+                             <t t-esc="requestjrf.name"/>
+                         </option>
+                     </t>
+                     </select>
+                      <select class="form-control s_website_form_input s_website_form_required_custom" id="tipe_sistem" placeholder="Sistem" required="true">
                           <option value="">(Silahkan Pilih)</option>
-                          <t t-foreach="requestjrf" t-as="requestjrf">
-                              <option t-attf-value="#{requestjrf.type_form}-#{requestjrf.id}">
-                                  <t t-esc="requestjrf.name"/>
+                          <t t-foreach="tipe_sistem" t-as="tipe_sistem">
+                              <option t-attf-value="#{tipe_sistem.id}-#{tipe_sistem.company_id.id}">
+                                  <t t-esc="tipe_sistem.name"/>
                               </option>
                           </t>
                       </select>

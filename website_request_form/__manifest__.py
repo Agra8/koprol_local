@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'website','eps_request_form'],
+    'depends': ['base', 'website','eps_request_form', 'website_form'],
 
     # always loaded
     'data': [

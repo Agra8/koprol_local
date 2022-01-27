@@ -34,16 +34,14 @@ function addRow(value) {
                                       <button type="button" class="btn custom-btn-primary rounded-circle buttonx custom-btn-close" style="font-size: 0.75rem;" onclick="deleteRow(this.parentElement.parentElement)">X</button>
                                       <div class="w3-col m1 w3-center w3-container m4 l3">
                                         <select id="requestform_id_${index +
-											1}" name="requestform_id" class="form-control s_website_form_input input-types"  placeholder="" required="true">
+											1}" name="request_line_ids" class="form-control s_website_form_input input-types"  placeholder="" required="true">
                                            <option value="">Pilih Tipe Request</option>
-                                           <option value="arf">Access Request</option>
-                                           <option value="jrf">Job Request</option>
                                         </select>
                                       </div>
                                       <div class="w3-col m1 w3-center w3-container m4 l6 custom-row">
                                         <select id="request_id_${index +
-											1}" name="request_line_ids" class="form-control s_website_form_input" placeholder="" required="true">
-                                           <option value="">(Silahkan Pilih)</option>
+											1}"  name="request_sistem_ids" class="form-control s_website_form_input" placeholder="" required="true">
+                                           <option value="">Pilih Sistem</option>
                                         </select>
                                       </div>
                                     </div>
@@ -65,7 +63,7 @@ function addRow(value) {
                                           <span class="s_website_form_mark"> </span>
                                         </label>
                                         <div class="col-sm">
-                                          <input type="file" class="form-control s_website_form_input" name="attachment" required=""/>
+                                          <input type="file" class="form-control s_website_form_input" name="attachment"/>
                                         </div>
                                       </div>
                                     </div>
@@ -73,6 +71,7 @@ function addRow(value) {
 					`
 		);
 		initEvent();
+		changeAddRequest();
 		tbl('#request_tbl', 'keyup', "input[name='requestform_id']");
 	}
 }
@@ -89,52 +88,55 @@ function tbl(selector, eventType, childSelector) {
 	}
 }
 
-$(document).on('change', '.input-types', function() {
-	idRequest = this.id.split('_');
-	otherSelector = 'select[id="request_id_' + idRequest[2] + '"]';
-	valueRequest = this.value;
-	request = document.getElementById('requestjrf_').children;
-	requestForm = document.querySelector(otherSelector);
-	requestForm.innerHTML = '';
-	requestFormOption = ``;
-
-	if (this.value != '') {
-		var opt = document.createElement('option');
-		opt.innerHTML = '(Silahkan Pilih)';
-		requestForm.appendChild(opt);
-	}
-
-	[].forEach.call(request, function(el) {
-		var temp = el.value.split('-');
-		if (temp[0] == valueRequest) {
-			var opt = document.createElement('option');
-			opt.value = temp[1];
-			opt.innerHTML = el.innerText;
-			requestForm.appendChild(opt);
-		}
-	});
-
-	initEvent();
-});
-
-$(document).on('change', '.input-company', function() {
+function changeByCompany() {
 	otherSelector = 'select[id="branch"]';
-	valueRequest = this.value;
+	var index = document.querySelectorAll('.w3-row').length;
 	console.log(otherSelector);
 	request = document.getElementById('branchdropdown').children;
+	request_tipe = document.getElementById('requestform_id').children;
+	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
 	requestForm = document.querySelector(otherSelector);
 	requestForm.innerHTML = '';
 	requestFormOption = ``;
 
+	for (let i = 1; i <= index; i++) {
+		selectorTipeForm = `select[id="requestform_id_${i}"]`;
+		requestTipeForm = document.querySelector(selectorTipeForm);
+		requestTipeForm.innerHTML = '';
+
+		if (this.value != '') {
+			var opts = document.createElement('option');
+			opts.value = 'NULL';
+			opts.innerHTML = '(Pilih Tipe Request)';
+			requestTipeForm.appendChild(opts);
+		}
+
+		[].forEach.call(request_tipe, function(e) {
+			var temporaryTipe = e.value.split('-');
+			if (temporaryTipe[2] == company_id) {
+				var options = document.createElement('option');
+				options.value = `${temporaryTipe[0]}-${temporaryTipe[1]}`;
+				options.innerHTML = e.innerText;
+				requestTipeForm.appendChild(options);
+			}
+		});
+		document.getElementById(`request_id_${i}`).style.display = 'none';
+		// document.getElementById(`request_id_${i}`).disabled = true;
+		// document.getElementById(`request_id_${i}`).value = 'XXX';
+
+		$(`#request_id_${i}`).prop('selectedIndex', 0);
+	}
+
 	if (this.value != '') {
 		var opt = document.createElement('option');
+		opt.value = 'NULL';
 		opt.innerHTML = '(Silahkan Pilih)';
 		requestForm.appendChild(opt);
 	}
 
 	[].forEach.call(request, function(el) {
 		var temp = el.value.split('-');
-		if (temp[0] == valueRequest) {
+		if (temp[0] == company_id) {
 			var opt = document.createElement('option');
 			opt.value = temp[1];
 			opt.innerHTML = el.innerText;
@@ -143,8 +145,81 @@ $(document).on('change', '.input-company', function() {
 	});
 
 	initEvent();
+}
+
+function changeAddRequest() {
+	var index = document.querySelectorAll('.w3-row').length;
+	selectorTipeForm = `select[id="requestform_id_${index}"]`;
+	request_tipe = document.getElementById('requestform_id').children;
+	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
+	requestTipeForm = document.querySelector(selectorTipeForm);
+	requestTipeForm.innerHTML = '';
+
+	if (this.value != '') {
+		var opts = document.createElement('option');
+		opts.value = 'NULL';
+		opts.innerHTML = '(Pilih Tipe Request)';
+		requestTipeForm.appendChild(opts);
+	}
+
+	[].forEach.call(request_tipe, function(e) {
+		var temporaryTipe = e.value.split('-');
+		if (temporaryTipe[2] == company_id) {
+			var options = document.createElement('option');
+			options.value = `${temporaryTipe[0]}-${temporaryTipe[1]}`;
+			options.innerHTML = e.innerText;
+			-requestTipeForm.appendChild(options);
+		}
+	});
+
+	// document.getElementById(`request_id_${index}`).disabled = true;
+	document.getElementById(`request_id_${index}`).style.display = 'none';
+	$(`#request_id_${index}`).prop('selectedIndex', 0);
+}
+
+$(document).on('change', '.input-types', function() {
+	idRequest = this.id.split('_');
+	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
+	requestTipeSistem = document.getElementById('tipe_sistem').children;
+	valueRequest = this.value.split('-');
+	selectorTipeSistem = `select[id="request_id_${idRequest[2]}"]`;
+	requestTipeSistemForm = document.querySelector(selectorTipeSistem);
+	requestTipeSistemForm.innerHTML = '';
+
+	if (this.value != '') {
+		var opt = document.createElement('option');
+		opt.value = 'NULL';
+		opt.innerHTML = '(Silahkan Pilih)';
+		requestTipeSistemForm.appendChild(opt);
+	}
+
+	[].forEach.call(requestTipeSistem, function(e) {
+		var temporaryTipe = e.value.split('-');
+		if (temporaryTipe[1] == company_id) {
+			var options = document.createElement('option');
+			options.value = temporaryTipe[0];
+			options.innerHTML = e.innerText;
+			requestTipeSistemForm.appendChild(options);
+		}
+	});
+
+	document.getElementById(`request_id_${idRequest[2]}`).style.display = 'none';
+	// document.getElementById(`request_id_${idRequest[2]}`).disabled = true;
+	$(`#request_id_${idRequest[2]}`).prop('selectedIndex', 0);
+	if (valueRequest[1] == 'Sistem') {
+		// document.getElementById(`request_id_${idRequest[2]}`).disabled = false;
+		document.getElementById(`request_id_${idRequest[2]}`).style.display = 'block';
+	}
 });
 
+// document.getElementById('main_form').addEventListener('keyup', function(event) {
+// 	$('input, select').prop('disabled', false);
+// });
+// $(document).ready(function() {
+// 	$('#main_form').submit(function() {
+// 		$('input, select').prop('disabled', false);
+// 	});
+// });
 function showSearch() {
 	var x = document.getElementById('section_search');
 	if (x.style.display === 'none') {

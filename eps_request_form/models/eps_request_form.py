@@ -4,12 +4,17 @@
 # 1: imports of python lib
 
 # 2: import of known third party lib
+from email import header
 import string, random, cryptocode, os
 from cryptography.fernet import Fernet
+from datetime import datetime, timedelta, date
+from dateutil.relativedelta import relativedelta
+from werkzeug.urls import url_encode
+from lxml import etree
 
 # 3:  imports of odoo
 from typing import Sequence
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.http import request
 import logging
 _logger = logging.getLogger(__name__)
@@ -26,9 +31,9 @@ class RequestForm(models.Model):
     _description="Request Form for JRF / ARF"
 
     # 7: defaults methods
+    
     def _get_default_date(self):
-        return self.env['res.branch'].get_default_date()
-
+        return (datetime.now() + relativedelta(hours=7)).date()
     
     def _key_gen(self):
         key_len = 5
@@ -41,12 +46,11 @@ class RequestForm(models.Model):
     name = fields.Char(string='Name', index=True)
     date = fields.Date(string='Date', readonly=True,default=_get_default_date)
     is_maindealer = fields.Boolean(string='Main Dealer')
-    state = fields.Selection(string='State', selection=[('draft','Draft'),('open','Open'),('confirmed','Confirmed')])
     alasan_reject = fields.Text(string='Alasan Reject')
-    total_approval = fields.Float(string='Approval Percentage', compute='_compute_total_approval')
+    total_approval = fields.Float(string='Approval Percentage')
     name_pegawai = fields.Char(string='Nama Pegawai')
     no_telp = fields.Char(string="Nomor Telp")
-    state = fields.Selection(string='State', selection=[('draft','Draft'), ('rfa','Waiting for Approval'), ('approved', 'Approved'), ('rejected', 'Rejected'),('cancel', 'Cancel'),('open', 'Open'), ('closed', 'Closed')], default='draft')
+    state = fields.Selection(string='State', selection=[('draft','Draft'), ('cancel', 'Cancel'),('open', 'Open'), ('done', 'Done')], default='draft')
     email_penerima = fields.Char()
     penerima = fields.Char()
     token_penerima = fields.Char()
@@ -65,9 +69,9 @@ class RequestForm(models.Model):
     # 8: Relational Fields
     company_id = fields.Many2one(comodel_name='res.company', string='Company')
     branch_id = fields.Many2one(comodel_name='res.branch', string='Branch')
+    divisi_id = fields.Many2one(comodel_name='eps.divisi', string='Divisi')
     department_id = fields.Many2one(comodel_name='hr.department', string='Department')
     employee_id = fields.Many2one(comodel_name='hr.employee',string='Employee')
-    approval_ids = fields.One2many(comodel_name='eps.request.form.approval',inverse_name='request_form_id', string='Approval JRF/ARF')
     request_line_ids = fields.One2many(comodel_name='eps.request.form.line',inverse_name='request_form_id', string='Request')
     job_title = fields.Many2one(comodel_name='hr.job',string='Job Title')
 
@@ -81,39 +85,39 @@ class RequestForm(models.Model):
             branch_obj = self.env['res.branch'].suspend_security().browse(vals['branch_id'])
             doc_code = branch_obj.code
             vals['name'] = self.env['ir.sequence'].suspend_security().get_per_doc_code(doc_code,'RF')
-            
+            vals['divisi_id'] = self.env['eps.divisi'].suspend_security().search([('name', '=', 'Umum')]).id
+            create_super = super(RequestForm, self).create(vals)
             if branch_obj.is_md == True:
                 department_obj = self.env['hr.department'].suspend_security().browse(vals['department_id'])
                 job_level = department_obj.manager_id.job_id.job_level 
                 group_id = self._change_group_by_level(job_level if job_level else '4')
-                record = {
-                    'employee_id': department_obj.manager_id.id,
-                    'job_id': department_obj.manager_id.job_id.id,
-                    'job_level': job_level,
-                    'group_id': group_id,
-                    'state': 'open',
-                }
-                create_super = super(RequestForm, self).create(vals)
-                create = self.env['eps.request.form.approval'].suspend_security().create(record)
-                record['request_form_id'] = create_super.id
-                record['user_id'] = create.employee_id.user_id.id
-                create.suspend_security().write(record)
+                employee_id = department_obj.manager_id
+                job_id = department_obj.manager_id.job_id.id
+            
             elif branch_obj.is_md == False:
                 job_level = branch_obj.kacab_id.job_id.job_level
                 group_id = self._change_group_by_level(job_level if job_level else '3')
-                record = {
-                    'employee_id': branch_obj.kacab_id.id,
-                    'job_id': branch_obj.kacab_id.job_id.id,
-                    'job_level': job_level,
-                    'group_id': group_id,
-                    'state': 'open',
-                }
-                create_super = super(RequestForm, self).create(vals)
-                create = self.env['eps.request.form.approval'].suspend_security().create(record)
-                record['request_form_id'] = create_super.id
-                record['user_id'] = create.employee_id.user_id.id
-                create.suspend_security().write(record)
-                  
+                employee_id = branch_obj.kacab_id
+                job_id = branch_obj.kacab_id.job_id.id
+           
+        for request in create_super.request_line_ids:
+            if int(request.value_approval) > 0:
+                request.env['eps.matrix.approval.line'].request_by_value(request, int(request.value_approval), send_email=False)
+            # for request in create_super.request_line_ids:
+            #     # record = {
+            #     #     'employee_id': employee_id.id,
+            #     #     'job_id': job_id,
+            #     #     'job_level': job_level,
+            #     #     'group_id': group_id,
+            #     #     'request_form_line_id':request.id,
+            #     #     'user_id': employee_id.user_id.id if employee_id else '',
+            #     #     'state': 'open',
+            #     # }
+            #     # self.env['eps.request.form.approval'].suspend_security().create(record)
+            #     if int(request.form_id.approval_default) > 0:
+            #         import ipdb; ipdb.set_trace()
+            #         request.env['eps.matrix.approval.line'].request_by_value(request, int(request.form_id.approval_default), send_email=False)
+            #         request.approval_ids.write({'user_id': employee_id.user_id.id})
         return create_super
     
     def unlink(self):
@@ -150,23 +154,33 @@ class RequestForm(models.Model):
         return token_encoded
 
     def action_rfa(self):
-        template = self.env.ref('eps_request_form.template_mail_request_form_result')
-        mail = self.env['mail.template'].suspend_security().browse(template.id)
-        for user in self.approval_ids.employee_id:
-            self.email_penerima = user.work_email
-            self.penerima = user.name
-            self.token_penerima = self.create_token(self.id, user.id)
-            path = "/approval/%s" % self.token_penerima
-            path_reject = "/reject/%s" % self.token_penerima
-            self.approval_url = self.get_url() + path
-            self.reject_url = self.get_url() + path_reject
-            mail.send_mail(self.id, force_send=True)
-        if mail:
-            self.write({
-                'state': 'rfa',
-                'request_uid':self.env.user.id,
-                'request_date':self._get_default_date()
-            })
+
+        for request in self.request_line_ids:
+            request.env['eps.matrix.approval.line'].request_by_value(request, int(request.value_approval), send_email=False)
+        self.write({
+            'state': 'rfa',
+            'request_uid':self.env.user.id,
+            'request_date':self._get_default_date()
+        })
+        # ? Jangan di hapus ya
+        # template = self.env.ref('eps_request_form.template_mail_request_form_result')
+        # # TODO: cek approval line transaction untuk ngirim ke siapanya, employee_id, dibikin list, yang ditaro object
+        # mail = self.env['mail.template'].suspend_security().browse(template.id)
+        # for user in self.additional_approval_ids.employee_id:
+        #     self.email_penerima = user.work_email
+        #     self.penerima = user.name
+        #     self.token_penerima = self.create_token(self.id, user.id)
+        #     path = "/approval/%s" % self.token_penerima
+        #     path_reject = "/reject/%s" % self.token_penerima
+        #     self.approval_url = self.get_url() + path
+        #     self.reject_url = self.get_url() + path_reject
+        #     mail.send_mail(self.id, force_send=True)
+        # if mail:
+        #     self.write({
+        #         'state': 'rfa',
+        #         'request_uid':self.env.user.id,
+        #         'request_date':self._get_default_date()
+        #     })
     
     def action_open(self):
         self.write({
@@ -180,21 +194,22 @@ class RequestForm(models.Model):
             'done_date': self._get_default_date()
         })
 
-    @api.depends('approval_ids','approval_ids.state')
-    def _compute_total_approval(self):
-        for record in self:
-            total = 0.0
-            if len(record.approval_ids):
-                approved = record.approval_ids.suspend_security().search([
-                    ('request_form_id','=',record.id),
-                    ('state','=','approved')
-                    ])
-                total = float(len(approved)) / float(len(record.approval_ids))
-            record.total_approval = total*100
+    # @api.depends('approval_ids','approval_ids.state')
+    # def _compute_total_approval(self):
+    #     for record in self:
+    #         total = 0.0
+    #         if len(record.additional_approval_ids):
+    #             approved = record.additional_approval_ids.suspend_security().search([
+    #                 ('request_form_id','=',record.id),
+    #                 ('state','=','approved')
+    #                 ])
+    #             total = float(len(approved)) / float(len(record.additional_approval_ids))
+    #         record.total_approval = total*100
     
     def action_request(self):
         self.ensure_one()
         form_id = self.env.ref('eps_request_form.eps_request_form_line_form_wizard').id
+
         return {
             'type': 'ir.actions.act_window',
             'name': 'Request Form Line',
@@ -205,73 +220,19 @@ class RequestForm(models.Model):
             'target': 'new',
             'view_type': 'form',
             'context': {
-                'active_id': self.id
+                'active_id': self.id,
+                'company_id': self.company_id.id,
+                'branch_id': self.branch_id.id
             }
         }
-    
-    def action_approve(self):
-        approval = self._check_user_groups()
-        if not approval.employee_id:
-            approval.write({
-                'employee_id': self.env.user.employee_id,
-                'user_id': self.env.user.id,
-                'state': 'approved',
-                'tanggal_approved': self._get_default_date()
-            })
- 
-        approval.write({
-            'state': 'approved',
-            'tanggal_approved': self._get_default_date()
-            })
-       
-        approval_open = self.approval_ids.search([
-            ('request_form_id', '=', self.id),
-            ('state', '=', 'open')
-        ])
-        if not approval_open:
-            self.write({
-                'state': 'approved'
-            })
-    
-    def action_reject(self):
-        approval = self._check_user_groups()
-        form_id = self.env.ref('eps_request_form.eps_request_form_approval_reject_form').id
-        return {
-            'name': ('Alasan Reject'),
-            'res_model': 'eps.request.form.approval',
-            'type': 'ir.actions.act_window',
-            'view_id': False,
-            'views': [(form_id, 'form')],
-            'view_mode': 'form',
-            'target': 'new',
-            'view_type': 'form',
-            'res_id': approval.id
-        }
-      
+   
     def action_cancel(self):
         self.write({
             'state': 'cancel'
         })
         
             
-    def _check_user_groups(self):
-        approval_obj = self.approval_ids.search([
-            ('request_form_id', '=', self.id),
-            ('state','=','open')
-        ])
-
-        for approval in approval_obj:
-            # TODO: create check if user already approving with this request
-            user_approval_obj = self.approval_ids.search([
-                ('request_form_id', '=', self.id),
-                ('user_id','=', self.env.user.id),
-                ('state', '=','approved')
-            ])
-            if self.env.user.has_group(approval.group_id.get_xml_id().popitem()[1]) and not user_approval_obj:
-                return approval
-        
-        raise Warning("Anda 'Tidak Dapat' atau 'Sudah' melakukan Approval. \nPeriksa Tab Approval.")
-    
+   
     def _change_group_by_level(self,vals):
         
         name_job_level = False
@@ -326,6 +287,7 @@ class RequestForm(models.Model):
      
 class RequestFormLine(models.Model):
     _name="eps.request.form.line"
+    _inherit = ['mail.thread']
     _description="Request Form Line"
 
     # 7: defaults methods
@@ -337,53 +299,283 @@ class RequestFormLine(models.Model):
         for record in self:
             if record.filename_upload:
                 try:
-                    image_lampiran = self.env['eps.conf.image'].suspend_security().get_img(record.filename_upload)
+                    image_lampiran = self.env['eps.config.files'].suspend_security().get_img(record.filename_upload)
                     record.file_show = image_lampiran
                     if record.type_file == 'pdf':
                         record.file_pdf = image_lampiran
+                        record.file_image = False
+                    elif record.type_file == 'jpg' or record.type_file == 'jpeg' or record.type_file == 'png' :
+                        record.file_image = image_lampiran
+                        record.file_pdf = False
                     else:
+                        record.file_image = False
                         record.file_pdf = False
                 except FileNotFoundError as err:
                     _logger.error(err)
                     record.file_show = False
-       
-
+                    record.file_image = False
+                    record.file_pdf = False
+            else:
+                record.file_show = False
+                record.file_image = False
+                record.file_pdf = False
+    
+    
     # 8: fields
 
     name=fields.Char(string='Name')
     date=fields.Date(string='Date', default=_get_default_date)
     keterangan = fields.Text(string='Keterangan')
+    state = fields.Selection(string='State',  selection=[('draft','Draft'),('approved','Approved'),('rejected','Rejected'),('open', 'Open'),('done', 'Done')], default='draft')
+    value_approval = fields.Selection(string='Default Approval',
+    selection=[
+        ('0', '0'),
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4')
+        ])
     
     file_upload = fields.Binary(string='Upload Lampiran')
     filename_upload = fields.Char(string='Nama Lampiran Upload')
     filename = fields.Char(string='Nama Lampiran')
     file_show = fields.Binary(string='lampiran_show', compute='compute_filename')
     file_download = fields.Binary(string='Download Lampiran', related='file_show')
-    file_pdf = fields.Binary(string='file pdf', related='file_show')
-    type_file = fields.Char(string='Tipe File')
-
+    file_pdf = fields.Binary(string='file pdf', compute='compute_filename')
+    file_image = fields.Binary(string='File Image', compute='compute_filename')
+    type_file = fields.Char(string='Tipe File', default='NULL')
+    user_request = fields.Char(String='User Request', related='request_form_id.name_pegawai')
+    reason = fields.Char(string='Alasan Reject')
+    
     # 9: Relations Fields
-    form_id = fields.Many2one(comodel_name='eps.master.jrf.arf', string='Master Request')
+    company_id = fields.Many2one(comodel_name='res.company', string='Company', related='request_form_id.company_id', store=False)
+    branch_id = fields.Many2one(comodel_name='res.branch', string='Branch', related='request_form_id.branch_id', store=False)
+    divisi_id = fields.Many2one(comodel_name='eps.divisi', string='Divisi', related='request_form_id.divisi_id', store=False)
+    department_id = fields.Many2one(comodel_name='hr.department', string='Department', related='request_form_id.department_id', store=False)
+    request_id = fields.Many2one(comodel_name='eps.master.jrf.arf', string='Master Request')
+    employee_id = fields.Many2one(comodel_name='hr.employee',string='PIC')
     request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
     sistem_id = fields.Many2one(comodel_name='eps.sistem.master', string='Master Sistem')
-
+    approval_ids = fields.One2many(comodel_name='eps.approval.transaction', inverse_name='transaction_id', string='Approval', copy=False)
+    additional_approval_ids = fields.One2many(comodel_name='eps.request.form.approval',inverse_name='request_form_line_id', string='Additional Approval JRF/ARF')
+    
     @api.model
-    def write(self, vals: dict):
+    def create(self, vals: dict):
+        branch_obj = self.env['eps.request.form'].suspend_security().browse(vals['request_form_id']).branch_id
+        doc_code = branch_obj.code
+        vals['name'] = self.env['ir.sequence'].suspend_security().get_per_doc_code(doc_code,'RFL')
         if vals.get('type_file'):
-            type_file = vals.pop('type_file')
+            type_file = vals.get('type_file')
         
+        file_upload = False
+        if vals.get('file_upload'):
+            file_upload = vals['file_upload']
+            vals['file_upload'] = False   
+        ids = super(RequestFormLine, self).create(vals)
+     
+        if file_upload:
+            tmp_lampiran = vals['filename'].split('.')
+            filename_up = f'[{ids.id}]{tmp_lampiran[0]}-{str(vals["request_line_id"])}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
+            self.env['eps.config.files'].suspend_security().upload_file(filename_up, file_upload)
+            ids.filename_upload = filename_up
+
+        #  ids.approval_ids.write({'user_id': employee_id.user_id.id})
+        return ids
+
+    def write(self, vals: dict):
+        if vals.get('value_approval'):
+            aprv_transcation_obj = self.env['eps.approval.transaction'].search([('transaction_id', '=', self.id)])
+            aprv_transcation_obj.write({
+                'value': vals['value_approval'],
+            })
+        if vals.get('type_file'):
+            type_file = vals.get('type_file')
+        if vals.get('value_approval', False):
+            if vals.get('value_approval') != self.value_approval:
+                self._message_log(body=_('<b>Value Approval Changed ! </b> From %d to %d') % (self.value_approval, int(vals.get('value_approval'))))
+        if vals.get('employee_id', False):
+            if vals.get('employee_id') != self.employee_id:
+                employee_obj = self.env['hr.employee'].suspend_security().browse(vals.get('employee_id'))
+                self._message_log(body=_('<b>PIC Changed!</b> From %s to %s') % (self.employee_id.name,employee_obj.name))
+        if vals.get('state', False):
+            if vals.get('state') != self.state:
+                self._message_log(body=_('<b>State Changed!</b> From %s to %s') % (self.state, str(vals.get('state'))))
         if vals.get('file_upload'):
             file_upload = vals['file_upload']
             vals['file_upload'] = False
             tmp_lampiran = vals['filename'].split('.')
-            filename_up = f'[{self.id}]{type_file}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
-            self.env['eps.conf.image'].suspend_security().upload_file(filename_up, file_upload)
+            filename_up = f'[{self.id}]{tmp_lampiran[0]}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
+            filename_up = filename_up.replace('/', '-')
+            self.env['eps.config.files'].suspend_security().upload_file(filename_up, file_upload)
             vals['filename_upload'] = filename_up
         return super(RequestFormLine, self).write(vals)
     
+   
+    
+    def action_approve(self):
+        if self.additional_approval_ids:
+            self.action_additional_approve()
+        self.env['eps.matrix.approval.line'].approve(self)
+        
+        approval_open = self.env['eps.approval.transaction'].search([
+            ('transaction_id', '=', self.id),
+            ('state', '=', 'IN')
+        ])
+
+        if not approval_open:
+            self.write({
+                'state': 'approved'
+            })
+        header_open = self.env['eps.request.form.line'].search(
+            [
+                ('request_form_id', '=', self.request_form_id.id),
+                ('state', '=', 'draft')
+            ]
+        )
+        
+        if not header_open:
+            self.request_form_id.write({
+                'state': 'open'
+            })
+    
+    def get_full_url(self):
+        self.ensure_one()
+        base_url = self.env["ir.config_parameter"].get_param("web.base.url")
+        url_params = {
+            'id': self.id,
+            'view_type': 'form',
+            'model': self._name,
+        }
+        params = '/web?#%s' % url_encode(url_params)
+        return base_url + params
+        
+
+    def action_additional_approve(self):
+        approval = self._check_user_groups()
+        if not approval.employee_id:
+            approval.write({
+                'employee_id': self.env.user.employee_id,
+                'user_id': self.env.user.id,
+                'state': 'approved',
+                'tanggal_approved': self._get_default_date()
+            })
+ 
+        approval.write({
+            'state': 'approved',
+            'tanggal_approved': self._get_default_date()
+            })
+       
+        approval_open = self.additional_approval_ids.search([
+            ('request_form_id', '=', self.id),
+            ('state', '=', 'open')
+        ])
+        if not approval_open:
+            self.write({
+                'state': 'approved'
+            })
+    
+    def action_reject_form(self):
+        line_obj = self.env['eps.request.form.line'].browse(self._context['res_id'])
+        self.env['eps.matrix.approval.line'].reject(line_obj, self.reason)
+        line_obj.write({
+            'state': 'rejected'
+        })
+    
+    def action_done(self):
+        self.write({
+            'state': 'done'
+        })
+    
+    
+    def action_reject(self):
+        form_id = self.env.ref('eps_request_form.eps_request_form_line_reject_form').id
+        return {
+            'name': ('Alasan Reject'),
+            'res_model': 'eps.request.form.line',
+            'type': 'ir.actions.act_window',
+            'view_id': False,
+            'views': [(form_id, 'form')],
+            'view_mode': 'form',
+            'target': 'new',
+            'res_id': self.id,
+            'view_type': 'form',
+            'context': {
+                'res_id': self.id,
+            }
+        }
+    
+
+    def action_assign(self):
+        form_id = self.env.ref('eps_request_form.eps_request_form_line_assign_form').id
+        employee_ids = []
+        if self.request_id.teams_id:
+            form_id = self.env.ref('eps_request_form.eps_request_form_line_domain_assign_form').id
+            employee_ids = [employee.employee_id.id for employee in self.request_id.teams_id.teams_line_ids]
+        return {
+            'name': ('Assign'),
+            'res_model': 'eps.request.form.line',
+            'type': 'ir.actions.act_window',
+            'view_id': False,
+            'views': [(form_id, 'form')],
+            'view_mode': 'form',
+            'target': 'new',
+            'res_id': self.id,
+            'view_type': 'form',
+            'context': {
+                'domain_employee_ids': employee_ids,
+                'res_id': self.id,
+                'default_employee_id': False,
+            }
+        }
+    
+    def action_save_pic(self):
+        line_obj = self.env['eps.request.form.line'].browse(self._context['res_id'])
+        line_obj.write({
+            'employee_id': self.employee_id,
+            'state': 'open'
+        })
+    
+       
+    def _check_user_groups(self):
+        approval_obj = self.additional_approval_ids.search([
+            ('request_form_id', '=', self.id),
+            ('state','=','open')
+        ])
+
+        for approval in approval_obj:
+            # TODO: create check if user already approving with this request
+            user_approval_obj = self.additional_approval_ids.search([
+                ('request_form_id', '=', self.id),
+                ('user_id','=', self.env.user.id),
+                ('state', '=','approved')
+            ])
+            if self.env.user.has_group(approval.group_id.get_xml_id().popitem()[1]) and not user_approval_obj:
+                return approval
+        
+        raise Warning("Anda 'Tidak Dapat' atau 'Sudah' melakukan Approval. \nPeriksa Tab Approval.")
+    
+    def eps_request_form_line_view(self):
+        name= 'Request Form Line'
+        tree_id = self.env.ref('eps_request_form.eps_request_form_line_view_tree').id
+        form_id = self.env.ref('eps_request_form.eps_request_form_line_view_form').id
+        search_id = self.env.ref('eps_request_form.eps_request_form_line_search').id
+        return {
+            'name': name,
+            'type': 'ir.actions.act_window',
+            'res_model': 'eps.request.form.line',
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'views': [(tree_id, 'tree'), (form_id, 'form')],
+            'search_view_id': search_id,
+            'context': {
+                'search_default_group_company': 1,
+                'readonly_by_pass': 1
+            }
+    }
+
 class RequestFormLineWizard(models.TransientModel):
     _name="eps.request.form.line.wizard"
-    _description="Request Form Line"
+    _description="Request Form Line Wizard"
 
     # 7: defaults methods
     def _get_default_date(self):
@@ -394,18 +586,17 @@ class RequestFormLineWizard(models.TransientModel):
     name=fields.Char(string='Name')
     date=fields.Date(string='Date', default=_get_default_date)
     keterangan = fields.Text(string='Keterangan')
-    tipe_form = fields.Char(string='Sistem', related='form_id.type_form_id.name')
+    tipe_form = fields.Char(string='Sistem', related='request_id.type_form_id.name')
 
     # 9: Relations Fields
-    form_id = fields.Many2one(comodel_name='eps.master.jrf.arf', string='Master Request')
-    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
+    request_id = fields.Many2one(comodel_name='eps.master.jrf.arf', string='Master Request')
     sistem_id = fields.Many2one(comodel_name='eps.sistem.master', string='Sistem')
-    attachment_line_ids = fields.One2many(comodel_name='eps.request.form.attachment', inverse_name='request_line_id')
+    approval_ids = fields.One2many(comodel_name='eps.approval.transaction', inverse_name='transaction_id', string='Approval', domain=[('model_id','=','eps.request.form')], copy=False)
 
     def action_add_only(self):
         self.ensure_one()
         vals = {
-            'form_id': self.form_id.id,
+            'request_id': self.request_id.id,
             'request_form_id': self._context['active_id'],
             'keterangan': self.keterangan,
         }
@@ -414,7 +605,7 @@ class RequestFormLineWizard(models.TransientModel):
     def action_add_and_more(self):
         self.ensure_one()
         vals = {
-            'form_id': self.form_id.id,
+            'request_id': self.request_id.id,
             'request_form_id': self._context['active_id'],
             'keterangan': self.keterangan,
         }
@@ -464,7 +655,7 @@ class RequestFormApproval(models.Model):
     employee_id = fields.Many2one(comodel_name='hr.employee',string='Name')
     job_id = fields.Many2one(comodel_name='hr.job',string='Jabatan')
     group_id = fields.Many2one(comodel_name='res.groups')
-    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
+    request_form_line_id = fields.Many2one(comodel_name='eps.request.form.line', string='Request Form')
 
     # 9: constraints & sql constraints
 
@@ -520,73 +711,3 @@ class RequestFormApproval(models.Model):
             self.env['eps.request.form'].suspend_security().write({
                 'state': 'rejected'
             })
-
-class RequestFormAttachment(models.Model):
-    _name = "eps.request.form.attachment"
-
-    def compute_filename(self):
-        for record in self:
-            if record.filename_upload:
-                try:
-                    image_lampiran = self.env['eps.conf.image'].suspend_security().get_img(record._filename_upload)
-                    record.file_show = image_lampiran
-                    if record.type_file == 'pdf':
-                        record.file_pdf = image_lampiran
-                    else:
-                        record.file_pdf = False
-                except FileNotFoundError as err:
-                    _logger.error(err)
-                    record.file_show = False
-            
-            else:
-                record.file_show = False
-    
-    file_upload = fields.Binary(string='Upload Lampiran')
-    filename_upload = fields.Char(string='Nama Lampiran Upload')
-    file = fields.Binary(string='Lampiran')
-    filename = fields.Char(string='Nama Lampiran')
-    file_show = fields.Binary(string='lampiran_show', compute='compute_filename')
-    file_download = fields.Binary(string='Download Lampiran', related='file_show')
-    file_pdf = fields.Binary(string='file pdf', compute='compute_filename')
-    type_file = fields.Char(string='Tipe File')
-
-    request_line_id = fields.Many2one(comodel_name='eps.request.form.line',string='Request Line', index=True)
-
-    @api.model
-    def create(self, vals: dict):
-        if not vals.get('file_upload'):
-            raise Warning('File tidak boleh kosong !')
-        if not vals.get('filename'):
-            raise Warning('Filename_upload tidak boleh kosong!')
-        
-        type_file = ''
-        if vals.get('type_file'):
-            type_file = vals.pop('type_file')
-        
-        file_upload = False
-        if vals.get('file_upload'):
-            file_upload = vals['file_upload']
-            vals['file_upload'] = False
-        
-        ids = super(RequestFormAttachment, self).create(vals)
-
-        if file_upload:
-            tmp_lampiran = vals['filename'].split('.')
-            filename_up = f'[{ids.id}]{type_file}-{str(vals["request_line_id"])}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
-            self.env['eps.conf.image'].suspend_security().upload_file(filename_up, file_upload)
-            ids.filename_upload = filename_up
-        return ids
-    
-    @api.model
-    def write(self, vals: dict):
-        if vals.get('type_file'):
-            type_file = vals.pop('type_file')
-        
-        if vals.get('file_upload'):
-            file_upload = vals['file_upload']
-            vals['file_upload'] = False
-            tmp_lampiran = vals['filename'].split('.')
-            filename_up = f'[{self.id}]{type_file}-{str(vals["request_form"])}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
-            self.env['eps.conf.image'].suspend_security().upload_file(filename_up, file_upload)
-            vals['filename_upload'] = filename_up
-        return super(RequestFormAttachment, self).write(vals)

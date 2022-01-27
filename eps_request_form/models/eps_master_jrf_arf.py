@@ -44,11 +44,10 @@ class MasterJrfArf(models.Model):
         res = []
         for record in self:
             name = record.name
-            type_form = record.type_form_id.name
             if not record.name:
-                name = '%s - %s' % (name,type_form)
+                name = '%s' % (name)
             else:
-                name = '%s - %s' % (record.name,record.type_form_id.name)
+                name = '%s' % (record.name)
             res.append((record.id,name))
         return res            
     
@@ -56,7 +55,7 @@ class MasterJrfArf(models.Model):
     def name_search(self, name='', args=None, operator='ilike', limit=100):
         args = args or []
         if name:
-            args = ['|',('name', operator, name),('type_form_id',operator,name)] + args
+            args = [('name', operator, name)] + args
         categories = self.search(args,limit=limit)
         return categories.name_get()
     

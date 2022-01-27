@@ -63,7 +63,7 @@ class eps_matrix_approval_line(models.Model):
     divisi_id = fields.Many2one(related='approval_id.divisi_id', readonly=True)
     department_id = fields.Many2one(related='approval_id.department_id', readonly=True)
 
-    def request_by_value(self,object,value,view_id=None):
+    def request_by_value(self,object,value,view_id=None,send_email=True):
         matrix = self.search([
             ('model_id','=',object.__class__.__name__),
             ('company_id','=',object['company_id'].id),
@@ -133,8 +133,9 @@ class eps_matrix_approval_line(models.Model):
         
         create_approval = self.env['eps.approval.transaction'].create(sorted_matrix_data)
         proposal_model = self.env['ir.model'].sudo().search([('model','=','eps.proposal')])
-        for approval in create_approval.filtered(lambda x:x.state=='IN'):
-            self.send_notif_email(approval)
+        if send_email:
+            for approval in create_approval.filtered(lambda x:x.state=='IN'):
+                self.send_notif_email(approval)
         return True
 
     def approve(self, trx):

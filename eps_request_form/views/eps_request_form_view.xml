@@ -14,7 +14,7 @@
                     <field name="date"/>
                     <field name="name_pegawai"/>
                     <field name="state"/>
-                    <field name="total_approval" widget="progressbar"/>
+                    <!-- <field name="total_approval" widget="progressbar"/> -->
                 </tree>
             </field>
         </record>
@@ -28,13 +28,10 @@
             <field name="arch" type="xml">
                 <form string="Request Form">
                     <header>
-                        <button name="action_rfa" string="Waiting for Approval" states="draft" class="oe_highlight" type="object"/>
-                        <button name="action_approve" string="Approve" states="rfa" class="oe_highlight" type="object"/>
                         <button name="action_open" string="Open" states="approved" class="oe_highlight" type="object"/>
-                        <button name="action_done" string="Closed" states="approved,open" class="oe_highlight" type="object"/>
-                        <button name="action_reject" string="Reject" states="rfa" class="oe_higlight" type="object"/>
+                        <button name="action_done" string="Done" states="approved,open" class="oe_highlight" type="object"/>
                         <button name="action_cancel" string="Cancel" states="draft,rfa,approved" class="oe_highlight" type="object"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,rfa,approved,rejected,cancel,open,closed"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,open,done"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
@@ -43,9 +40,9 @@
                             </h1>
                         </div>
                         <group>
-                            <field name="company_id" groups="base.group_multi_company" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                            <field name="branch_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                            <field name="department_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
+                            <field name="company_id" groups="base.group_multi_company" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" options="{'no_create': True,'no_open': True}"/>
+                            <field name="branch_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" options="{'no_create': True,'no_open': True}"/>
+                            <field name="department_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" options="{'no_create': True,'no_open': True}"/>
                             
                         </group>
                         <group>
@@ -61,24 +58,15 @@
                             <page string="Request">
                                 <field name="request_line_ids">
                                 <tree create="0" delete="0"> 
-                                    <field name="form_id" string="Request" readonly="1"/>
+                                    <field name="request_id" string="Request" readonly="1"/>
                                     <field name="keterangan" readonly="1"/>
                                     <field name="date" readonly="1"/>
+                                    <field name="value_approval" invisible="1"/>
+                                    <field name="state"/>
+                                    <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['open','done']), ('value_approval', '=', '0')]}"/>
+                                    <button name="action_reject" string="Reject" class="oe_higlight" type="object"  attrs="{'invisible': ['|',('state', 'in', ['open','done']), ('value_approval', '=', '0')]}"/>
                                 </tree>
                                 </field>
-                            </page>
-                            <page string="Approval">
-                                 <field name="approval_ids">
-                                    <tree>
-                                        <field name="group_id" string="Groups" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                        <field name="employee_id" string="Nama Approval" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                        <field name="date"/>
-                                        <field name="tanggal_approved" string="Tanggal Approved" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                        <field name="tanggal_reject" string="Tanggal Reject" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                        <field name="alasan_reject" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                        <field name="state" string="Status" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                    </tree>
-                                 </field> 
                             </page>
                             <page string="Audit Trail" >
                                 <group>
@@ -140,7 +128,7 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="eps Request Form Line">
-                    <field name="form_id">
+                    <field name="request_id">
                         <field name="name" string="Request"/>
                     </field>
                     <field name="keterangan"/>
@@ -157,39 +145,28 @@
                 <form string="eps Request Form Line">
                     <group>
                         <group>
-                            <field name="form_id" required="1"/>
+                            <field name="request_id" required="1" domain="[('company_id.id', '=', context.get('company_id'))]"/>
                             <field name="tipe_form" readonly="1" invisible="1"/>
-                            <field name="sistem_id" attrs="{'invisible':[('tipe_form','!=', 'Sistem')], 'required': [('tipe_form','=', 'Sistem')]}"/>
+                            <field name="sistem_id" attrs="{'invisible':[('tipe_form','!=', 'Sistem')], 'required': [('tipe_form','=', 'Sistem')]}" domain="[('company_id.id', '=', context.get('company_id'))]"/>
                             <field name="keterangan"/>
                             <field name="date" readonly="1"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Approval">
+                            <field name="approval_ids">
+                               <tree>
+                                    <field name="group_id" string="Groups"/>
+                                    <field name="user_id"/>
+                               </tree>
+                            </field> 
+                       </page>
+                    </notebook>
                     <footer>
                         <button name="action_add_only" string="Save" type="object" class="oe_highlight oe_edit_only"/>
                         <button name="action_add_and_more" string="Add another request" type="object" class="oe_edit_only"/>
                         <button string="Cancel" special="cancel"/>
                     </footer>
-                </form>
-            </field>
-        </record>
-
-        <record id="eps_request_form_line_form" model="ir.ui.view">
-            <field name="name">eps.request.form.line.form</field>
-            <field name="model">eps.request.form.line</field>
-            <field name="priority" eval="8"/>
-            <field name="arch" type="xml">
-                <form string="eps Request Form Line">
-                    <group>
-                        <group>
-                            <field name="request_form_id" invisible="1"/>
-                            <field name="form_id" readonly="1"/>
-                            <field name="keterangan" readonly="1"/>
-                            <field name="date" readonly="1"/>
-                            <field name="type_file" invisible="1"/>
-                            <field name="file_pdf" widget="pdf_viewer" attrs="{'invisible': [('type_file', 'in', ('png', 'jpg','jpeg', 'tiff', 'tif', 'drawio','pdf','xls','xlsx','doc','docx','zip','rar', 'NULL'))]}" />
-                            <field name="file_download"/>
-                        </group>
-                    </group>
                 </form>
             </field>
         </record>
@@ -237,26 +214,7 @@
                 </form>
             </field>
         </record>
-        <!-- form reject -->
-        <record id="eps_request_form_approval_reject_form" model="ir.ui.view">
-            <field name="name">eps.request.form.reject.form</field>
-            <field name="model">eps.request.form.approval</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Reject">
-                    <sheet>
-                        <h3>Silahkan isi alasan anda</h3>
-                        <group col="4" colspan="4">
-                            <field name="alasan_reject" widget="text_emojis" nolabel="1" required="1"/>
-                        </group>
-                        <footer>
-                            <button name="action_reject_form" string="Reject" type="object" class="oe_highlight"/>
-                            <button name="Cancel" special="cancel"/>
-                        </footer>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+
 
         
     </data>

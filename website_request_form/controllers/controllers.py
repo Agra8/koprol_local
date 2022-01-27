@@ -42,6 +42,7 @@ class WebsiteForm(Home):
         job_title = request.env['hr.job'].sudo().search([])
         employee = request.env['hr.employee'].sudo().search([('job_id.name','like','%Manager%')])
         requestjrf = request.env['eps.master.jrf.arf'].sudo().search([])
+        tipe_sistem = request.env['eps.sistem.master'].sudo().search([])
         return request.render("website_request_form.website_request_form", {
             'company': company,
             'branch': branch,
@@ -49,6 +50,7 @@ class WebsiteForm(Home):
             'department': department,
             'employee': employee,
             'requestjrf': requestjrf,
+            'tipe_sistem': tipe_sistem,
         })
     
     @http.route('/create_website_form/<string:model_name>', type='http', auth='public', methods=['POST'], website=True)
@@ -60,9 +62,9 @@ class WebsiteForm(Home):
         model_record_attachment = request.env['ir.model'].sudo().search(
             [('model','=','eps.request.form.line')]
         )
+
         if not model_record:
             return json.dumps(False)
-        
         try:
             data = self.extract_data(model_record, request.params)
         except ValidationError as e:
@@ -98,11 +100,13 @@ class WebsiteForm(Home):
         
         if 'request_line_keterangan[]' in value:
             del value['request_line_keterangan[]']
+        
+        if 'request_sistem_ids' in value:
+            del value['request_sistem_ids']
 
+        request_id = request.env[model_record.model].sudo().create(value)
         if data['attachments']:
             attachment = data['attachments']
-            request_id = request.env[model_record.model].sudo().create(value)
-
             id_record = [id_record.id for id_record in request_id.request_line_ids]
             attachment_status, result = self.insert_attachment(
                 model_record,
@@ -118,7 +122,6 @@ class WebsiteForm(Home):
                 return json.dumps({
                     'error': _(result)
                 })
-
         request.session['form_builder_model_model'] = model_record.model
         request.session['form_builder_model'] = model_record.name
         request.session['form_builder_id'] = request_id.id
@@ -126,14 +129,16 @@ class WebsiteForm(Home):
     
     def convert_list(self,values,type_var):
         ids = []
-   
+        
         for data in (values.split(',')):
             if type_var == 'form_id':
-                dict_var = dict(form_id = int(data))
+                data_id = data.split('-')
+                dict_var = dict(form_id = int(data_id[0]))
             if type_var == 'description':
                 dict_var = dict(description = str(data))
+            if type_var == 'sistem_id':
+                dict_var = dict(sistem_id = 0 if data=='NULL' else int(data))
             ids.append(dict_var)
-             
         values = ids
         return values
             
@@ -158,14 +163,20 @@ class WebsiteForm(Home):
                     data['record'][field_name] = field_value
                 except ValueError:
                     custom_fields.append((field_name, field_value))
-                
+        
         if 'request_line_ids' in data['record']:
+            
+            if 'request_sistem_ids' in data['record']:
+                data['record']['request_sistem_ids'] = self.convert_list(data['record']['request_sistem_ids'], 'sistem_id')
             data['record']['request_line_ids'] = self.convert_list(data['record']['request_line_ids'], 'form_id') 
             data['record']['request_line_keterangan[]'] = self.convert_list(data['record']['request_line_keterangan[]'], 'description') 
             for idx, datas in enumerate(data['record']['request_line_ids']):
+                default_value_approval = request.env['eps.master.jrf.arf'].browse(datas['form_id']).approval_default
                 request_line_ids.append([0,0, {
-                    'form_id': datas['form_id'],
-                    'keterangan': data['record']['request_line_keterangan[]'][idx]['description']
+                    'request_id': datas['form_id'],
+                    'keterangan': data['record']['request_line_keterangan[]'][idx]['description'],
+                    'sistem_id': data['record']['request_sistem_ids'][idx]['sistem_id'] if 'request_sistem_ids' in data['record'] else '',
+                    'value_approval': default_value_approval
                 }])
             data['record']['request_line_ids'] = request_line_ids
 
@@ -174,41 +185,42 @@ class WebsiteForm(Home):
     
     def insert_attachment(self, model,id_header, id_record, files, extension, max_size, file_name):
         attachment = False
+        
         attachment_value = []
         model_name = model.sudo().model
         record = model.env[model_name].browse(id_header)
-        list_ext = [ext for ext in extension.values()]
+        list_ext = [ext for ext in extension[0]]
         list_size = [size for size in max_size.values()]
         list_name = [name for name in file_name.values()]
-
-        for file_, ext, size, name, id_record in zip(files, list_ext, list_size, list_name, id_record):
+        list_id_record = [id_record for id_record in id_record]
+        
+        for file_, id_record in zip(files,  list_id_record):
             value = file_.read()
             file_length = file_.tell()
-            
             uploaded_name = file_.filename.split('-')
             uploaded_ext = uploaded_name[-1].split('.')
-            
-            valid_filename = f'{name} - {record.name.replace(" ","_")}.{uploaded_ext[-1]}'
+            valid_filename = f'{list_name[0]} - {record.name.replace(" ","_")}.{uploaded_ext[-1]}'
 
-            if name != uploaded_name[0] or \
+            if list_name[0] != uploaded_name[0] or \
                 record.name.replace(' ','_') != uploaded_ext[0]:
                 file_.filename = valid_filename
             
-            if uploaded_ext[-1] not in ext:
-                return False, f"file {name} seharusnya ber-ekstensi {ext} !"
+            if uploaded_ext[-1] not in list_ext:
+                return False, f"file {list_name[0]} seharusnya ber-ekstensi {list_ext} !"
             
-            if file_length > size:
+            if file_length > list_size[0]:
                 return False, f"ukuran file ({file_length}) melebehi batas!"
             
             attachment = request.env['eps.request.form.line'].sudo().search([
                 ('id', '=', id_record)
             ], limit=1)
             if attachment:
+                
                 try:
                     attachment.sudo().write({
                         'filename': file_.filename,
                         'file_upload': base64.encodebytes(value),
-                        'type_file': name
+                        'type_file': uploaded_ext[1],
                     })
                 except Exception as err:
                     _logger.error(err)
@@ -219,7 +231,7 @@ class WebsiteForm(Home):
                 attachment_value.append({
                     'filename': file_.filename,
                     'file_upload': base64.encodebytes(value),
-                    'type_file': name
+                    'type_file': uploaded_ext[1],
                 })
         
         if attachment_value:

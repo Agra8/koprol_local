@@ -28,6 +28,7 @@
         'views/menu.xml',
         'views/eps_request_form_view.xml',
         'views/eps_master_jrf_arf_view.xml',
+        'views/eps_request_form_line_view.xml',
         
         # 'data/data_master_arf_jrf.xml',
         'data/ir_ui_view.xml',
