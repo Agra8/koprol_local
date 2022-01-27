@@ -59,10 +59,21 @@ class Branch(models.Model):
     pimpinan_id = fields.Many2one('hr.employee',string='Pimpinan')
     profit_centre = fields.Char(string='Profit Centre',required=True,help='please contact your Accounting Manager to get Profit Center.')
 
+    def init(self):
+        self._cr.execute("""
+            ALTER TABLE IF EXISTS res_branch 
+            DROP CONSTRAINT IF EXISTS res_branch_name_code_uniq
+            
+        """
+        )
+
     #NAME & CODE should unique
-    _sql_constraints = [
-        ('name_code_uniq', 'unique (name,code)', 'Name dan code sudah digunakan !')
-    ]
+    @api.constrains('company_id','name','code')
+    def _check_name_code(self):
+        for record in self:
+            branches = self.search([('company_id','=',record.company_id.id),('name','=',record.name),('code','=',record.code),('id','!=',record.id)])
+            if branches:
+                raise Warning('Nama dan Code sudah pernah digunakan!')
 
     @api.model
     def create(self, vals):

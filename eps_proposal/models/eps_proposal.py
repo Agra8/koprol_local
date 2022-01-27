@@ -296,7 +296,7 @@ class Proposal(models.Model):
     def get_aging(self, approval_date):
         aging = 0
         if approval_date :
-            delta = datetime.now() - approval_date
+            delta = approval_date - datetime.now().date()
             aging = delta.days
         if aging :
             if aging == 1 :
