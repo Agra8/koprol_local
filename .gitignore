@@ -11,11 +11,6 @@ _build/
 *.egg-info
 # emacs backup files
 *~
-<<<<<<< HEAD
-*.bak
-*.po
-=======
->>>>>>> 5a1ee4d23b033c9446ee73029d93c81ac2af7c21
 # hg stuff
 *.orig
 status
