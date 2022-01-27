@@ -20,34 +20,32 @@ class eps_matrix_approval(models.Model):
     view_id = fields.Many2one('ir.ui.view',string='Form View')
     model_id = fields.Many2one('ir.model',string='Form/Model')
 
-    # _sql_constraints = [
-    #     ('unique_approval', 'unique(company_id,branch_id,divisi_id)', 'Matriks approval sudah dibuat!'),
-    # ]
-    
-    # @api.model
-    # def create(self, vals): 
-    #     if vals.get('department_id'):
-    #         cek_full = self.search([('company_id','=',vals['company_id']),('branch_id','=',vals['branch_id']),('divisi_id','=',vals['divisi_id'])])
-    #         cek_self = self.search([('company_id','=',vals['company_id']),('branch_id','=',vals['branch_id']),('divisi_id','=',vals['divisi_id']),('department_id','=',vals['department_id'])])
-    #         if cek_full or cek_self:
-    #             raise Warning('Matriks approval sudah dibuat')
-    #     else:
-    #         cek_full = self.search([('company_id','=',vals['company_id']),('branch_id','=',vals['branch_id']),('divisi_id','=',vals['divisi_id'])])
-    #         if cek_full or cek_self:
-    #             raise Warning('Matriks approval sudah dibuat')
-    #     return super(eps_matrix_approval, self).create(vals)
+    @api.constrains('company_id', 'branch_id', 'divisi_id')
+    def _check_existance(self):
+        if self.department_id.id:
+            search_ids = self.sudo().search([
+                ('company_id', '=', self.company_id.id),
+                ('branch_id', '=', self.branch_id.id),
+                ('divisi_id', '=' , self.divisi_id.id),
+                ('department_id', '=' , False),
+            ])
+            search_full_ids = self.sudo().search([
+                    ('company_id', '=', self.company_id.id),
+                    ('branch_id', '=', self.branch_id.id),
+                    ('divisi_id', '=' , self.divisi_id.id),
+                    ('department_id', '=' , self.department_id.id),
+                ])
 
-    # def write(self, vals):
-    #     if vals.get('department_id'):
-    #         cek_full = self.search([('company_id','=',vals['company_id']),('branch_id','=',vals['branch_id']),('divisi_id','=',vals['divisi_id'])])
-    #         cek_self = self.search([('company_id','=',vals['company_id']),('branch_id','=',vals['branch_id']),('divisi_id','=',vals['divisi_id']),('department_id','=',vals['department_id'])])
-    #         if cek_full or cek_self:
-    #             raise Warning('Matriks approval sudah dibuat')
-    #     else:
-    #         cek_full = self.search([('company_id','=',vals['company_id']),('branch_id','=',vals['branch_id']),('divisi_id','=',vals['divisi_id'])])
-    #         if cek_full or cek_self:
-    #             raise Warning('Matriks approval sudah dibuat')
-    #     return super(eps_matrix_approval, self).create(vals)
+            if (len(search_ids) > 0) or (len(search_full_ids) > 1):
+                raise ValidationError("Matriks approval sudah dibuat!")
+        else:
+            search_ids = self.sudo().search([
+                ('company_id', '=', self.company_id.id),
+                ('branch_id', '=', self.branch_id.id),
+                ('divisi_id', '=' , self.divisi_id.id),
+            ])
+            if len(search_ids) > 1:
+                raise ValidationError("Matriks approval sudah dibuat!")
 
 class eps_matrix_approval_line(models.Model):
     _name = "eps.matrix.approval.line"

@@ -39,15 +39,15 @@
 			                        <field name="rw" placeholder="RW" style="width: 25%%"/>
 			                    </div>
 			                        <field name="state_id" class="oe_no_button" placeholder="Province" style="width: 50%%" options='{"no_open": True}'/>
-			                        <field name="kabupaten_id" placeholder="City" style="width: 50%%" options="{'no_create': True,'no_open': True}"/>
+			                        <field name="kabupaten_id" placeholder="City" style="width: 50%%" options="{'no_create': True,'no_open': True}" domain="[('state_id','=',state_id)]"/>
 			                    <label for="kecamatan_id" string="Kecamatan"/>
 			                    <div>            
-			                        <field name="kecamatan_id" placeholder="Kecamatan" style="width: 50%%" options="{'no_create': True,'no_open': True}"/>
+			                        <field name="kecamatan_id" placeholder="Kecamatan" style="width: 50%%" options="{'no_create': True,'no_open': True}" domain="[('city_id','=',kabupaten_id)]"/>
 			                        <field name="kecamatan" placeholder="Kecamatan" style="width: 50%%" />
 			                    </div>
 			                    <label for="kelurahan_id" string="Kelurahan"/>
 			                    <div>                   
-			                        <field name="kelurahan_id" placeholder="Kelurahan" style="width: 50%%" options="{'no_create': True,'no_open': True}" />                              
+			                        <field name="kelurahan_id" placeholder="Kelurahan" style="width: 50%%" options="{'no_create': True,'no_open': True}" domain="[('kecamatan_id','=',kecamatan_id)]"/>                              
 			                        <field name="kelurahan" class="oe_no_button" placeholder="Kelurahan" style="width: 50%%"/>
 			                    </div>
 			                    <field name="kode_pos"/>

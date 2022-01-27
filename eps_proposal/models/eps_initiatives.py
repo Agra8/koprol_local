@@ -1,15 +1,12 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
-from docxtpl import DocxTemplate, R, InlineImage
 import subprocess
 import base64
 import os
 import platform
 from odoo.tools import config
-from docx2pdf import convert
 from datetime import datetime
 import qrcode
-from docx.shared import Mm
 from werkzeug.urls import url_encode
 from datetime import datetime, timedelta
 import pytz

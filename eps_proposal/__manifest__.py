@@ -1,12 +1,12 @@
 {
     'name':"EPS - Proposal",
     'version':'10.0.1.0.0',
-    'depends':['eps_menu', 'eps_config_files','eps_branch','eps_approval', 'mail'],
-    'external_dependencies': {
-        'python': [
-            'docx2pdf',
-        ],
-    },
+    'depends':['eps_menu', 'eps_config_files','eps_branch','eps_approval', 'mail', 'product', 'purchase'],
+    # 'external_dependencies': {
+    #     'python': [
+    #         'docx2pdf',
+    #     ],
+    # },
     'author':"ABK",
     'website':"",
     'category':"Koprol",
@@ -20,6 +20,7 @@ Proposal
     'data': [
         'views/eps_category.xml',
         'views/eps_proposal.xml',
+        'report/report_eps_proposal.xml',
         'views/eps_initiatives_view.xml',
         'views/eps_quotation_view.xml',
         'security/res_groups.xml',
