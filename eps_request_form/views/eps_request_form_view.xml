@@ -63,8 +63,8 @@
                                     <field name="date" readonly="1"/>
                                     <field name="value_approval" invisible="1"/>
                                     <field name="state"/>
-                                    <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['open','done']), ('value_approval', '=', '0')]}"/>
-                                    <button name="action_reject" string="Reject" class="oe_higlight" type="object"  attrs="{'invisible': ['|',('state', 'in', ['open','done']), ('value_approval', '=', '0')]}"/>
+                                    <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['approved','rejected','open','done']), ('value_approval', '=', '0')]}"/>
+                                    <button name="action_reject" string="Reject" class="oe_higlight" type="object"  attrs="{'invisible': ['|',('state', 'in', ['approved','rejected','open','done']), ('value_approval', '=', '0')]}"/>
                                 </tree>
                                 </field>
                             </page>

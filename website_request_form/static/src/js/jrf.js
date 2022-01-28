@@ -24,7 +24,7 @@ function addRow(value) {
 	console.log(newDiv);
 	if (value == 'request_tbl') {
 		newDiv.insertAdjacentHTML(
-			'afterend',
+			'beforeend',
 			`        				<div>
 									<div class="w3-row">
                                       <label class="w3-col m1 s_website_form_label" style="width: 200px" for="2hvgthz7mmr">

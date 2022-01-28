@@ -320,13 +320,16 @@ class RequestFormLine(models.Model):
                 record.file_image = False
                 record.file_pdf = False
     
+    @api.model
+    def _expand_groups(self, states, domain, order):
+        return ['draft', 'approved', 'rejected', 'open', 'done']
     
     # 8: fields
 
     name=fields.Char(string='Name')
     date=fields.Date(string='Date', default=_get_default_date)
     keterangan = fields.Text(string='Keterangan')
-    state = fields.Selection(string='State',  selection=[('draft','Draft'),('approved','Approved'),('rejected','Rejected'),('open', 'Open'),('done', 'Done')], default='draft')
+    state = fields.Selection(string='State',  selection=[('draft','Draft'),('approved','Approved'),('rejected','Rejected'),('open', 'Open'),('done', 'Done')], default='draft', group_expand='_expand_groups')
     value_approval = fields.Selection(string='Default Approval',
     selection=[
         ('0', '0'),
@@ -398,8 +401,11 @@ class RequestFormLine(models.Model):
                 employee_obj = self.env['hr.employee'].suspend_security().browse(vals.get('employee_id'))
                 self._message_log(body=_('<b>PIC Changed!</b> From %s to %s') % (self.employee_id.name,employee_obj.name))
         if vals.get('state', False):
+            if not self.employee_id and vals.get('state') != 'approved' and vals.get('state') != 'rejected':
+                raise Warning('PIC belum ditambahkan !')
             if vals.get('state') != self.state:
                 self._message_log(body=_('<b>State Changed!</b> From %s to %s') % (self.state, str(vals.get('state'))))
+            
         if vals.get('file_upload'):
             file_upload = vals['file_upload']
             vals['file_upload'] = False
@@ -558,14 +564,15 @@ class RequestFormLine(models.Model):
         name= 'Request Form Line'
         tree_id = self.env.ref('eps_request_form.eps_request_form_line_view_tree').id
         form_id = self.env.ref('eps_request_form.eps_request_form_line_view_form').id
+        kanban_id = self.env.ref('eps_request_form.eps_request_form_line_kanban_view').id
         search_id = self.env.ref('eps_request_form.eps_request_form_line_search').id
         return {
             'name': name,
             'type': 'ir.actions.act_window',
             'res_model': 'eps.request.form.line',
             'view_type': 'form',
-            'view_mode': 'tree,form',
-            'views': [(tree_id, 'tree'), (form_id, 'form')],
+            'view_mode': 'kanban,tree,form',
+            'views': [(kanban_id, 'kanban'),(tree_id, 'tree'), (form_id, 'form')],
             'search_view_id': search_id,
             'context': {
                 'search_default_group_company': 1,

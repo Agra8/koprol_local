@@ -390,7 +390,7 @@ class WebsiteForm(Home):
     @http.route("/service_worker.js", type="http", auth="public")
     def render_service_worker(self):
         js_code = """
-            const aktiv_CACHE = "Aktiv-cache"
+            const aktiv_CACHE = "Request-form-cache"
             const assets = [
                 "/",
             ]
