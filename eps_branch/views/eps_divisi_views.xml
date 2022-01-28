@@ -6,6 +6,7 @@
 			<field name="model">eps.divisi</field>
 			<field name="arch" type="xml">
 				<tree string="Divisi">
+					<field name="company_id"/>
 					<field name="name"/>
 				</tree>
 			</field>
@@ -19,6 +20,7 @@
 					<sheet>
 						<group col="4" colspan="4">
 							<field name="name"/>
+							<field name="company_id" required="1" options="{'no_open':True,'no_create':True}"/>
 						</group>
 						<notebook>
 							<page string="Audit Trail">
