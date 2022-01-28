@@ -128,6 +128,7 @@
 		                 				<field name="group_id" options="{'no_show':True,'no_create':True,'no_open':True}" required="1"/>
 									 	<field name="matrix_sequence" required="1"/>
 									 	<field name="limit" required="1"/>
+									 	<field name="sla_days" required="1"/>
 		                 			</tree>
 		                 		</field>
 		                 	</page>

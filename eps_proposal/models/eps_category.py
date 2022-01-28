@@ -10,8 +10,16 @@ class Category(models.Model):
     group_id = fields.Many2one('res.groups', string='Approval Group')
     matrix_sequence = fields.Integer('Sequence')
     limit = fields.Float('Limit')
+    sla_days = fields.Integer('SLA Approval Days')
     
     _sql_constraints = [
         ('name_unique', 'unique(name)', 'Nama Kategori tidak boleh ada yang sama.'),
         ('code_unique', 'unique(code)', 'Kode Kategori tidak boleh ada yang sama.')
     ] 
+
+    @api.onchange('group_id')
+    def _onchange_group(self):
+        if self.group_id:
+            self.matrix_sequence = 0
+            self.limit = 0
+            self.sla_days = 0

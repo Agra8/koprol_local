@@ -18,8 +18,12 @@
     </record>
 
     <template id="external_layout_standard_custom">
+        <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+            <span t-esc="o.get_state()" t-att-style="'transform:rotate(300deg); -webkit-transform:rotate(300deg);font-size:150px;top:700px;position:absolute;text-align:center;width:100%;absolute;opacity:0.25;'"/>
+        </div>
         <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-            <span t-esc="o.get_state()" t-att-style="'transform:rotate(300deg); -webkit-transform:rotate(300deg);font-size:150px;top:500px;position:absolute;text-align:center;width:100%;absolute;opacity:0.25;'"/>
+<!--            <span t-esc="o.get_state()" t-att-style="'transform:rotate(300deg); -webkit-transform:rotate(300deg);font-size:150px;top:500px;position:absolute;text-align:center;width:100%;absolute;opacity:0.25;'"/>-->
+
             <div class="pt-5">
                 <!-- This div ensures that the address is not cropped by the header. -->
                 <t t-call="web.address_layout"/>
@@ -75,6 +79,7 @@
     <template id="report_eps_proposal_document">
         <t t-call="eps_proposal.external_layout_custom">
             <div class="page">
+<!--                <span t-esc="o.get_state()" t-att-style="'transform:rotate(300deg); -webkit-transform:rotate(300deg);font-size:150px;top:500px;position:absolute;text-align:center;width:100%;absolute;opacity:0.25;'"/>-->
                 <table>
                     <tr>
                         <td style="width:500pt;"><h2>Online Proposal</h2></td>
@@ -118,7 +123,7 @@
                     </tr>
                     <tr>
                         <td><span>Expectation Date</span></td>
-                        <td>: <span t-field="o.date"/></td>
+                        <td>: <span t-field="o.expected_date"/></td>
                     </tr>
                     <tr>
                         <td><span>Total Estimation</span></td>
@@ -231,7 +236,7 @@
                                     <span t-field="line.tanggal"/>
                                 </td>
                                 <td>
-                                    <span t-esc="o.get_aging(line.tanggal)"/>
+                                    <span t-esc="o.get_aging(line.expected_date)"/>
                                 </td>
                             </tr>
                         </t>
@@ -241,7 +246,7 @@
                 <div class="oe_structure"/>
                 <div style="border-top: 1px solid black;">
                     <br/>
-                    <span>Printed on: </span><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>
+                    <span>Printed on: </span><span t-esc="context_timestamp(datetime.datetime.now()).strftime(o.env['res.lang']._lang_get(user.lang).date_format)"/>
                     <br/>
                     <span>Printed by: </span><span t-esc="user.name"/>
                 </div>

@@ -5,7 +5,7 @@ import base64
 import os
 import platform
 from odoo.tools import config
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import qrcode
 from werkzeug.urls import url_encode
 from io import BytesIO
@@ -58,6 +58,7 @@ class Proposal(models.Model):
     approval_state = fields.Selection([('b','Belum Request'),('rf','Request For Approval'),('a','Approved'),('r','Reject')],'Approval State', readonly=True)
     initiatives_ids = fields.One2many('eps.initiatives', 'proposal_id', string='Initiatives', copy=False)
     initiatives_count = fields.Integer(compute="_compute_initiatives", string='Initiatives Count', copy=False, default=0, store=True)
+    expected_date = fields.Date('Expected Date')
 
     @api.depends('proposal_line_ids.price')
     def _compute_total(self):
@@ -238,6 +239,7 @@ class Proposal(models.Model):
                 reviewer_approval[key] = {}
                 reviewer_approval[key]['reviewer_sequence']=line.categ_id.matrix_sequence
                 reviewer_approval[key]['reviewer_value']=line.categ_id.limit
+                reviewer_approval[key]['reviewer_sla_days']=line.categ_id.sla_days
 
         for key, value in reviewer_approval.items():
             per_reviewer.append({'value':self.total,
@@ -251,10 +253,14 @@ class Proposal(models.Model):
               'branch_id': self.branch_id.id,
               'divisi_id': self.divisi_id.id,
               'department_id': self.department_id.id,
-              'matrix_sequence': value['reviewer_sequence']})
+              'matrix_sequence': value['reviewer_sequence'],
+              'sla_days': value['reviewer_sla_days']
+              })
 
         self.env['eps.matrix.approval.line'].with_context(per_reviewer=per_reviewer).request_by_value(self, self.total)
-        self.write({'state':'waiting_for_approval', 'approval_state':'rf'})
+        sla_proposal = self.env['ir.config_parameter'].get_param('eps_notification_center.sla_approval_proposal')
+        expected_date = date.today() + timedelta(days = int(sla_proposal))
+        self.write({'state':'waiting_for_approval', 'approval_state':'rf', 'expected_date': expected_date})
 
     def action_approve(self):
         approval_sts = self.env['eps.matrix.approval.line'].approve(self)
@@ -296,7 +302,7 @@ class Proposal(models.Model):
     def get_aging(self, approval_date):
         aging = 0
         if approval_date :
-            delta = datetime.now() - approval_date
+            delta = approval_date - datetime.now().date()
             aging = delta.days
         if aging :
             if aging == 1 :
