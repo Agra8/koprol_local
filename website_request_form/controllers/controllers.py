@@ -275,29 +275,30 @@ class WebsiteForm(Home):
         get_token = decrypt_token[5:]
         get_token = get_token.decode("utf-8") 
         token_split = str(get_token).split("n")
-        request_form = request.env['eps.request.form'].sudo().search([('id','=',int(token_split[0]))])
+        request_form = request.env['eps.request.form.line'].sudo().search([('id','=',int(token_split[0]))])
         if request_form:
-            approval_line = request.env['eps.request.form.approval'].sudo().search([('request_form_id','=',request_form.id),('employee_id','=',int(token_split[1]))])
+            approval_line = request.env['eps.request.form.approval'].sudo().search([('request_form_line_id','=',request_form.id),('employee_id','=',int(token_split[1]))])
             if approval_line.state == 'approved' or approval_line.state == 'rejected':
                 return http.request.render('website_request_form.sorry_page', {
                     'approval_line': approval_line
                 })
 
             if approval_line:
-                approval_line.write({
-                'state': 'approved',
-                'tanggal_approved': today
-                })
-                approval_open = request_form.approval_ids.search([
-                    ('request_form_id', '=', request_form.id),
-                    ('state', '=', 'open')
-                ])
-                if not approval_open:
-                    request_form.write({
-                        'state': 'approved'
-                    })
+                # approval_line.write({
+                # 'state': 'approved',
+                # 'tanggal_approved': today
+                # })
+                # approval_open = request_form.additional_approval_ids.search([
+                #     ('request_form_line_id', '=', request_form.id),
+                #     ('state', '=', 'open')
+                # ])
+                # if not approval_open:
+                #     request_form.write({
+                #         'state': 'approved'
+                #     })
+                request_form.action_approve()
             return http.request.render('website_request_form.website_request_form_approval', {
-                'nama_transaksi': request_form.name,
+                'nama_transaksi': request_form.request_form_id.name,
                 'nama_employee': approval_line.employee_id.name,
                 'request_form': request_form
             })
@@ -312,9 +313,9 @@ class WebsiteForm(Home):
         get_token = decrypt_token[5:]
         get_token = get_token.decode("utf-8") 
         token_split = get_token.split("n")
-        request_form = request.env['eps.request.form'].sudo().search([('id','=',int(token_split[0]))])
+        request_form = request.env['eps.request.form.line'].sudo().search([('id','=',int(token_split[0]))])
         if request_form:
-            approval_line = request.env['eps.request.form.approval'].sudo().search([('request_form_id','=',request_form.id),('employee_id','=',int(token_split[1]))])
+            approval_line = request.env['eps.request.form.approval'].sudo().search([('request_form_line_id','=',request_form.id),('employee_id','=',int(token_split[1]))])
             if approval_line.state == 'approved' or approval_line.state == 'rejected':
                 return http.request.render('website_request_form.sorry_page', {
                     'approval_line': approval_line
@@ -344,7 +345,7 @@ class WebsiteForm(Home):
 
 
         if 'request_form' in value:
-            request_form = request.env['eps.request.form'].sudo().search([('id','=',int(value.get('request_form')))])
+            request_form = request.env['eps.request.form.line'].sudo().search([('id','=',int(value.get('request_form')))])
             line_id = int(value.get('approval_line'))
             alasan_reject = value.get('alasan_reject')
             approval_line = request.env[model_record.model].sudo().search([('id','=', line_id)])
@@ -355,7 +356,7 @@ class WebsiteForm(Home):
                 'tanggal_reject': today
                 })
                 approval_open = request_form.approval_ids.search([
-                    ('request_form_id', '=', request_form.id),
+                    ('request_form_line_id', '=', request_form.id),
                     ('state', '=', 'open')
                 ])
                 if not approval_open:

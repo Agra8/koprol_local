@@ -30,11 +30,11 @@
                                                             <p style="font-size: 19px; line-height: 23px; text-align: left; margin: 0;">
                                                                 <span align="center" style="font-size: 20px; mso-ansi-font-size: 18px;">
                                                                 <h2>YTH. Bapak/Ibu</h2>
-                                                                <p>Kami ingin memberitahukan bahwa telah dilakukan Request for Approval <b><t t-esc="object.branch_id.name"/></b></p>
-                                                                <p>Pada Tanggal : <b><t t-esc="object.date"/></b></p>
-                                                                <p>Dari : <b><t t-esc="object.name_pegawai"/></b></p>
-                                                                <p>Jabatan : <b><t t-esc="object.job_title.name"/></b></p>
-                                                                <p>Ke : <b><t t-esc="object.penerima"/></b></p>
+                                                                <p>Kami ingin memberitahukan bahwa telah dilakukan Request for Approval <b><t t-esc="object.request_form_id.branch_id.name"/></b></p>
+                                                                <p>Pada Tanggal : <b><t t-esc="object.request_form_id.date"/></b></p>
+                                                                <p>Dari : <b><t t-esc="object.request_form_id.name_pegawai"/></b></p>
+                                                                <p>Jabatan : <b><t t-esc="object.request_form_id.job_title.name"/></b></p>
+                                                                <p>Ke : <b><t t-esc="object.request_form_id.penerima"/></b></p>
                                                                 <p>Berikut adalah list JRF / ARF : </p>
                                                                 </span>
                                                             </p>
@@ -55,7 +55,7 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <t t-foreach="object.request_line_ids" t-as="line">
+                                                            <t t-foreach="object.request_form_id.request_line_ids" t-as="line">
                                                                 <tr>
                                                                     <td style="border: 1px solid black;"><t t-esc="nomor"/> </td>
                                                                     <td style="border: 1px solid black;"><t t-esc="line.keterangan"/> </td>

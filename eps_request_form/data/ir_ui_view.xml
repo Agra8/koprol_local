@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <template id="dms_request_form_result_email">
+    <template id="eps_request_form_result_email">
         <t t-name="DMS Request Form">
         
         <body class="clean-body" style="margin: 0; padding: 0; -webkit-text-size-adjust: 100%; background-color: #F1F3F3;">
@@ -59,12 +59,12 @@
                                                             <td style="overflow-wrap:break-word;word-break:break-word;padding:0px 25px 10px;font-family:'Open Sans',sans-serif;" align="left">
                                                               
                                                         <div style="color: #333333; line-height: 160%; text-align: justify; word-wrap: break-word;">
-                                                          <p style="font-size: 14px; line-height: 160%; text-align: center;">YTH. Bapak/Ibu,<br />Kami ingin memberitahukan bahwa telah dilakukan Request for Approval</p>
-                                                      <p style="font-size: 14px; line-height: 160%; text-align: center;"><b><t t-esc="object.branch_id.name"/></b></p>
+                                                          <p style="font-size: 14px; line-height: 160%; text-align: center;">YTH. Bapak/Ibu,<br />Kami ingin memberitahukan bahwa telah dilakukan Request dan membutuhkan Approval</p>
+                                                      <p style="font-size: 14px; line-height: 160%; text-align: center;"><b><t t-esc="object.request_form_id.branch_id.name"/></b></p>
                                                       <br/>
-                                                      <p style="font-size: 14px; line-height: 160%;">Pada Tanggal :  <b><t t-esc="object.date"/></b></p>
-                                                      <p style="font-size: 14px; line-height: 160%;">Dari : <b><t t-esc="object.name_pegawai"/></b></p>
-                                                      <p style="font-size: 14px; line-height: 160%;">Jabatan : <b><t t-esc="object.job_title.name"/></b></p>
+                                                      <p style="font-size: 14px; line-height: 160%;">Pada Tanggal :  <b><t t-esc="object.request_form_id.date"/></b></p>
+                                                      <p style="font-size: 14px; line-height: 160%;">Dari : <b><t t-esc="object.request_form_id.name_pegawai"/></b></p>
+                                                      <p style="font-size: 14px; line-height: 160%;">Jabatan : <b><t t-esc="object.request_form_id.job_title.name"/></b></p>
                                                       <p style="font-size: 14px; line-height: 160%;">Ke : <b><t t-esc="object.penerima"/></b></p>
                                                       <p style="font-size: 14px; line-height: 160%;">Berikut adalah list JRF / ARF :</p>
                                                         </div>
@@ -89,21 +89,21 @@
                                                                     <tr>
                                                                         <td style="border: 1px solid black; text-align: left" width="6.00%"><b>No</b></td>
                                                                         <td style="border: 1px solid black; text-align: left" width="16.00%"><b>Keterangan</b></td>
-                                                                        <td style="border: 1px solid black; text-align: left" width="8.00%"><b>Type</b></td>
-                                                                        <td style="border: 1px solid black; text-align: left" width="16.00%"><b>Request</b></td>
+                                                                        <td style="border: 1px solid black; text-align: left" width="8.00%"><b>Request</b></td>
+                                                                        <td style="border: 1px solid black; text-align: left" width="16.00%"><b>Date</b></td>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                <t t-foreach="object.request_line_ids" t-as="line">
+                                                                <!-- <t t-foreach="object.request_line_ids" t-as="line"> -->
                                                                   
                                                                     <tr>
                                                                         <td style="border: 1px solid black;"><t t-esc="nomor"/> </td>
-                                                                        <td style="border: 1px solid black;"><t t-esc="line.keterangan"/> </td>
-                                                                        <td style="border: 1px solid black;"><t t-esc="line.form_id.type_form"/> </td>
-                                                                        <td style="border: 1px solid black;"><t t-esc="line.form_id.name"/> </td>
+                                                                        <td style="border: 1px solid black;"><t t-esc="object.keterangan"/> </td>
+                                                                        <td style="border: 1px solid black;"><t t-esc="object.request_id.name"/> </td>
+                                                                        <td style="border: 1px solid black;"><t t-esc="object.date"/> </td>
                                                                     </tr>
-                                                                    <t t-set="nomor" t-value="nomor+1"/>
-                                                                </t>
+                                                                    <!-- <t t-set="nomor" t-value="nomor+1"/> -->
+                                                                <!-- </t> -->
                                                                 </tbody>
                                                             </table>
                                                             <div class="u-row-container" style="padding: 0px;background-color: transparent; margin-top:15px;">

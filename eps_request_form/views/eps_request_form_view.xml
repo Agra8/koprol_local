@@ -9,7 +9,7 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Request Form">
-                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="company_id"/>
                     <field name="name"/>
                     <field name="date"/>
                     <field name="name_pegawai"/>
@@ -28,10 +28,11 @@
             <field name="arch" type="xml">
                 <form string="Request Form">
                     <header>
+                        <button name="action_rfa" string="RFA" states="draft" class="oe_highlight" type="object"/>
                         <button name="action_open" string="Open" states="approved" class="oe_highlight" type="object"/>
                         <button name="action_done" string="Done" states="approved,open" class="oe_highlight" type="object"/>
-                        <button name="action_cancel" string="Cancel" states="draft,rfa,approved" class="oe_highlight" type="object"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,open,done"/>
+                        <button name="action_cancel" string="Cancel" states="draft,rfa,approved" class="oe_stat_button" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,rfa,open,done"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
@@ -40,7 +41,7 @@
                             </h1>
                         </div>
                         <group>
-                            <field name="company_id" groups="base.group_multi_company" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" options="{'no_create': True,'no_open': True}"/>
+                            <field name="company_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" options="{'no_create': True,'no_open': True}"/>
                             <field name="branch_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" options="{'no_create': True,'no_open': True}"/>
                             <field name="department_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" options="{'no_create': True,'no_open': True}"/>
                             
@@ -92,7 +93,7 @@
             <field name="model">eps.request.form</field>
             <field name="arch" type="xml">
                 <search string="Request Form">
-                    <field name="company_id"  groups="base.group_multi_company" select="True"/>
+                    <field name="company_id" select="True"/>
                     <field name="branch_id" select="True"/>
                     <field name="name_pegawai" string="Nama Pegawai"/>
                     <filter name="state_open" string="Open" domain="[('state', '=', 'open')]"/>

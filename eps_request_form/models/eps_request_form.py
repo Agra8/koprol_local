@@ -35,12 +35,6 @@ class RequestForm(models.Model):
     def _get_default_date(self):
         return (datetime.now() + relativedelta(hours=7)).date()
     
-    def _key_gen(self):
-        key_len = 5
-        random_letters = string.ascii_letters+string.digits
-        keylist = [random.choice(random_letters) for i in range (key_len)]
-        return ("".join(keylist))
-
 
     # 8: fields
     name = fields.Char(string='Name', index=True)
@@ -50,12 +44,7 @@ class RequestForm(models.Model):
     total_approval = fields.Float(string='Approval Percentage')
     name_pegawai = fields.Char(string='Nama Pegawai')
     no_telp = fields.Char(string="Nomor Telp")
-    state = fields.Selection(string='State', selection=[('draft','Draft'), ('cancel', 'Cancel'),('open', 'Open'), ('done', 'Done')], default='draft')
-    email_penerima = fields.Char()
-    penerima = fields.Char()
-    token_penerima = fields.Char()
-    approval_url = fields.Char()
-    reject_url = fields.Char()
+    state = fields.Selection(string='State', selection=[('draft','Draft'),('rfa', 'Waiting for Approval'), ('cancel', 'Cancel'),('open', 'Open'), ('done', 'Done')], default='draft')
     # Audit Trail
     request_uid = fields.Many2one(comodel_name='res.users',string='Requested by')
     request_date = fields.Datetime(string='Requested on')
@@ -86,39 +75,8 @@ class RequestForm(models.Model):
             doc_code = branch_obj.code
             vals['name'] = self.env['ir.sequence'].suspend_security().get_per_doc_code(doc_code,'RF')
             vals['divisi_id'] = self.env['eps.divisi'].suspend_security().search([('name', '=', 'Umum')]).id
-            create_super = super(RequestForm, self).create(vals)
-            if branch_obj.is_md == True:
-                department_obj = self.env['hr.department'].suspend_security().browse(vals['department_id'])
-                job_level = department_obj.manager_id.job_id.job_level 
-                group_id = self._change_group_by_level(job_level if job_level else '4')
-                employee_id = department_obj.manager_id
-                job_id = department_obj.manager_id.job_id.id
-            
-            elif branch_obj.is_md == False:
-                job_level = branch_obj.kacab_id.job_id.job_level
-                group_id = self._change_group_by_level(job_level if job_level else '3')
-                employee_id = branch_obj.kacab_id
-                job_id = branch_obj.kacab_id.job_id.id
-           
-        for request in create_super.request_line_ids:
-            if int(request.value_approval) > 0:
-                request.env['eps.matrix.approval.line'].request_by_value(request, int(request.value_approval), send_email=False)
-            # for request in create_super.request_line_ids:
-            #     # record = {
-            #     #     'employee_id': employee_id.id,
-            #     #     'job_id': job_id,
-            #     #     'job_level': job_level,
-            #     #     'group_id': group_id,
-            #     #     'request_form_line_id':request.id,
-            #     #     'user_id': employee_id.user_id.id if employee_id else '',
-            #     #     'state': 'open',
-            #     # }
-            #     # self.env['eps.request.form.approval'].suspend_security().create(record)
-            #     if int(request.form_id.approval_default) > 0:
-            #         import ipdb; ipdb.set_trace()
-            #         request.env['eps.matrix.approval.line'].request_by_value(request, int(request.form_id.approval_default), send_email=False)
-            #         request.approval_ids.write({'user_id': employee_id.user_id.id})
-        return create_super
+            create = super(RequestForm, self).create(vals)
+        return create
     
     def unlink(self):
         raise Warning('Request Form tidak bisa di delete !')
@@ -127,60 +85,27 @@ class RequestForm(models.Model):
         raise Warning('Perhatian!\nData tidak bisa diduplikasi.')
 
 
-    def get_url(self):
-        urls = request.httprequest.url.replace('//','/').split('/')
-        base_url = urls[0] + "//" + urls[1]
-        return base_url
-    
-    def generate_key(self):
-        key = Fernet.generate_key()
-        with open("secret.key", "wb") as key_file:
-            key_file.write(key)
-    
-    def load_key(self):
-         file_exist = os.path.exists('./secret.key')
-         if file_exist:
-            return open("secret.key", "rb").read()
-         else:
-            return False
-
-    def create_token(self, id_request_form, id_penerima):
-        if not self.load_key():
-            self.generate_key()
-        token = self._key_gen()+str(id_request_form)+'n'+str(id_penerima)
-        key = self.load_key()
-        f = Fernet(key)
-        token_encoded = f.encrypt(bytes(token,encoding='utf8'))
-        return token_encoded
-
-    def action_rfa(self):
-
+    def action_rfa(self):    
         for request in self.request_line_ids:
-            request.env['eps.matrix.approval.line'].request_by_value(request, int(request.value_approval), send_email=False)
+            if request.additional_approval_ids:
+                template = request.env.ref('eps_request_form.template_mail_request_form_result')
+                mail = request.env['mail.template'].suspend_security().browse(template.id)
+                for user in request.additional_approval_ids.employee_id:
+                    request.email_penerima = user.work_email
+                    request.penerima = user.name
+                    request.token_penerima = request.create_token(request.id, user.id)
+                    path = "/approval/%s" % request.token_penerima
+                    path_reject = "/reject/%s" % request.token_penerima
+                    request.approval_url = request.get_url() + path
+                    request.reject_url = request.get_url() + path_reject
+                    mail.send_mail(request.id, force_send=True)
+            if int(request.value_approval) > 0:
+                request.env['eps.matrix.approval.line'].request_by_value(request, int(request.value_approval), send_email=False)
         self.write({
             'state': 'rfa',
             'request_uid':self.env.user.id,
             'request_date':self._get_default_date()
         })
-        # ? Jangan di hapus ya
-        # template = self.env.ref('eps_request_form.template_mail_request_form_result')
-        # # TODO: cek approval line transaction untuk ngirim ke siapanya, employee_id, dibikin list, yang ditaro object
-        # mail = self.env['mail.template'].suspend_security().browse(template.id)
-        # for user in self.additional_approval_ids.employee_id:
-        #     self.email_penerima = user.work_email
-        #     self.penerima = user.name
-        #     self.token_penerima = self.create_token(self.id, user.id)
-        #     path = "/approval/%s" % self.token_penerima
-        #     path_reject = "/reject/%s" % self.token_penerima
-        #     self.approval_url = self.get_url() + path
-        #     self.reject_url = self.get_url() + path_reject
-        #     mail.send_mail(self.id, force_send=True)
-        # if mail:
-        #     self.write({
-        #         'state': 'rfa',
-        #         'request_uid':self.env.user.id,
-        #         'request_date':self._get_default_date()
-        #     })
     
     def action_open(self):
         self.write({
@@ -194,17 +119,6 @@ class RequestForm(models.Model):
             'done_date': self._get_default_date()
         })
 
-    # @api.depends('approval_ids','approval_ids.state')
-    # def _compute_total_approval(self):
-    #     for record in self:
-    #         total = 0.0
-    #         if len(record.additional_approval_ids):
-    #             approved = record.additional_approval_ids.suspend_security().search([
-    #                 ('request_form_id','=',record.id),
-    #                 ('state','=','approved')
-    #                 ])
-    #             total = float(len(approved)) / float(len(record.additional_approval_ids))
-    #         record.total_approval = total*100
     
     def action_request(self):
         self.ensure_one()
@@ -230,9 +144,7 @@ class RequestForm(models.Model):
         self.write({
             'state': 'cancel'
         })
-        
-            
-   
+
     def _change_group_by_level(self,vals):
         
         name_job_level = False
@@ -324,6 +236,13 @@ class RequestFormLine(models.Model):
     def _expand_groups(self, states, domain, order):
         return ['draft', 'approved', 'rejected', 'open', 'done']
     
+    def _key_gen(self):
+        key_len = 5
+        random_letters = string.ascii_letters+string.digits
+        keylist = [random.choice(random_letters) for i in range (key_len)]
+        return ("".join(keylist))
+
+    
     # 8: fields
 
     name=fields.Char(string='Name')
@@ -349,6 +268,11 @@ class RequestFormLine(models.Model):
     type_file = fields.Char(string='Tipe File', default='NULL')
     user_request = fields.Char(String='User Request', related='request_form_id.name_pegawai')
     reason = fields.Char(string='Alasan Reject')
+    email_penerima = fields.Char()
+    penerima = fields.Char()
+    token_penerima = fields.Char()
+    approval_url = fields.Char()
+    reject_url = fields.Char()
     
     # 9: Relations Fields
     company_id = fields.Many2one(comodel_name='res.company', string='Company', related='request_form_id.company_id', store=False)
@@ -421,39 +345,27 @@ class RequestFormLine(models.Model):
     def action_approve(self):
         if self.additional_approval_ids:
             self.action_additional_approve()
-        self.env['eps.matrix.approval.line'].approve(self)
-        
-        approval_open = self.env['eps.approval.transaction'].search([
-            ('transaction_id', '=', self.id),
-            ('state', '=', 'IN')
-        ])
+        if self.approval_ids:
+            self.env['eps.matrix.approval.line'].approve(self)
+            approval_matrix_open = self.env['eps.approval.transaction'].search([
+                ('transaction_id', '=', self.id),
+                ('state', '=', 'IN')
+            ])
 
-        if not approval_open:
-            self.write({
-                'state': 'approved'
-            })
+            if not approval_matrix_open:
+                self.write({
+                    'state': 'approved'
+                })
         header_open = self.env['eps.request.form.line'].search(
             [
                 ('request_form_id', '=', self.request_form_id.id),
                 ('state', '=', 'draft')
             ]
         )
-        
         if not header_open:
             self.request_form_id.write({
                 'state': 'open'
             })
-    
-    def get_full_url(self):
-        self.ensure_one()
-        base_url = self.env["ir.config_parameter"].get_param("web.base.url")
-        url_params = {
-            'id': self.id,
-            'view_type': 'form',
-            'model': self._name,
-        }
-        params = '/web?#%s' % url_encode(url_params)
-        return base_url + params
         
 
     def action_additional_approve(self):
@@ -472,7 +384,7 @@ class RequestFormLine(models.Model):
             })
        
         approval_open = self.additional_approval_ids.search([
-            ('request_form_id', '=', self.id),
+            ('request_form_line_id', '=', self.id),
             ('state', '=', 'open')
         ])
         if not approval_open:
@@ -510,6 +422,42 @@ class RequestFormLine(models.Model):
             }
         }
     
+    def get_full_url(self):
+        self.ensure_one()
+        base_url = self.env["ir.config_parameter"].get_param("web.base.url")
+        url_params = {
+            'id': self.id,
+            'view_type': 'form',
+            'model': self._name,
+        }
+        params = '/web?#%s' % url_encode(url_params)
+        return base_url + params
+            
+    def get_url(self):
+        urls = request.httprequest.url.replace('//','/').split('/')
+        base_url = urls[0] + "//" + urls[1]
+        return base_url
+    
+    def generate_key(self):
+        key = Fernet.generate_key()
+        with open("secret.key", "wb") as key_file:
+            key_file.write(key)
+    
+    def load_key(self):
+         file_exist = os.path.exists('./secret.key')
+         if file_exist:
+            return open("secret.key", "rb").read()
+         else:
+            return False
+
+    def create_token(self, id_request_form, id_penerima):
+        if not self.load_key():
+            self.generate_key()
+        token = self._key_gen()+str(id_request_form)+'n'+str(id_penerima)
+        key = self.load_key()
+        f = Fernet(key)
+        token_encoded = f.encrypt(bytes(token,encoding='utf8'))
+        return token_encoded
 
     def action_assign(self):
         form_id = self.env.ref('eps_request_form.eps_request_form_line_assign_form').id
@@ -544,14 +492,14 @@ class RequestFormLine(models.Model):
        
     def _check_user_groups(self):
         approval_obj = self.additional_approval_ids.search([
-            ('request_form_id', '=', self.id),
+            ('request_form_line_id', '=', self.id),
             ('state','=','open')
         ])
 
         for approval in approval_obj:
             # TODO: create check if user already approving with this request
             user_approval_obj = self.additional_approval_ids.search([
-                ('request_form_id', '=', self.id),
+                ('request_form_line_id', '=', self.id),
                 ('user_id','=', self.env.user.id),
                 ('state', '=','approved')
             ])

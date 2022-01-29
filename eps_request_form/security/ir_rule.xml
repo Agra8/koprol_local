@@ -7,9 +7,27 @@
             <field name="domain_force">[('company_id', 'in', company_ids)]</field>
         </record>
 
+        <record id="eps_request_form_line_multi_rule" model="ir.rule">
+            <field name="name">Request Form Line multi company rule</field>
+            <field name="model_id" ref="model_eps_request_form_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="eps_request_form_master_jrf_arf_multi_rule" model="ir.rule">
+            <field name="name">Request Form Master Jrf Arf multi company rule</field>
+            <field name="model_id" ref="model_eps_master_jrf_arf"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
         <record id="eps_reques_form_branch_rule" model="ir.rule">
             <field name="name">Request Form Branch Rule</field>
             <field name="model_id" ref="model_eps_request_form"/>
+            <field name="domain_force">[("branch_id","in",[b.id for b in user.area_id.branch_ids])]</field>
+        </record>
+
+        <record id="eps_reques_form_line_branch_rule" model="ir.rule">
+            <field name="name">Request Form Branch Rule</field>
+            <field name="model_id" ref="model_eps_request_form_line"/>
             <field name="domain_force">[("branch_id","in",[b.id for b in user.area_id.branch_ids])]</field>
         </record>
     </data>

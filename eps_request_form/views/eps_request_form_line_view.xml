@@ -8,7 +8,7 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Request Form Line">
-                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule"/>
                     <field name="name"/>
                     <field name="request_id"/>
                     <field name="user_request" string="User Request"/>
@@ -37,7 +37,7 @@
                         <group>
                             <group>
                                 <field name="request_form_id" invisible="1"/>
-                                <field name="employee_id" readonly="1"/>
+                                <field name="employee_id" readonly="1" />
                                 <field name="request_id" readonly="1"/>
                                 <field name="keterangan" readonly="1"/>
                                 <field name="date" readonly="1"/>
@@ -94,7 +94,7 @@
             <field name="model">eps.request.form.line</field>
             <field name="arch" type="xml">
                 <search string="Request Form Line">
-                    <field name="company_id"  groups="base.group_multi_company" select="True"/>
+                    <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule" select="True"/>
                     <field name="branch_id" select="True"/>
                     <field name="name" string="Transaksi"/>
                     <filter name="state_open" string="Open" domain="[('state', '=', 'open')]"/>
@@ -190,6 +190,7 @@
                 <kanban version="7.0" default_group_by="state" class="o_kanban_mobile" sample="1">
                     <field name="state"/>
                     <field name="request_form_id"/>
+                    <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule"/>
                     <field name="employee_id"/>
                     <field name="request_id"/>
                     <field name="keterangan"/>
