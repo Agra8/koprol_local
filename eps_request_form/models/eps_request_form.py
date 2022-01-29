@@ -273,6 +273,7 @@ class RequestFormLine(models.Model):
     token_penerima = fields.Char()
     approval_url = fields.Char()
     reject_url = fields.Char()
+    request_state = fields.Selection(related="request_form_id.state")
 
     # Audit trail
     request_uid = fields.Many2one(comodel_name='res.users',string='Requested by',related="request_form_id.request_uid")
@@ -335,8 +336,8 @@ class RequestFormLine(models.Model):
                 employee_obj = self.env['hr.employee'].suspend_security().browse(vals.get('employee_id'))
                 self._message_log(body=_('<b>PIC Changed!</b> From %s to %s') % (self.employee_id.name,employee_obj.name))
         if vals.get('state', False):
-            if not self.employee_id and vals.get('state') != 'approved' and vals.get('state') != 'rejected':
-                raise Warning('PIC belum ditambahkan !')
+            if not self.employee_id:
+                raise Warning('PIC belum ditambahkan ! \n silahkan lakukan assign terlebih dahulu')
             if vals.get('state') != self.state:
                 self._message_log(body=_('<b>State Changed!</b> From %s to %s') % (self.state, str(vals.get('state'))))
             
