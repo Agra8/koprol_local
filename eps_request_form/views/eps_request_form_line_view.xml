@@ -76,6 +76,26 @@
                                     </tree>
                                 </field>
                             </page>
+                            <page string="Audit Trail" >
+                                <group>
+                                    <group>
+                                        <field name="create_uid" readonly="1" attrs="{'invisible':[('create_uid','=',False)]}"/>
+                                        <field name="create_date" readonly="1" attrs="{'invisible':[('create_date','=',False)]}"/>
+                                        <field name="request_uid" readonly="1" attrs="{'invisible':[('request_uid','=',False)]}"/>
+                                        <field name="reject_date" readonly="1" attrs="{'invisible':[('reject_date','=',False)]}"/>
+                                        <field name="reject_uid" readonly="1" attrs="{'invisible':[('reject_uid','=',False)]}"/>
+                                        <field name="request_date" readonly="1" attrs="{'invisible':[('request_date','=',False)]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="write_uid" readonly="1" attrs="{'invisible':[('write_uid','=',False)]}"/>
+                                        <field name="write_date" readonly="1" attrs="{'invisible':[('write_date','=',False)]}"/>
+                                        <field name="approve_uid" readonly="1" attrs="{'invisible':[('approve_uid','=',False)]}"/>
+                                        <field name="approve_date" readonly="1" attrs="{'invisible':[('approve_date','=',False)]}"/>
+                                        <field name="done_uid" readonly="1" attrs="{'invisible':[('done_uid','=',False)]}"/>
+                                        <field name="done_date" readonly="1" attrs="{'invisible':[('done_date','=',False)]}"/>
+                                    </group>
+                                </group>
+                            </page>
                         </notebook>
                         <sheet>
                             <div class="oe_chatter">
