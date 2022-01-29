@@ -273,15 +273,25 @@ class RequestFormLine(models.Model):
     token_penerima = fields.Char()
     approval_url = fields.Char()
     reject_url = fields.Char()
+
+    # Audit trail
+    request_uid = fields.Many2one(comodel_name='res.users',string='Requested by',related="request_form_id.request_uid")
+    request_date = fields.Datetime(string='Requested on',related="request_form_id.request_date")
+    reject_uid = fields.Many2one(comodel_name='res.users',string='Rejected by')
+    reject_date = fields.Datetime(string='Rejected on')
+    approve_uid = fields.Many2one(comodel_name='res.users',string='Approve by')
+    approve_date = fields.Datetime(string='Approve on')
+    done_uid = fields.Many2one(comodel_name='res.users', string='Done by')
+    done_date = fields.Datetime(string='Done on')
     
     # 9: Relations Fields
+    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
     company_id = fields.Many2one(comodel_name='res.company', string='Company', related='request_form_id.company_id', store=False)
     branch_id = fields.Many2one(comodel_name='res.branch', string='Branch', related='request_form_id.branch_id', store=False)
     divisi_id = fields.Many2one(comodel_name='eps.divisi', string='Divisi', related='request_form_id.divisi_id', store=False)
     department_id = fields.Many2one(comodel_name='hr.department', string='Department', related='request_form_id.department_id', store=False)
     request_id = fields.Many2one(comodel_name='eps.master.jrf.arf', string='Master Request')
     employee_id = fields.Many2one(comodel_name='hr.employee',string='PIC')
-    request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
     sistem_id = fields.Many2one(comodel_name='eps.sistem.master', string='Master Sistem')
     approval_ids = fields.One2many(comodel_name='eps.approval.transaction', inverse_name='transaction_id', string='Approval', copy=False)
     additional_approval_ids = fields.One2many(comodel_name='eps.request.form.approval',inverse_name='request_form_line_id', string='Additional Approval JRF/ARF')
