@@ -7,14 +7,15 @@
             <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <tree string="Request Form Line">
+                <tree string="Request Form Line" default_order="create_date desc">
                     <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule"/>
                     <field name="name"/>
                     <field name="request_id"/>
                     <field name="user_request" string="User Request"/>
                     <field name="employee_id"/>
+                    <field name="create_date" string="Date"/>
                     <field name="state"/>
-                    <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('employee_id', '!=', False)]}"/>
+                    <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['rejected','open','done']), ('employee_id', '!=', False)]}"/>
                 </tree>
             </field>
         </record>
@@ -29,8 +30,8 @@
                     <header>
                         <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['open','approved','rejected','done']), ('value_approval', '=', '0')]}"/>
                         <button name="action_reject" string="Reject" class="oe_higlight" type="object"  attrs="{'invisible': ['|',('state', 'in', ['open','approved','rejected','done']), ('value_approval', '=', '0')]}"/>
-                        <button name="action_assign" type="object" string="Delegate" class="oe_stat_button"/>
-                        <button name="action_done" type="object" string="Done" class="oe_stat_button" attrs="{'invisible': [('state', 'in', ['approved','rejected','done'])]}"/>
+                        <button name="action_assign" type="object" string="Delegate" attrs="{'invisible': [('employee_id', '=', False)]}" class="oe_stat_button"/>
+                        <button name="action_done" type="object" string="Done" class="oe_stat_button" attrs="{'invisible': [('state', 'in', ['draft','approved','rejected','done'])]}"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,approved,rejected,open,done"/>
                     </header>
                     <sheet>
@@ -51,7 +52,7 @@
                             </group>
                         </group>
                         <notebook>
-                            <page string="Approval">
+                            <page string="Approval" attrs="{'invisible': [('value_approval', '=', '0')]}">
                                 <field name="approval_ids">
                                     <tree>
                                         <field name="group_id"/>
@@ -63,7 +64,7 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Additional Approval">
+                            <page string="Additional Approval" attrs="{'invisible': [('value_approval', '=', '0')]}">
                                 <field name="additional_approval_ids">
                                     <tree>
                                         <field name="group_id" string="Groups" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>

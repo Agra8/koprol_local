@@ -8,10 +8,10 @@
             <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <tree string="Request Form">
+                <tree string="Request Form" default_order="create_date desc">
                     <field name="company_id"/>
                     <field name="name"/>
-                    <field name="date"/>
+                    <field name="create_date"/>
                     <field name="name_pegawai"/>
                     <field name="state"/>
                     <!-- <field name="total_approval" widget="progressbar"/> -->
@@ -64,8 +64,8 @@
                                     <field name="date" readonly="1"/>
                                     <field name="value_approval" invisible="1"/>
                                     <field name="state"/>
-                                    <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['approved','rejected','open','done']), ('value_approval', '=', '0')]}"/>
-                                    <button name="action_reject" string="Reject" class="oe_higlight" type="object"  attrs="{'invisible': ['|',('state', 'in', ['approved','rejected','open','done']), ('value_approval', '=', '0')]}"/>
+                                    <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','approved','rejected','open','done']), ('value_approval', '=', '0')]}"/>
+                                    <button name="action_reject" string="Reject" class="oe_higlight" type="object"  attrs="{'invisible': ['|',('state', 'in', ['draft','approved','rejected','open','done']), ('value_approval', '=', '0')]}"/>
                                 </tree>
                                 </field>
                             </page>
