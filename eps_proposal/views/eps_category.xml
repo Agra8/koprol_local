@@ -24,6 +24,7 @@
 							<field name="group_id" options="{'no_create':True,'no_open':True}"/>
 							<field name="matrix_sequence" attrs="{'invisible':[('group_id','=',False)],'required':[('group_id','=',False)]}"/>
 							<field name="limit" attrs="{'invisible':[('group_id','=',False)],'required':[('group_id','=',False)]}"/>
+							<field name="sla_days" attrs="{'invisible':[('group_id','=',False)],'required':[('group_id','=',False)]}"/>
 						</group>
 						<notebook>
 							<page string="Audit Trail">

@@ -60,6 +60,7 @@ class eps_matrix_approval_line(models.Model):
     branch_id = fields.Many2one(related='approval_id.branch_id', readonly=True)
     divisi_id = fields.Many2one(related='approval_id.divisi_id', readonly=True)
     department_id = fields.Many2one(related='approval_id.department_id', readonly=True)
+    sla_days = fields.Integer('SLA Approval Days')
 
     def request_by_value(self,object,value,view_id=None):
         matrix = self.search([
@@ -86,12 +87,18 @@ class eps_matrix_approval_line(models.Model):
         prev_sequence = 1
         state = 'IN'
         matrix_data = []
+        
 
         for data in matrix :
+            approval_start_date = False
+            expected_date = False
             if data.matrix_sequence==min_sequence:
                 state='IN'
+                approval_start_date = date.today()
+                expected_date = date.today() + timedelta(days = data.sla_days)
             else:
                 state='IWA'
+
             matrix_data.append({
               'value':value,
               'group_id':data.group_id.id,
@@ -104,7 +111,10 @@ class eps_matrix_approval_line(models.Model):
               'branch_id': data.branch_id.id,
               'divisi_id': data.divisi_id.id,
               'department_id': data.department_id.id,
-              'matrix_sequence': data.matrix_sequence
+              'matrix_sequence': data.matrix_sequence,
+              'expected_date': expected_date,
+              'approval_start_date': approval_start_date,
+              'sla_days': data.sla_days,
             })
             
             
@@ -125,8 +135,6 @@ class eps_matrix_approval_line(models.Model):
         sla_approval = self.env['ir.config_parameter'].get_param('eps_notification_center.sla_approval_proposal')
         for i in sorted_matrix_data :
             i['sequence'] = sequence
-            i['expected_date'] = date.today() + timedelta(days = int(sla_approval))
-            i['approval_start_date'] = date.today()
             sequence+=1
         
         create_approval = self.env['eps.approval.transaction'].create(sorted_matrix_data)
@@ -170,6 +178,8 @@ class eps_matrix_approval_line(models.Model):
                 if prev_state == 'OK':
                     approval_line.write({
                               'state':'IN',
+                              'approval_start_date': date.today(),
+                              'expected_date': date.today() + timedelta(days = approval_line.sla_days),
                             })
 
                 if approval_line.group_id in user_groups:
@@ -181,6 +191,8 @@ class eps_matrix_approval_line(models.Model):
                 if prev_state == 'OK':
                     approval_line.write({
                               'state':'IN',
+                              'approval_start_date': date.today(),
+                              'expected_date': date.today() + timedelta(days = approval_line.sla_days),
                             })
                 elif prev_state in ('IN','WA') and prev_sequence == approval_line.matrix_sequence:
                     approval_line.write({
@@ -399,6 +411,7 @@ class eps_approval_transaction(models.Model):
     expected_date = fields.Date(string='Expected Date')
     sequence = fields.Integer(string='Integer')
     approval_start_date = fields.Date(string='Start Date')
+    sla_days = fields.Integer('SLA Approval Days')
         
     
     def schedule_notification_outstanding_proposal_approval(self):
