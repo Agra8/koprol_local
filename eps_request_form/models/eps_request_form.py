@@ -44,7 +44,8 @@ class RequestForm(models.Model):
     total_approval = fields.Float(string='Approval Percentage')
     name_pegawai = fields.Char(string='Nama Pegawai')
     no_telp = fields.Char(string="Nomor Telp")
-    state = fields.Selection(string='State', selection=[('draft','Draft'),('rfa', 'Waiting for Approval'), ('cancel', 'Cancel'),('open', 'Open'), ('done', 'Done')], default='draft')
+    email = fields.Char(string='Email')
+    state = fields.Selection(string='State', selection=[('draft','Draft'),('rfa', 'Waiting for Approval'),('open', 'Open'), ('done', 'Done')], default='draft')
     # Audit Trail
     request_uid = fields.Many2one(comodel_name='res.users',string='Requested by')
     request_date = fields.Datetime(string='Requested on')
@@ -101,6 +102,13 @@ class RequestForm(models.Model):
                     mail.send_mail(request.id, force_send=True)
             if int(request.value_approval) > 0:
                 request.env['eps.matrix.approval.line'].request_by_value(request, int(request.value_approval), send_email=False)
+            if int(request.value_approval) == 0:
+                request.write({
+                    'state': 'approved',
+                    'approve_uid': self.env.user.id,
+                    'approve_date': self._get_default_date()
+                })
+
         self.write({
             'state': 'rfa',
             'request_uid':self.env.user.id,
@@ -140,10 +148,6 @@ class RequestForm(models.Model):
             }
         }
    
-    def action_cancel(self):
-        self.write({
-            'state': 'cancel'
-        })
 
     def _change_group_by_level(self,vals):
         
@@ -234,7 +238,7 @@ class RequestFormLine(models.Model):
     
     @api.model
     def _expand_groups(self, states, domain, order):
-        return ['draft', 'approved', 'rejected', 'open', 'done']
+        return ['draft', 'approved', 'rejected','cancel','open', 'done']
     
     def _key_gen(self):
         key_len = 5
@@ -248,8 +252,8 @@ class RequestFormLine(models.Model):
     name=fields.Char(string='Name')
     date=fields.Date(string='Date', default=_get_default_date)
     keterangan = fields.Text(string='Keterangan')
-    state = fields.Selection(string='State',  selection=[('draft','Draft'),('approved','Approved'),('rejected','Rejected'),('open', 'Open'),('done', 'Done')], default='draft', group_expand='_expand_groups')
-    value_approval = fields.Selection(string='Default Approval',
+    state = fields.Selection(string='State',  selection=[('draft','Draft'),('approved','Approved'),('rejected','Rejected'),('cancel', 'Cancel'),('open', 'Open'),('done', 'Done')], default='draft', group_expand='_expand_groups')
+    value_approval = fields.Selection(string='Approval Value',
     selection=[
         ('0', '0'),
         ('1', '1'),
@@ -284,6 +288,8 @@ class RequestFormLine(models.Model):
     approve_date = fields.Datetime(string='Approve on')
     done_uid = fields.Many2one(comodel_name='res.users', string='Done by')
     done_date = fields.Datetime(string='Done on')
+    cancel_uid = fields.Many2one(comodel_name='res.users', string='Cancel by')
+    cancel_date = fields.Datetime(string='Cancel on')
     
     # 9: Relations Fields
     request_form_id = fields.Many2one(comodel_name='eps.request.form', string='Request Form')
@@ -291,12 +297,13 @@ class RequestFormLine(models.Model):
     branch_id = fields.Many2one(comodel_name='res.branch', string='Branch', related='request_form_id.branch_id', store=False)
     divisi_id = fields.Many2one(comodel_name='eps.divisi', string='Divisi', related='request_form_id.divisi_id', store=False)
     department_id = fields.Many2one(comodel_name='hr.department', string='Department', related='request_form_id.department_id', store=False)
-    request_id = fields.Many2one(comodel_name='eps.master.jrf.arf', string='Master Request')
+    request_id = fields.Many2one(comodel_name='eps.master.jrf.arf', string='Tipe Request')
     employee_id = fields.Many2one(comodel_name='hr.employee',string='PIC')
     sistem_id = fields.Many2one(comodel_name='eps.sistem.master', string='Master Sistem')
     approval_ids = fields.One2many(comodel_name='eps.approval.transaction', inverse_name='transaction_id', string='Approval', copy=False)
     additional_approval_ids = fields.One2many(comodel_name='eps.request.form.approval',inverse_name='request_form_line_id', string='Additional Approval JRF/ARF')
-    
+    teams_id = fields.Many2one(comodel_name='eps.teams.master', string='Teams')
+
     @api.model
     def create(self, vals: dict):
         branch_obj = self.env['eps.request.form'].suspend_security().browse(vals['request_form_id']).branch_id
@@ -336,7 +343,7 @@ class RequestFormLine(models.Model):
                 employee_obj = self.env['hr.employee'].suspend_security().browse(vals.get('employee_id'))
                 self._message_log(body=_('<b>PIC Changed!</b> From %s to %s') % (self.employee_id.name,employee_obj.name))
         if vals.get('state', False):
-            if not self.employee_id:
+            if not self.employee_id and vals.get('state') != 'approved':
                 raise Warning('PIC belum ditambahkan ! \n silahkan lakukan assign terlebih dahulu')
             if vals.get('state') != self.state:
                 self._message_log(body=_('<b>State Changed!</b> From %s to %s') % (self.state, str(vals.get('state'))))
@@ -352,7 +359,14 @@ class RequestFormLine(models.Model):
         return super(RequestFormLine, self).write(vals)
     
    
-    
+    def action_cancel(self):
+        self.write({
+            'state': 'cancel',
+            'cancel_uid': self.env.user.id,
+            'cancel_date': self.request_form_id._get_default_date()
+        })
+
+
     def action_approve(self):
         if self.additional_approval_ids:
             self.action_additional_approve()
@@ -409,11 +423,31 @@ class RequestFormLine(models.Model):
         line_obj.write({
             'state': 'rejected'
         })
+        header_open = self.env['eps.request.form.line'].search(
+            [
+                ('request_form_id', '=', self.request_form_id.id),
+                ('state', '=', 'draft')
+            ]
+        )
+        if not header_open:
+            self.request_form_id.write({
+                'state': 'rejected'
+            })
     
     def action_done(self):
         self.write({
             'state': 'done'
         })
+        header_open = self.env['eps.request.form.line'].search(
+            [
+                ('request_form_id', '=', self.request_form_id.id),
+                ('state', '=', 'draft')
+            ]
+        )
+        if not header_open:
+            self.request_form_id.write({
+                'state': 'done'
+            })
     
     
     def action_reject(self):
@@ -432,6 +466,29 @@ class RequestFormLine(models.Model):
                 'res_id': self.id,
             }
         }
+    
+    def action_rfa(self):
+        if self.additional_approval_ids:
+            template =self.env.ref('eps_request_form.template_mail_request_form_result')
+            mail =self.env['mail.template'].suspend_security().browse(template.id)
+            for user in self.additional_approval_ids.employee_id:
+                self.email_penerima = user.work_email
+                self.penerima = user.name
+                self.token_penerima =self.create_token(request.id, user.id)
+                path = "/approval/%s" %self.token_penerima
+                path_reject = "/reject/%s" %self.token_penerima
+                self.approval_url =self.get_url() + path
+                self.reject_url =self.get_url() + path_reject
+                mail.send_mail(request.id, force_send=True)
+        if int(self.value_approval) > 0:
+            self.env['eps.matrix.approval.line'].request_by_value(request, int(request.value_approval), send_email=False)
+        if int(request.value_approval) == 0:
+            self.write({
+                'state': 'approved',
+                'approve_uid': self.env.user.id,
+                'approve_date': self._get_default_date()
+            })
+
     
     def get_full_url(self):
         self.ensure_one()
@@ -499,6 +556,16 @@ class RequestFormLine(models.Model):
             'employee_id': self.employee_id,
             'state': 'open'
         })
+        header_open = self.env['eps.request.form.line'].search(
+            [
+                ('request_form_id', '=', self.request_form_id.id),
+                ('state', '=', 'draft')
+            ]
+        )
+        if not header_open:
+            self.request_form_id.write({
+                'state': 'open'
+            })
     
        
     def _check_user_groups(self):
