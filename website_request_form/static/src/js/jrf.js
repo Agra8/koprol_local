@@ -26,6 +26,10 @@ function addRow(value) {
 		newDiv.insertAdjacentHTML(
 			'beforeend',
 			`        				<div>
+			 						<div class="s_hr text-left pt32 pb18" data-snippet="s_hr" data-name="Separator">
+                                        <hr class="w-100 mx-auto" style="border-top-style: double !important; border-top-width: 5px !important; margin-bottom: 25px;"/>
+                                    </div>
+									<p name="number"></p>
 									<div class="w3-row">
                                       <label class="w3-col m1 s_website_form_label" style="width: 200px" for="2hvgthz7mmr">
                                         <span class="s_website_form_label_content">Request</span>
@@ -73,6 +77,7 @@ function addRow(value) {
 		initEvent();
 		changeAddRequest();
 		tbl('#request_tbl', 'keyup', "input[name='requestform_id']");
+		numberRow();
 	}
 }
 
@@ -99,8 +104,9 @@ function changeByCompany() {
 	requestForm.innerHTML = '';
 	requestFormOption = ``;
 
-	for (let i = 1; i <= index; i++) {
-		selectorTipeForm = `select[id="requestform_id_${i}"]`;
+	for (let i = 0; i < index; i++) {
+		selectorTipeFormId = document.querySelectorAll('.w3-row')[i].childNodes[5].childNodes[1].id;
+		selectorTipeForm = `select[id="${selectorTipeFormId}"]`;
 		requestTipeForm = document.querySelector(selectorTipeForm);
 		requestTipeForm.innerHTML = '';
 
@@ -120,11 +126,12 @@ function changeByCompany() {
 				requestTipeForm.appendChild(options);
 			}
 		});
-		document.getElementById(`request_id_${i}`).style.display = 'none';
+		requestId = document.querySelectorAll('.w3-row')[i].childNodes[7].childNodes[1].id;
+		document.getElementById(requestId).style.display = 'none';
 		// document.getElementById(`request_id_${i}`).disabled = true;
 		// document.getElementById(`request_id_${i}`).value = 'XXX';
 
-		$(`#request_id_${i}`).prop('selectedIndex', 0);
+		$(requestId).prop('selectedIndex', 0);
 	}
 
 	if (this.value != '') {
@@ -231,6 +238,18 @@ function showSearch() {
 
 function deleteRow(value) {
 	value.remove();
+	numberRow();
+}
+
+function numberRow() {
+	let numberRange = document.querySelectorAll('.w3-row').length;
+	let number = 0;
+	let numberInnerHtml = 2;
+	let name = document.getElementsByName('number');
+	for (numberInnerHtml; numberInnerHtml <= numberRange; numberInnerHtml++) {
+		name[number].innerText = numberInnerHtml;
+		number++;
+	}
 }
 
 // function functionDebug() {
