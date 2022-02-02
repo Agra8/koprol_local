@@ -171,12 +171,13 @@ class WebsiteForm(Home):
             data['record']['request_line_ids'] = self.convert_list(data['record']['request_line_ids'], 'form_id') 
             data['record']['request_line_keterangan[]'] = self.convert_list(data['record']['request_line_keterangan[]'], 'description') 
             for idx, datas in enumerate(data['record']['request_line_ids']):
-                default_value_approval = request.env['eps.master.jrf.arf'].browse(datas['form_id']).approval_default
+                tipe_request_obj = request.env['eps.master.jrf.arf'].browse(datas['form_id'])
                 request_line_ids.append([0,0, {
                     'request_id': datas['form_id'],
                     'keterangan': data['record']['request_line_keterangan[]'][idx]['description'],
                     'sistem_id': data['record']['request_sistem_ids'][idx]['sistem_id'] if 'request_sistem_ids' in data['record'] else '',
-                    'value_approval': default_value_approval
+                    'value_approval': tipe_request_obj.approval_default,
+                    'teams_id': tipe_request_obj.teams_id.id
                 }])
             data['record']['request_line_ids'] = request_line_ids
 
