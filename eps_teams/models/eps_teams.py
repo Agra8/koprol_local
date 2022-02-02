@@ -112,7 +112,8 @@ class EpsTeamsLine(models.Model):
     @api.onchange('employee_id')
     def _change_job_name(self):
         if self.employee_id:
-            self.job_id = self.employee_id.job_id
+            for user in self.employee_id:
+                self.job_id = user.job_id
 
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
