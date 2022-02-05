@@ -34,6 +34,8 @@
         'data/ir_ui_view.xml',
         'data/mail_template.xml',
 
+        'report/eps_request_form_report_wizard.xml',
+
         'security/ir.model.access.csv',
         'security/ir_rule.xml',
         'security/res_groups.xml',
