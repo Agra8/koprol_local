@@ -29,6 +29,7 @@ class EpsTeamsMaster(models.Model):
 
     # 8: Relational Fields
     company_id = fields.Many2one(comodel_name='res.company', string='Company')
+    company_ids = fields.Many2many('res.company', 'eps_teams_company_rel', 'eps_teams_id', 'company_id', 'Allowed Company', copy=False)
     teams_line_ids = fields.One2many(comodel_name='eps.teams.line', inverse_name='teams_id' )
 
     

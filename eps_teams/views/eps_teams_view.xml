@@ -30,6 +30,7 @@
                             </group>
                             <group>
                                 <field name="company_id" required="1"/>
+                                <field name="company_ids" required="1" widget="many2many_tags"/>
                             </group>
                         </group>
                         <field name="teams_line_ids">
