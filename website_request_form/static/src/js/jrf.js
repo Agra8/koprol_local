@@ -29,7 +29,7 @@ function addRow(value) {
 			 						<div class="s_hr text-left pt32 pb18" data-snippet="s_hr" data-name="Separator">
                                         <hr class="w-100 mx-auto" style="border-top-style: double !important; border-top-width: 5px !important; margin-bottom: 25px;"/>
                                     </div>
-									<p name="number"></p>
+									<p name="number" style="text-align:left;  font-weight: bold;"></p>
 									<div class="w3-row">
                                       <label class="w3-col m1 s_website_form_label" style="width: 200px" for="2hvgthz7mmr">
                                         <span class="s_website_form_label_content">Request</span>
@@ -45,7 +45,13 @@ function addRow(value) {
                                       <div class="w3-col m1 w3-center w3-container m4 l6 custom-row">
                                         <select id="request_id_${index +
 											1}"  name="request_sistem_ids" class="form-control s_website_form_input" placeholder="" required="true">
-                                           <option value="">Pilih Sistem</option>
+                                          <option value="">(Silahkan Pilih)</option>
+                                          <t t-foreach="tipe_sistem" t-as="tipe_sistem">
+                                              <option t-attf-value="#{tipe_sistem.id}">
+                                                	<t t-esc="tipe_sistem.name"/> -
+                                                  	<t t-esc="tipe_sistem.company_id.name"/>
+                                              </option>
+                                          </t>
                                         </select>
                                       </div>
                                     </div>
@@ -60,13 +66,13 @@ function addRow(value) {
                                         </div>
                                       </div>
                                     </div>
-                                    <div class="form-group s_website_form_field col-12 s_website_form_custom" data-name="Field" style="padding-top: 15px;">
+                                  <div class="form-group s_website_form_field s_website_form_custom" data-name="Field" style="padding-top: 15px;">
                                       <div class="row s_col_no_resize s_col_no_bgcolor">
                                         <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
                                           <span class="s_website_form_label_content">Lampiran</span>
                                           <span class="s_website_form_mark"> </span>
                                         </label>
-                                        <div class="col-sm">
+                                        <div class="col-sm-8" style="padding-left: 30px;">
                                           <input type="file" class="form-control s_website_form_input" name="attachment"/>
                                         </div>
                                       </div>
@@ -189,26 +195,26 @@ $(document).on('change', '.input-types', function() {
 	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
 	requestTipeSistem = document.getElementById('tipe_sistem').children;
 	valueRequest = this.value.split('-');
-	selectorTipeSistem = `select[id="request_id_${idRequest[2]}"]`;
-	requestTipeSistemForm = document.querySelector(selectorTipeSistem);
-	requestTipeSistemForm.innerHTML = '';
+	// selectorTipeSistem = `select[id="request_id_${idRequest[2]}"]`;
+	// requestTipeSistemForm = document.querySelector(selectorTipeSistem);
+	// requestTipeSistemForm.innerHTML = '';
 
-	if (this.value != '') {
-		var opt = document.createElement('option');
-		opt.value = 'NULL';
-		opt.innerHTML = '(Silahkan Pilih)';
-		requestTipeSistemForm.appendChild(opt);
-	}
+	// if (this.value != '') {
+	// 	var opt = document.createElement('option');
+	// 	opt.value = 'NULL';
+	// 	opt.innerHTML = '(Silahkan Pilih)';
+	// 	requestTipeSistemForm.appendChild(opt);
+	// }
 
-	[].forEach.call(requestTipeSistem, function(e) {
-		var temporaryTipe = e.value.split('-');
-		if (temporaryTipe[1] == company_id) {
-			var options = document.createElement('option');
-			options.value = temporaryTipe[0];
-			options.innerHTML = e.innerText;
-			requestTipeSistemForm.appendChild(options);
-		}
-	});
+	// [].forEach.call(requestTipeSistem, function(e) {
+	// 	var temporaryTipe = e.value.split('-');
+	// 	if (temporaryTipe[1] == company_id) {
+	// 		var options = document.createElement('option');
+	// 		options.value = temporaryTipe[0];
+	// 		options.innerHTML = e.innerText;
+	// 		requestTipeSistemForm.appendChild(options);
+	// 	}
+	// });
 
 	document.getElementById(`request_id_${idRequest[2]}`).style.display = 'none';
 	// document.getElementById(`request_id_${idRequest[2]}`).disabled = true;
@@ -247,7 +253,7 @@ function numberRow() {
 	let numberInnerHtml = 2;
 	let name = document.getElementsByName('number');
 	for (numberInnerHtml; numberInnerHtml <= numberRange; numberInnerHtml++) {
-		name[number].innerText = numberInnerHtml;
+		name[number].innerText = 'Nomor: ' + numberInnerHtml;
 		number++;
 	}
 }
