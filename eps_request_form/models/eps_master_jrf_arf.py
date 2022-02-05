@@ -37,7 +37,7 @@ class MasterJrfArf(models.Model):
 
     # 8: Relational Fields
     company_id = fields.Many2one(comodel_name='res.company', string='Company')
-    teams_id = fields.Many2one(comodel_name='eps.teams.master', string='Teams', domain="[('company_id', '=', company_id)]" )
+    teams_id = fields.Many2one(comodel_name='eps.teams.master', string='Teams')
     type_form_id = fields.Many2one(comodel_name='eps.request.form.type', string='Tipe Request')
 
     def name_get(self):
@@ -59,6 +59,16 @@ class MasterJrfArf(models.Model):
         categories = self.search(args,limit=limit)
         return categories.name_get()
     
+    
+    @api.onchange('company_id')
+    def _onchange_teams(self):
+        domain={}
+        self.teams_id = False
+        domain = {'teams_id':[('company_ids','=',0)]}
+        if self.company_id :
+            domain = {'teams_id':[('company_ids','=',self.company_id.id)]}
+        return {'domain':domain}
+
 
 class TypeRequest(models.Model):
     _name="eps.request.form.type"

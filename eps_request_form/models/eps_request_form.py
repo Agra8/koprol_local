@@ -6,6 +6,7 @@
 # 2: import of known third party lib
 from email import header
 import string, random, cryptocode, os
+from winreg import REG_QWORD
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
@@ -77,6 +78,9 @@ class RequestForm(models.Model):
             vals['name'] = self.env['ir.sequence'].suspend_security().get_per_doc_code(doc_code,'RF')
             vals['divisi_id'] = self.env['eps.divisi'].suspend_security().search([('name', '=', 'Umum')]).id
             create = super(RequestForm, self).create(vals)
+            template_mail = request.env.ref('eps_request_form.template_mail_request_form_notif_accept')
+            mail = request.env['mail.template'].suspend_security().browse(template_mail.id)
+            mail.send_mail(create.id, force_send=True)
         return create
     
     def unlink(self):
@@ -92,8 +96,6 @@ class RequestForm(models.Model):
                 template = request.env.ref('eps_request_form.template_mail_request_form_result')
                 mail = request.env['mail.template'].suspend_security().browse(template.id)
                 for user in request.additional_approval_ids.employee_id:
-                    request.email_penerima = user.work_email
-                    request.penerima = user.name
                     request.token_penerima = request.create_token(request.id, user.id)
                     path = "/approval/%s" % request.token_penerima
                     path_reject = "/reject/%s" % request.token_penerima
@@ -278,6 +280,7 @@ class RequestFormLine(models.Model):
     approval_url = fields.Char()
     reject_url = fields.Char()
     request_state = fields.Selection(related="request_form_id.state")
+    jumlah_task = fields.Char(string='Jumlah Task PIC')
 
     # Audit trail
     request_uid = fields.Many2one(comodel_name='res.users',string='Requested by',related="request_form_id.request_uid")
@@ -317,7 +320,6 @@ class RequestFormLine(models.Model):
             file_upload = vals['file_upload']
             vals['file_upload'] = False   
         ids = super(RequestFormLine, self).create(vals)
-     
         if file_upload:
             tmp_lampiran = vals['filename'].split('.')
             filename_up = f'[{ids.id}]{tmp_lampiran[0]}-{str(vals["request_line_id"])}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
@@ -467,66 +469,6 @@ class RequestFormLine(models.Model):
             }
         }
     
-    def action_rfa(self):
-        if self.additional_approval_ids:
-            template =self.env.ref('eps_request_form.template_mail_request_form_result')
-            mail =self.env['mail.template'].suspend_security().browse(template.id)
-            for user in self.additional_approval_ids.employee_id:
-                self.email_penerima = user.work_email
-                self.penerima = user.name
-                self.token_penerima =self.create_token(request.id, user.id)
-                path = "/approval/%s" %self.token_penerima
-                path_reject = "/reject/%s" %self.token_penerima
-                self.approval_url =self.get_url() + path
-                self.reject_url =self.get_url() + path_reject
-                mail.send_mail(request.id, force_send=True)
-        if int(self.value_approval) > 0:
-            self.env['eps.matrix.approval.line'].request_by_value(request, int(request.value_approval), send_email=False)
-        if int(request.value_approval) == 0:
-            self.write({
-                'state': 'approved',
-                'approve_uid': self.env.user.id,
-                'approve_date': self._get_default_date()
-            })
-
-    
-    def get_full_url(self):
-        self.ensure_one()
-        base_url = self.env["ir.config_parameter"].get_param("web.base.url")
-        url_params = {
-            'id': self.id,
-            'view_type': 'form',
-            'model': self._name,
-        }
-        params = '/web?#%s' % url_encode(url_params)
-        return base_url + params
-            
-    def get_url(self):
-        urls = request.httprequest.url.replace('//','/').split('/')
-        base_url = urls[0] + "//" + urls[1]
-        return base_url
-    
-    def generate_key(self):
-        key = Fernet.generate_key()
-        with open("secret.key", "wb") as key_file:
-            key_file.write(key)
-    
-    def load_key(self):
-         file_exist = os.path.exists('./secret.key')
-         if file_exist:
-            return open("secret.key", "rb").read()
-         else:
-            return False
-
-    def create_token(self, id_request_form, id_penerima):
-        if not self.load_key():
-            self.generate_key()
-        token = self._key_gen()+str(id_request_form)+'n'+str(id_penerima)
-        key = self.load_key()
-        f = Fernet(key)
-        token_encoded = f.encrypt(bytes(token,encoding='utf8'))
-        return token_encoded
-
     def action_assign(self):
         form_id = self.env.ref('eps_request_form.eps_request_form_line_assign_form').id
         employee_ids = []
@@ -566,6 +508,50 @@ class RequestFormLine(models.Model):
             self.request_form_id.write({
                 'state': 'open'
             })
+
+    @api.onchange('employee_id')
+    def onchange_jumlah_task(self):
+        jumlah_task = self.search([('employee_id', '=', self.employee_id.id), ('state', '!=', 'done')])
+        self.jumlah_task = len(jumlah_task)
+
+
+    def get_full_url(self):
+        self.ensure_one()
+        base_url = self.env["ir.config_parameter"].get_param("web.base.url")
+        url_params = {
+            'id': self.id,
+            'view_type': 'form',
+            'model': self._name,
+        }
+        params = '/web?#%s' % url_encode(url_params)
+        return base_url + params
+            
+    def get_url(self):
+        urls = request.httprequest.url.replace('//','/').split('/')
+        base_url = urls[0] + "//" + urls[1]
+        return base_url
+    
+    def generate_key(self):
+        key = Fernet.generate_key()
+        with open("secret.key", "wb") as key_file:
+            key_file.write(key)
+    
+    def load_key(self):
+         file_exist = os.path.exists('./secret.key')
+         if file_exist:
+            return open("secret.key", "rb").read()
+         else:
+            return False
+
+    def create_token(self, id_request_form, id_penerima):
+        if not self.load_key():
+            self.generate_key()
+        token = self._key_gen()+str(id_request_form)+'n'+str(id_penerima)
+        key = self.load_key()
+        f = Fernet(key)
+        token_encoded = f.encrypt(bytes(token,encoding='utf8'))
+        return token_encoded
+
     
        
     def _check_user_groups(self):
@@ -693,6 +679,18 @@ class RequestFormApproval(models.Model):
     # 9: constraints & sql constraints
 
     # 10: compute/depends & on change methods
+
+    @api.model
+    def create(self, vals):
+        create = super(RequestFormApproval, self).create(vals)
+        request_line_obj = self.env['eps.request.form.line'].suspend_security().search([('request_form_line_id', '=', create.request_form_line_id.id)])
+        request_line_obj.write({
+            'email_penerima': create.employee_id.work_email,
+            'penerima': create.employee_id.name,
+        })
+        return create
+        
+
 
     @api.onchange('employee_id')
     def _change_job_user(self):
