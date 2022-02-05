@@ -4,5 +4,6 @@
 		<menuitem id="eps_request_form_top_menu" name="Request Form" sequence="100" web_icon="website,static/description/icon.png"/>
 		<menuitem id="eps_request_form_sub_menu" name="JRF/ARF" sequence="40" parent="eps_request_form.eps_request_form_top_menu" />
 		<menuitem id="eps_master_jrf_arf_sub_menu" name="Configuration" sequence="40" parent="eps_request_form.eps_request_form_top_menu" />
+		<menuitem id="eps_request_form_report_sub_menu" name="Laporan"  sequence="40" parent="eps_request_form.eps_request_form_top_menu"/>
 	</data>
 </odoo>

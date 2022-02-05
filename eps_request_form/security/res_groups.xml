@@ -159,5 +159,12 @@
             <field name="group_id" ref="group_eps_request_form_configuration_delete"/>
             <field name="perm_unlink" eval="True"/>
         </record>
+
+        <!-- Laporan
+        <record id="access_eps_request_form_report_read" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">eps Request Form Laporan Read</field>
+            <field name="menu_access" eval
+        </record> -->
     </data>
 </odoo>
