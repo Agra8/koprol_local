@@ -18,7 +18,7 @@ class eps_hr_employee (models.Model):
             jobs = self.env['hr.job'].sudo().search([('id','=',vals['job_id'])],limit=1)
             if jobs:
                 group_id = jobs.group_id.id
-        if not group_id: 
+        if not group_id and vals.get('is_user',False): 
             raise Warning('Perhatian ! User Group belum diisi di Master Job.')   
         
         if vals['job_id'] :
