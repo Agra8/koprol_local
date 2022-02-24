@@ -269,7 +269,6 @@ class WebsiteForm(Home):
     
     @http.route('/approval/<token_access>', type='http', auth='public', website=True)
     def verify_approval_request(self,token_access):
-        today = date.today()
         key = self.load_key()
         f = Fernet(key)
         decrypt_token = f.decrypt(bytes(token_access,encoding='utf8'))
