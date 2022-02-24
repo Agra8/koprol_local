@@ -94,7 +94,8 @@ class RequestForm(models.Model):
         for request in self.request_line_ids:
             if request.additional_approval_ids:
                 template = request.env.ref('eps_request_form.template_mail_request_form_result')
-                mail = request.env['mail.template'].suspend_security().browse(template.id)
+                if template:
+                    mail = request.env['mail.template'].suspend_security().browse(template.id)
                 for user in request.additional_approval_ids.employee_id:
                     request.token_penerima = request.create_token(request.id, user.id)
                     path = "/approval/%s" % request.token_penerima
@@ -349,7 +350,26 @@ class RequestFormLine(models.Model):
                 raise Warning('PIC belum ditambahkan ! \n silahkan lakukan assign terlebih dahulu')
             if vals.get('state') != self.state:
                 self._message_log(body=_('<b>State Changed!</b> From %s to %s') % (self.state, str(vals.get('state'))))
-            
+        if vals.get('state') == 'approved':
+            if self.additional_approval_ids and self.approval_ids:
+                line_additional_approval_open = self.env['eps.request.form.approval'].search(
+                    [
+                        ('request_line_ids', '=', self.additional_approval_ids.id),
+                        ('state', '=', 'open')
+                    ]
+                )
+                line_approval_open = self.env['eps.approval.transaction'].search(
+                    [
+                        ('transaction_id', '=', self.id),
+                        ('state', '=', 'IN')
+                    ]
+                )
+
+                if line_approval_open and line_additional_approval_open and self.request_form_id.state == 'draft':
+                    raise Warning('Tidak bisa pindah state jika belum Approval !')
+            if self.request_form_id.state == 'draft':
+                raise Warning('Tidak bisa pindah state jika belum Approval !')
+
         if vals.get('file_upload'):
             file_upload = vals['file_upload']
             vals['file_upload'] = False
@@ -684,10 +704,11 @@ class RequestFormApproval(models.Model):
     def create(self, vals):
         create = super(RequestFormApproval, self).create(vals)
         request_line_obj = self.env['eps.request.form.line'].suspend_security().search([('request_form_line_id', '=', create.request_form_line_id.id)])
-        request_line_obj.write({
-            'email_penerima': create.employee_id.work_email,
-            'penerima': create.employee_id.name,
-        })
+        if request_line_obj:
+            request_line_obj.write({
+                'email_penerima': create.employee_id.work_email,
+                'penerima': create.employee_id.name,
+            })
         return create
         
 
