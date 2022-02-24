@@ -48,15 +48,17 @@ class EpsRequestFormReport(models.TransientModel):
             query_where += f" AND rfl.state = '{str(self.state)}'"
         query = f"""
                 SELECT 
-                    rf.name_pegawai AS nama_perequest,
+                    cm.name AS company,
+                    br.name AS branch,
                     rfl.date AS tanggal,
                     rf.name AS Transaksi_Header,
-                    rfl.name AS Transaksi_Line,
+                    rfl.name AS Transaksi_request,
+                    rf.name_pegawai AS nama,
+                    tm.name AS team,
                     hr.name AS pic,
+                    rfl.keterangan AS keterangan,
                     ms.name AS tipe_request,
                     ss.name AS sistem,
-                    tm.name AS team,
-                    br.name AS branch,
                     rfl.state AS status
                     FROM eps_request_form_line rfl
                     LEFT JOIN eps_request_form rf ON rf.id = rfl.request_form_id
@@ -64,7 +66,8 @@ class EpsRequestFormReport(models.TransientModel):
                     LEFT JOIN eps_master_jrf_arf ms ON ms.id = rfl.request_id
                     LEFT JOIN eps_sistem_master ss ON ss.id = rfl.sistem_id
                     LEFT JOIN res_branch br ON br.id = rf.branch_id
-                    LEFT JOIN eps_teams_master tm ON tm.id = rfl.teams_id
+                    LEFT JOIN eps_teams_master tm ON tm.id = rfl.teams_id 
+                    LEFT JOIN res_company cm ON cm.id = rf.company_id
                     WHERE 1=1
                     {query_where}
                     AND rfl.date >= '{str(self.start_date)}'
