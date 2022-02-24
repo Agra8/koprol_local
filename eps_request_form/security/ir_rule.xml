@@ -16,7 +16,8 @@
         <record id="eps_request_form_master_jrf_arf_multi_rule" model="ir.rule">
             <field name="name">Request Form Master Jrf Arf multi company rule</field>
             <field name="model_id" ref="model_eps_master_jrf_arf"/>
-            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id', '=', False),('company_id', 'in', company_ids)]</field>
         </record>
 
         <record id="eps_reques_form_branch_rule" model="ir.rule">
