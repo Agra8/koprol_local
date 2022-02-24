@@ -48,7 +48,7 @@
                         <group>
                             <field name="name_pegawai" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed'])]}"/>
                             <field name="no_telp" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed'])]}"/>
-                            <field name="job_title" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed'])]}"/>
+                            <field name="job_title" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed'])]}" options="{'no_open':True,'no_create':True}"/>
                         </group>
                         <div>
                             <br />
@@ -184,7 +184,7 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="eps Request Form Line">
-                    <field name="employee_id"/>
+                    <field name="employee_id" options="{'no_create': True,'no_open': True}"/>
                     <field name="alasan_reject"/>
                     <field name="job_id"/>
                     <field name="state"/>
@@ -201,11 +201,10 @@
                 <form string="eps Request Form Approval">
                     <group>
                         <group>
-                            <field name="employee_id"/>
+                            <field name="employee_id" options="{'no_create': True,'no_open': True}"/>
                             <field name="job_level" required="1"/>
                             <field name="job_id" readonly="1" force_save="1"/>
                             <field name="group_id" readonly="1" force_save="1"/>
-                            <field name="alasan_reject"/>
                             <field name="user_id" invisible="1"/>
 
                         </group>
