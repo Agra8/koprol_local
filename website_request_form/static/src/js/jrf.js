@@ -125,7 +125,7 @@ function changeByCompany() {
 
 		[].forEach.call(request_tipe, function(e) {
 			var temporaryTipe = e.value.split('-');
-			if (temporaryTipe[2] == company_id) {
+			if (temporaryTipe[2] == company_id || temporaryTipe[2] == '') {
 				var options = document.createElement('option');
 				options.value = `${temporaryTipe[0]}-${temporaryTipe[1]}`;
 				options.innerHTML = e.innerText;
