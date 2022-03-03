@@ -126,7 +126,12 @@ class eps_hr_employee (models.Model):
         return super(eps_hr_employee, self).write(vals)
 
     def unlink(self, context=None):
-        raise Warning('Tidak Bisa Hapus Karyawan')
+        # raise Warning('Tidak Bisa Hapus Karyawan')
+        for record in self:
+            if record.partner_id and not record.user_id:
+                record.partner_id.unlink()
+            if record.user_id:
+                record.user_id.unlink()
         return super(eps_hr_employee, self).unlink()
     
 
