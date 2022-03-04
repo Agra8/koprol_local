@@ -14,9 +14,9 @@ class eps_matrix_approval(models.Model):
     _description = "Matrix Approval"
 
     company_id = fields.Many2one('res.company', string='Company')         
-    branch_id = fields.Many2one('res.branch','Cabang')
-    divisi_id = fields.Many2one('eps.divisi','Divisi')
-    department_id = fields.Many2one('hr.department','Department')
+    branch_id = fields.Many2one('res.branch','Cabang', domain="[('company_id','=',company_id)]")
+    divisi_id = fields.Many2one('eps.divisi','Divisi', domain="[('company_id','=',company_id)]")
+    department_id = fields.Many2one('hr.department','Department', domain="[('company_id','=',company_id)]")
     approval_line = fields.One2many('eps.matrix.approval.line','approval_id')
     view_id = fields.Many2one('ir.ui.view',string='Form View')
     model_id = fields.Many2one('ir.model',string='Form/Model')
@@ -91,13 +91,17 @@ class eps_matrix_approval_line(models.Model):
         prev_sequence = 1
         state = 'IN'
         matrix_data = []
-        
+        first_record = True
 
         for data in matrix :
             approval_start_date = False
             expected_date = False
             if data.matrix_sequence==min_sequence:
-                state='IN'
+                if first_record:
+                    state='IN'
+                    first_record = False
+                else:
+                    state='WA'
                 approval_start_date = date.today()
                 expected_date = date.today() + timedelta(days = data.sla_days)
             else:
@@ -129,7 +133,7 @@ class eps_matrix_approval_line(models.Model):
     
         if user_limit < value:
             #raise Warning(('Perhatian !'), ("Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval.") % (value, user_limit))
-            raise ValidationError(_('Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval."'))
+            raise ValidationError(_('Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval."' % (value, user_limit) ) )
         if self._context.get('per_reviewer'):
             for rev in self._context.get('per_reviewer'):
                 matrix_data.append(rev)
@@ -161,6 +165,7 @@ class eps_matrix_approval_line(models.Model):
         user_limit = 0
         prev_sequence = 1
         prev_state = ''
+        last_approval = False
 
         for approval_line in approval_lines_ids:
             if approval_line.state == 'IN':
@@ -168,6 +173,7 @@ class eps_matrix_approval_line(models.Model):
                     if approval_line.limit > user_limit:
                         user_limit = approval_line.limit
                         approve_all = approval_line.value <= user_limit
+                        last_approval = approval_line.group_id
                         approval_line.write({
                               'state':'OK',
                               'user_id':self._uid,
@@ -217,12 +223,14 @@ class eps_matrix_approval_line(models.Model):
                         'user_id':self._uid,
                         'tanggal':datetime.now(),
                       })
+                        last_approval = approval_line.group_id
                     elif approval_line.limit <= user_limit:
                         approval_line.write({
                         'state':'OK',
                         'user_id':self._uid,
                         'tanggal':datetime.now(),
                       })
+                        last_approval = approval_line.group_id
                     
                     if approval_line.state == 'IN':
                         approval_line.approval_start_date = date.today()
@@ -234,7 +242,7 @@ class eps_matrix_approval_line(models.Model):
         if approve_all:
             return 1
         elif user_limit:
-            return 2
+            return {'last_approval':last_approval,'user_limit':user_limit}
         return 0
 
     def reject(self, trx, reason):

@@ -20,6 +20,7 @@ class ResUsers(models.Model):
     area_id = fields.Many2one('res.area','Area',context={'user_preference':True},help='Area for this user.')
     branch_ids_show = fields.Many2many(related='area_id.branch_ids',string='Branches')
     area_id_show = fields.Many2one(related='area_id',string='Area',context={'user_preference':True},help='Area for this user.')
+    company_ids = fields.Many2many(string='Allowed Company', related='area_id.company_ids')
     
     @api.onchange('area_id')
     def _onchange_area(self):

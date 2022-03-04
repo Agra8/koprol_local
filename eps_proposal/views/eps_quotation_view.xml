@@ -23,9 +23,9 @@
 			<field name="arch" type="xml">
 				<form string="Quotation">
                     <header>
-                    	<button name="action_set_final" class="oe_highlight" states="valid" string="Final" type="object"/>
-                    	<button name="action_set_invalid" states="valid" string="Invalid" type="object"/>
+                    	<button name="action_set_won" class="oe_highlight" attrs="{'invisible': ['|',('state','!=','proposed'),('initiatives_state','!=','approved')]}" string="Set to Win" type="object"/>
                         <field name="state" widget="statusbar"/>
+                        <field name="initiatives_state" invisible="1"/>
                     </header>
 					<sheet>
                         <h2>
@@ -33,19 +33,25 @@
                         </h2>
 						<group col="4" colspan="4">
                             <field name='date' readonly="1"/>
-                            <field name='ref' attrs="{'readonly': [('state','!=','draft')]}"/>
-                            <field name='supplier_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
-                            <field name='validity_date' attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='initiatives_id' readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="branch_id" readonly="1"/>
+                            <field name="divisi_id" readonly="1"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name='ref' attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}"/>
+                            <field name='supplier_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}"/>
+                            <field name='validity_date' attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}"/>
+                            <field name='quotation_amount' attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}" required="1"/>
                             <label for="file_document_show" string="File Document"/>
                             <div>
                                 <field name="filename_document" invisible="1"/>
                                 <field name="file_document_show" filename="filename_document" />
-                                <field name="file_document" filename="filename_document" />
+                                <field name="file_document" filename="filename_document" attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')],'required':[('state','=','valid')]}"/>
                             </div>
 						</group>
 						<notebook>
-                            <page string="Quotation Lines">
-								<field name="quotation_line_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}">
+                            <page string="Quotation Lines" attrs="{'invisible': [('state','not in',('proposed','won'))]}">
+								<field name="quotation_line_ids" nolabel="1" attrs="{'readonly': ['|',('initiatives_state','!=','approved'),('state','!=','proposed')]}">
                                     <tree editable='top' edit='false'>
                                         <field name="product_id" options="{'no_create': True,'no_open': True}"/>
                                         <field name="name"/>
@@ -78,22 +84,9 @@
 	                                </group>
 	                                <div class="oe_clear"/>
 	                            </group>
-                                <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="work_total">
-	                                <div class="oe_subtotal_footer_seperator oe_inline">
-	                             	<label for="total"/>
-	                             	
-	                             	</div>
-	                             	<field name="total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-	                             </group> -->
 							</page>
 							<page string="Audit Trail">
 								<group>
-									<!-- <group>
-										<field name="requested_by" readonly="1"></field>
-										<field name="requested_on" readonly="1"></field>
-										<field name="closed_by" readonly="1"></field>
-										<field name="closed_on" readonly="1"></field>
-									</group> -->
 									<group>
                                         <field name="create_uid" readonly="1"></field>
 										<field name="create_date" readonly="1"></field>
@@ -119,10 +112,16 @@
                 <search string="Search quotation">
                     <field name="name"/>
                     <field name="supplier_id"/>
+                    <field name='initiatives_id'/>
+                    <field name='company_id'/>
+                    <field name='branch_id'/>
+                    <field name='divisi_id'/>
+                    <field name='department_id'/>
                     <field name="state"/>
-					<filter string="Quotation" name="state_quotation" domain="[('state','=','quotation')]" />
-					<filter string="Negotiation" name="state_negotiation" domain="[('state','=','negotiation')]" />
-					<filter string="Final Tender" name="state_final_tender" domain="[('state','=','final_tender')]" />
+					<filter string="Valid" name="state_valid" domain="[('state','=','valid')]" />
+					<filter string="Invalid" name="state_invalid" domain="[('state','=','invalid')]" />
+					<filter string="Proposed" name="state_proposed" domain="[('state','=','proposed')]" />
+					<filter string="Won" name="state_won" domain="[('state','=','won')]" />
                     <group expand="0" string="Group By">
                         <filter string="Supplier" name="supplier_group" icon="terp-personal" domain="[]" context="{'group_by':'supplier_id'}"/>
                         <filter string="Status" name="state_group" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>

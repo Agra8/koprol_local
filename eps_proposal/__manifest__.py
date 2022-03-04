@@ -1,7 +1,7 @@
 {
     'name':"EPS - Proposal",
     'version':'10.0.1.0.0',
-    'depends':['eps_menu', 'eps_config_files','eps_branch','eps_approval', 'mail', 'product', 'purchase'],
+    'depends':['eps_menu', 'eps_config_files','eps_branch','eps_approval', 'mail', 'product', 'purchase','base_suspend_security'],
     # 'external_dependencies': {
     #     'python': [
     #         'docx2pdf',
@@ -23,6 +23,8 @@ Proposal
         'report/report_eps_proposal.xml',
         'views/eps_initiatives_view.xml',
         'views/eps_quotation_view.xml',
+        'views/product_view.xml',
+        'views/eps_tender_view.xml',
         'security/res_groups.xml',
         # 'security/ir.model.access.csv',
     ]

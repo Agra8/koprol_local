@@ -73,7 +73,7 @@ class eps_hr_employee (models.Model):
     is_user = fields.Boolean('User') 
     user_login = fields.Char('Login') 
     nip = fields.Char('NIP')
-    divisi_id = fields.Many2one('eps.divisi',string='Divisi')
+    divisi_id = fields.Many2one('eps.divisi',string='Divisi',domain="[('company_id','=',company_id)]")
 
     def write(self, vals):
         user_id = False

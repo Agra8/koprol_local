@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+		<record model="ir.ui.view" id="eps_tender_tree_view">
+			<field name="name">eps.tender.tree</field>
+			<field name="model">eps.tender</field>
+			<field name="arch" type="xml">
+				<tree string="Tender">
+                    <field name='name'/>
+                    <field name='initiatives_id'/>
+                    <field name='company_id'/>
+                    <field name='branch_id'/>
+                    <field name='divisi_id'/>
+                    <field name='department_id'/>
+                    <field name='state'/>
+				</tree>
+			</field>
+		</record>
+			
+		<record model="ir.ui.view" id="eps_tender_form_view">
+			<field name="name">eps.tender.form</field>
+			<field name="model">eps.tender</field>
+			<field name="arch" type="xml">
+				<form string="Tender">
+                    <header>
+                    	<button name="action_aanweizing" class="oe_highlight" states="draft" string="Aanweizing" type="object"/>
+                    	<button name="action_klarifikasi" class="oe_highlight" states="aanweizing" string="Klarifikasi" type="object"/>
+                    	<button name="action_final" class="oe_highlight" states="klarifikasi" string="Final" type="object"/>
+                    	<button name="action_request_approval" class="oe_highlight" states="final" string="RFA" type="object"/>
+                    	<button name="action_approve" class="oe_highlight" states="waiting_for_approval" string="Approve" type="object"/>
+                    	<button string="Reject" name="%(eps_approval.eps_reject_approval_wizard_action)d" type="action" attrs="{'invisible': [('state','!=','waiting_for_approval')]}" context="{'model_name':'eps.tender','update_value':{'approval_state':'r','state':'final'}}" />
+	            		<button name="%(eps_approval.eps_cancel_approval_wizard_action)d" states="waiting_for_approval" string="Cancel Approval" type="action" context="{'model_name':'eps.initiatives','update_value':{'approval_state':'b','state':'final'}}"/>
+	            		<button name="action_close" class="oe_highlight" states="approved" string="Close" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+					<sheet>
+                        <h2>
+                            <field name='name' readonly="1"/>
+                        </h2>
+						<group col="4" colspan="4">
+                            <field name='initiatives_id' readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="branch_id" readonly="1"/>
+                            <field name="divisi_id" readonly="1"/>
+                            <field name="department_id" readonly="1"/>
+                            <!-- <field name='supplier_ids' options="{'no_create': True,'no_open': True}" aattrs="{'readonly': [('state','!=','draft')]}"/> -->
+                            <field name='date_start' attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='date_end' attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='link_vicon' attrs="{'readonly': [('state','!=','draft')]}"/>
+						</group>
+						<notebook>
+                            <page string="Tender Participants">
+								<field name="tender_participant_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}">
+                                    <tree editable='top'>
+                                        <field name="employee_id" options="{'no_create': True,'no_open': True}"/>
+                                        <field name="type"/>
+                                    </tree>
+                                </field>
+							</page>
+							<page string="Quotation">
+								<field name="quotation_line_ids" nolabel="1">
+									<form string="Quotation">
+					                    <header>
+					                    	<button name="action_set_proposed" class="oe_highlight" states="valid" string="Propose" type="object"/>
+					                    	<button name="action_set_won" class="oe_highlight" attrs="{'invisible': ['|',('state','!=','proposed'),('initiatives_state','!=','approved')]}" string="Set to Win" type="object"/>
+					                        <field name="state" widget="statusbar" statusbar_visible="valid,proposed,won"/>
+					                        
+					                    </header>
+										<sheet>
+											<group>
+												<field name="initiatives_state" readonly="1"/>
+					                            <field name='date' readonly="1"/>
+					                            <field name='ref' attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}"/>
+					                            <field name='supplier_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}"/>
+					                            <field name='validity_date' attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}"/>
+					                            <field name='quotation_amount' attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}" required="1"/>
+					                            <label for="file_document" string="File Document"/>
+					                            <div>
+					                                <field name="filename_document" invisible="1"/>
+					                                <field name="file_document" filename="filename_document" attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}"/>
+					                            </div>
+					                            <field name="filename_upload_document" invisible="1"/>
+                                            	<field name="file_document_show" widget="pdf_viewer" attrs="{'invisible':[('filename_document','=',False)]}"/>
+											</group>
+											<notebook>
+												<page string="Quotation Lines" attrs="{'invisible': [('state','not in',('proposed','won'))]}">
+													<field name="quotation_line_ids" nolabel="1" attrs="{'readonly': ['|',('initiatives_state','!=','approved'),('state','!=','proposed')]}">
+					                                    <tree editable='top' edit='false'>
+					                                        <field name="product_id" options="{'no_create': True,'no_open': True}"/>
+					                                        <field name="name"/>
+					                                        <field name="categ_id" options="{'no_create': True,'no_open': True}"/>
+					                                        <field name="quantity"/>
+					                                        <field name="price_unit"/>
+					                                        <field
+						                                        name="tax_id"
+						                                        widget="many2many_tags"
+						                                        options="{'no_create': True}"
+						                                        domain="[('type_tax_use','=','purchase')]"
+						                                        optional="show"
+						                                    />
+						                                    <field name="discount" string="Disc.%" optional="show" widget="product_discount"/>
+						                                    <field name="price_subtotal" widget="monetary"/>
+						                                    <field name="price_total" widget="monetary" groups="account.group_show_line_subtotals_tax_included"/>
+						                                    <field name="price_tax" invisible="1"/>
+					                                    </tree>
+					                                </field>
+					                                <group name="note_group" col="6" class="mt-2 mt-md-0">
+						                                <group colspan="4">
+						                                </group>
+						                                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+						                                    <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+						                                    <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+						                                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+						                                        <label for="amount_total" />
+						                                    </div>
+						                                    <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+						                                </group>
+						                                <div class="oe_clear"/>
+						                            </group>
+												</page>
+											</notebook>
+										</sheet>
+									</form>
+									<tree create="false" delete="false" >
+	                                    <field name="name"/>
+	                                    <field name="supplier_id"/>
+	                                    <field name="ref"/>
+	                                    <field name="quotation_amount"/>
+	                                    <field name="revision"/>
+	                                    <field name="filename_document"/>
+	                                    <field name="state"/>
+	                                    <button name="action_set_proposed" class="oe_highlight" attrs="{'invisible': ['|',('state','!=','valid'),('initiatives_state','not in',('draft','waiting_for_tender'))]}" string="Propose" type="object"/>
+	                                    <field name="initiatives_state" invisible="1"/>
+	                                    <!-- <button name="open_record" states="approved" string="Fill in Detail Quotation" type="object" class="oe_highlight"/> -->
+	                                </tree>
+	                            </field>
+							</page>
+							<page string="Approval">
+								<field name="approval_ids">
+									<tree string="Approval" editable="bottom" create="false" edit="false" delete="false" >
+										<field name="matrix_sequence"/>
+										<field name="group_id"/>
+										<field name="limit"/>
+										<field name="state"/>
+										<field name="reason"/>
+										<field name="user_id"/>
+										<field name="tanggal"/>
+									</tree>
+								</field>
+							</page>
+							<page string="Audit Trail">
+								<group>
+									<group>
+                                        <field name="create_uid" readonly="1"></field>
+										<field name="create_date" readonly="1"></field>
+										<field name="write_uid" readonly="1"></field>
+										<field name="write_date" readonly="1"></field>
+									</group>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids"/>
+						<field name="message_ids"/>
+					</div>
+				</form>
+			</field>
+		</record> 
+
+		<record id="eps_tender_search_view" model="ir.ui.view">
+            <field name="name">eps.tender.search</field>
+            <field name="model">eps.tender</field>
+            <field name="arch" type="xml">
+                <search string="Search Tender">
+                    <field name="name"/>
+                    <field name='initiatives_id'/>
+                    <field name='company_id'/>
+                    <field name='branch_id'/>
+                    <field name='divisi_id'/>
+                    <field name='department_id'/>
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Initiatives" name="initiatives_group" icon="terp-personal" domain="[]" context="{'group_by':'initiatives_id'}"/>
+                        <filter string="Status" name="state_group" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+                    </group> 
+                </search>
+            </field>
+        </record>
+
+		<record model="ir.actions.act_window" id="eps_tender_action">
+			<field name="name">Tender</field>
+			<field name="res_model">eps.tender</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="eps_tender_menuitem" name="Tender" sequence="4" parent="eps_menu.eps_proposal_top_menu" action="eps_tender_action"/>  
+	</data>
+</odoo> 

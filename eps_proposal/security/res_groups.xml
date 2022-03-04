@@ -54,6 +54,48 @@
             <field name="group_id" ref="group_eps_proposal_read"/>  
             <field name="perm_read">1</field> 
         </record>
+        <record id="access_eps_proposal_category_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_category"/>
+            <field name="name">eps_proposal_category read</field> 
+            <field name="group_id" ref="group_eps_proposal_read"/>  
+            <field name="perm_read">1</field> 
+        </record>
+        <record id="access_eps_proposal_branch_read" model="ir.model.access">
+            <field name="model_id" ref="eps_branch.model_res_branch"/>
+            <field name="name">eps_proposal_branch read</field> 
+            <field name="group_id" ref="group_eps_proposal_read"/>  
+            <field name="perm_read">1</field> 
+        </record>
+        <record id="access_eps_proposal_divisi_read" model="ir.model.access">
+            <field name="model_id" ref="eps_branch.model_eps_divisi"/>
+            <field name="name">eps_proposal_divisi read</field> 
+            <field name="group_id" ref="group_eps_proposal_read"/>  
+            <field name="perm_read">1</field> 
+        </record>
+        <record id="access_eps_proposal_initiatives_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_initiatives"/>
+            <field name="name">eps_proposal_initiatives read</field> 
+            <field name="group_id" ref="group_eps_proposal_read"/>  
+            <field name="perm_read">1</field> 
+        </record>
+        <record id="access_eps_proposal_initiatives_line_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_initiatives_line"/>
+            <field name="name">eps_proposal_initiatives_line read</field> 
+            <field name="group_id" ref="group_eps_proposal_read"/>  
+            <field name="perm_read">1</field> 
+        </record>
+        <record id="access_eps_proposal_line_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_proposal_line"/>
+            <field name="name">eps_proposal_line read</field> 
+            <field name="group_id" ref="group_eps_proposal_read"/>  
+            <field name="perm_read">1</field> 
+        </record>
+        <record id="access_eps_proposal_product_line_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_proposal_product_line"/>
+            <field name="name">eps_proposal_product_line read</field> 
+            <field name="group_id" ref="group_eps_proposal_read"/>  
+            <field name="perm_read">1</field> 
+        </record>
 
         <record id="group_eps_proposal_update" model="res.groups">
             <field name="category_id" ref="eps_menu.eps_role"/>
@@ -66,6 +108,13 @@
             <field name="group_id" ref="group_eps_proposal_update"/>  
             <field name="perm_create">1</field> 
             <field name="perm_write">1</field> 
+        </record>
+        <record id="access_eps_proposal_product_line_update" model="ir.model.access">
+            <field name="model_id" ref="model_eps_proposal_product_line"/>
+            <field name="name">eps_proposal_product_line update</field> 
+            <field name="group_id" ref="group_eps_proposal_read"/>  
+            <field name="perm_create">1</field> 
+            <field name="perm_write">1</field>  
         </record>   
 
         <record id="group_eps_proposal_delete" model="res.groups">
@@ -78,7 +127,13 @@
             <field name="name">eps_proposal delete</field> 
             <field name="group_id" ref="group_eps_proposal_delete"/>  
             <field name="perm_unlink">1</field> 
-        </record>  
+        </record> 
+        <record id="access_eps_proposal_product_line_delete" model="ir.model.access">
+            <field name="model_id" ref="model_eps_proposal_product_line"/>
+            <field name="name">eps_proposal_product_line delete</field> 
+            <field name="group_id" ref="group_eps_proposal_delete"/>  
+            <field name="perm_unlink">1</field>  
+        </record> 
 
         <record id="access_eps_proposal_line_read" model="ir.model.access">
 			<field name="model_id" ref="model_eps_proposal_line" />
@@ -222,6 +277,66 @@
             <field name="perm_unlink">1</field> 
         </record>
 
+        <!-- Tender -->
+        <record id="group_eps_tender_read" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Tender Read</field> 
+            <field name="menu_access" eval="[(4, ref('eps_tender_menuitem'))]"/>  
+        </record> 
+        <record id="access_eps_tender_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_tender"/>
+            <field name="name">eps_tender read</field> 
+            <field name="group_id" ref="group_eps_tender_read"/>  
+            <field name="perm_read">1</field> 
+        </record>
+
+        <record id="group_eps_tender_update" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Tender Update</field> 
+            <field name="implied_ids" eval="[(4, ref('group_eps_tender_read'))]"/>
+        </record>
+        <record id="access_eps_tender_update" model="ir.model.access">
+            <field name="model_id" ref="model_eps_tender"/>
+            <field name="name">eps_tender update</field> 
+            <field name="group_id" ref="group_eps_tender_update"/>  
+            <field name="perm_create">1</field> 
+            <field name="perm_write">1</field> 
+        </record>   
+
+        <record id="group_eps_tender_delete" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Tender Delete</field> 
+            <field name="implied_ids" eval="[(4, ref('group_eps_tender_read'))]"/>
+        </record>
+        <record id="access_eps_tender_delete" model="ir.model.access">
+            <field name="model_id" ref="model_eps_tender"/>
+            <field name="name">eps_tender delete</field> 
+            <field name="group_id" ref="group_eps_tender_delete"/>  
+            <field name="perm_unlink">1</field> 
+        </record>  
+
+        <record id="access_eps_tender_participant_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_tender_participant" />
+            <field name="name">eps_tender_participant read</field>
+            <field name="group_id" ref="group_eps_quotation_read" />
+            <field name="perm_read">1</field>
+        </record>
+
+        <record id="access_eps_tender_participant_update" model="ir.model.access">
+            <field name="model_id" ref="model_eps_tender_participant"/>
+            <field name="name">eps_tender_participant update</field> 
+            <field name="group_id" ref="group_eps_quotation_update"/>  
+            <field name="perm_create">1</field> 
+            <field name="perm_write">1</field> 
+        </record>     
+
+        <record id="access_eps_tender_participant_delete" model="ir.model.access">
+            <field name="model_id" ref="model_eps_tender_participant"/>
+            <field name="name">eps_tender_participant delete</field> 
+            <field name="group_id" ref="group_eps_quotation_delete"/>  
+            <field name="perm_unlink">1</field> 
+        </record>
+
         <record id="eps_menu.group_sys_admin" model="res.groups">
             <field name="implied_ids" eval="[
                 (4,ref('group_eps_category_read')),
@@ -236,6 +351,7 @@
                 (4,ref('group_eps_quotation_read')),
                 (4,ref('group_eps_quotation_update')),
                 (4,ref('group_eps_quotation_delete')),
+                
                 ]" />
         </record>
     </data>
