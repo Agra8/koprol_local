@@ -13,13 +13,12 @@ from odoo.exceptions import ValidationError
 # 6: Import of unknown third party lib
 
 class Area(models.Model):
-    _inherit = "res.area"
+    _name = "res.area"
     _description = 'Area'
 
     name = fields.Char(string='Code', required=True)
     description = fields.Char(string='Description', required=True)
     company_ids = fields.Many2many('res.company', string='Company')
-    branch_ids = fields.Many2many('res.branch', domain="[('company_id','in', company_ids)]", string='Branches')
 
     _sql_constraints = [('code_unique', 'unique(name)', 'Code tidak boleh ada yang sama.')]
     

@@ -19,6 +19,7 @@ Branch
         'security/ir_rule.xml',
         'security/res_group.xml',
         'security/ir.model.access.csv',
+
     ],
     'external_dependencies': {
         'python': ['validate_email','pytz']

@@ -15,17 +15,28 @@ from odoo.exceptions import ValidationError
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    area_id = fields.Many2one('res.area','Area',help='Area for this user.')
+    def _default_area(self): 
+        return self.env.ref('eps_menu.area_default_all')
+
+    area_id = fields.Many2one('res.area','Area',help='Area for this user.', )
     branch_ids = fields.Many2many(string='Branches', related='area_id.branch_ids')
-    area_id = fields.Many2one('res.area','Area',context={'user_preference':True},help='Area for this user.')
+    area_id = fields.Many2one('res.area','Area',context={'user_preference':True},help='Area for this user.',default=_default_area)
     branch_ids_show = fields.Many2many(related='area_id.branch_ids',string='Branches')
     area_id_show = fields.Many2one(related='area_id',string='Area',context={'user_preference':True},help='Area for this user.')
     company_ids = fields.Many2many(string='Allowed Company', related='area_id.company_ids')
+
+    # def init(self):
+    #     cr = self.env.cr
+    #     cr.execute("""
+    #         insert into res_area('name','description') values('ALL-COMPANIES','ALL COMPANIES');
+    #         insert into res_area_res_company_rel('res_area_id','res_company_id') values((select id from res_area where name='ALL-COMPANIES',1))
+    #         """)
+    #     print (self.env.ref('eps_branch.area_default_all'),"<<<<<<<<<<<<<<<<<<<,,self.env.ref('eps_branch.area_default_all')")
     
-    @api.onchange('area_id')
-    def _onchange_area(self):
-        if self.area_id:
-            self.company_ids = self.area_id.company_ids
+    # @api.onchange('area_id')
+    # def _onchange_area(self):
+    #     if self.area_id:
+    #         self.company_ids = self.area_id.company_ids
     
     # def __init__(self, pool, cr):
     #     """ Override of __init__ to add access rights on
