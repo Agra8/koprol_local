@@ -112,14 +112,19 @@ class eps_hr_employee (models.Model):
                     jobs = self.env['hr.job'].sudo().browse(vals['job_id'])
                     if not jobs.group_id:
                         raise Warning('Perhatian ! User Group belum diisi di Master Job.')    
-                    group_id = jobs.group_id.id 
+                    group_id = jobs.group_id.id
+                else:
+                    if not self.job_id.group_id:
+                        raise Warning('Perhatian ! User Group belum diisi di Master Job.')
+                    group_id = self.job_id.group_id.id
+
                 if vals.get('email',False):
                     email = vals['email']
                 if not email:
                     email = 'user@example.com'
                 
                 company_ids = [(4,t.id) for t in area_id.company_ids]
-                create_user = self.create_user(name,login,area_id.id,group_id,email,self.partner_id.id,company_ids)
+                create_user = self.create_user(name,login,area_id.id,group_id,email,self.partner_id.id,company_ids,self.company_id.id)
                 if create_user:
                     vals['user_id'] = create_user
         if vals.get('is_user') == False: 
