@@ -58,7 +58,7 @@ class eps_hr_employee (models.Model):
         if vals.get('is_user',False):
             area_id = self.env['res.area'].browse(vals['area_id'])
             company_ids = [(4,t.id) for t in area_id.company_ids]
-            create_user = self.create_user(vals['name'],vals['user_login'],vals['area_id'],group_id,vals['work_email'],partner_id.id,company_ids)
+            create_user = self.create_user(vals['name'],vals['user_login'],vals['area_id'],group_id,vals['work_email'],partner_id.id,company_ids,vals['company_id'])
             create.user_id = create_user
 
         return create
@@ -79,6 +79,8 @@ class eps_hr_employee (models.Model):
         user_id = False
         if vals.get('name'):
             self.partner_id.write({'name':vals.get('name')})
+        if vals.get('work_email'):
+            self.partner_id.write({'email':vals.get('work_email')})
         if vals.get('tgl_keluar'):
             self.partner_id.write({'active':False})
         if vals.get('tgl_keluar')==False:
@@ -135,7 +137,7 @@ class eps_hr_employee (models.Model):
         return super(eps_hr_employee, self).unlink()
     
 
-    def create_user(self,name,login,area_id,group_id,work_email,partner_id,company_ids):
+    def create_user(self,name,login,area_id,group_id,work_email,partner_id,company_ids,company_id):
         users = self.env['res.users'].sudo().search([
             ('login','=',login),
             '|',
@@ -156,6 +158,7 @@ class eps_hr_employee (models.Model):
            'email':work_email,
            'partner_id':partner_id,
            'company_ids':company_ids,
+           'company_id': company_id,
         })
         return user_create.id
 

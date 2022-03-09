@@ -20,6 +20,9 @@
 				<field name="parent_id" position="attributes">
 					<attribute name="string">Superior</attribute>
 				</field>
+				<field name="work_email" position="attributes">
+					<attribute name="attrs">{'required':[('is_user','=',True)]}</attribute>
+				</field>
 				<field name="department_id" position="after">
 					<field name="job_id" required="1" options="{'no_show':True,'no_create':True,'no_open':True}"/>
 					<field name="branch_id" required="1" options="{'no_show':True,'no_create':True,'no_open':True}" domain="[('company_id','=', company_id)]"/>
