@@ -118,7 +118,7 @@ class Proposal(models.Model):
 
     @api.model
     def create(self,vals):
-        vals['name'] = self.env['ir.sequence'].get_per_branch(vals['branch_id'], 'PRO')
+        vals['name'] = self.env['ir.sequence'].sudo().get_per_branch(vals['branch_id'], 'PRO')
         if vals.get('file_document'):
             file_document = vals['file_document']
             vals['file_document'] = False
