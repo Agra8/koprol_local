@@ -39,7 +39,7 @@ class Quotation(models.Model):
     name = fields.Char(string='Quotation Name', required=True, default='/')
     ref = fields.Char(string='Reference')
     date = fields.Date(string='Date', required=True, default=_get_default_date)
-    supplier_id = fields.Many2one('res.partner', string='Supplier', required=True, domain="[('supplier_rank','=',1)]")
+    supplier_id = fields.Many2one('res.partner', string='Supplier', required=True, domain="[('supplier_rank','=',1),('state','=','approved')]")
     validity_date = fields.Date('Valid Until', required=True)
     file_document = fields.Binary(string="File Document")
     filename_document = fields.Char(string="File Document")
@@ -65,6 +65,17 @@ class Quotation(models.Model):
     approval_ids = fields.One2many('eps.approval.transaction', 'transaction_id', string='Approval', domain=[('model_id','=','eps.quotation')], copy=False)
     approval_state = fields.Selection([('b','Belum Request'),('rf','Request For Approval'),('a','Approved'),('r','Reject')],'Approval State', readonly=True)
     initiatives_state = fields.Selection(related='initiatives_id.state', store=True, string='Initiatives Status')
+
+    @api.constrains('supplier_id')
+    def _check_supplier(self):
+        for record in self:
+            if not record.supplier_id.vendor_registration_doc_name:
+                check_record = self.env['eps.initiatives.line'].search([('supplier_id','=',record.supplier_id.id),
+                                                                        ('initiatives_id','!=',record.initiatives_id.id),
+                                                                        ('initiatives_id.state','=','done')
+                                                                    ])
+                if check_record:
+                    raise ValidationError('Vendor %s sudah pernah dipakai untuk transaksi one time purchase, jika ingin menggunakan vendor ini silahkan lengkapi dokumen persyaratan untuk menjadi recurring vendor')
 
     @api.constrains('quotation_amount')
     def _check_quotation_amount(self):

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+    <record id="view_eps_koprol_setting_tree" model="ir.ui.view">
+      <field name="name">view.eps.koprol.setting.tree</field>
+      <field name="model">eps.koprol.setting</field>
+      <field name="arch" type="xml">
+        <tree string="Koprol Configuration">
+            <field name="default_company_vendor_approval_id"/>
+            <field name="default_branch_vendor_approval_id"/>
+            <field name="default_divisi_vendor_approval_id"/>
+        </tree>
+      </field>
+    </record>
+       
+    <record id="view_eps_koprol_setting_form" model="ir.ui.view">
+      <field name="name">view.eps.koprol.setting.form</field>
+      <field name="model">eps.koprol.setting</field>            
+      <field name="arch" type="xml">
+        <form string="Saved Files Directory">
+          <sheet>
+                <group>
+                    <field name="default_company_vendor_approval_id" options="{'no_create':True,'no_open':True}"/>
+                    <field name="default_branch_vendor_approval_id" options="{'no_create':True,'no_open':True}" domain="[('company_id','=',default_company_vendor_approval_id)]"/>
+                    <field name="default_divisi_vendor_approval_id" options="{'no_create':True,'no_open':True}" domain="[('company_id','=',default_company_vendor_approval_id)]"/>
+                </group>
+                <notebook>
+                  <page string="Audit Trail">
+                      <group>
+                          <group>
+                              <field name="create_uid" readonly="1"></field>
+                              <field name="create_date" readonly="1"></field>
+                          </group>
+                          <group>                           
+                              <field name="write_uid" readonly="1"></field>
+                              <field name="write_date" readonly="1"></field>
+                          </group>
+                      </group>
+                  </page>
+                </notebook>
+          </sheet>                          
+        </form>
+       </field>
+    </record>
+        
+    <record model="ir.actions.act_window" id="view_eps_koprol_setting_action">
+        <field name="name">Koprol Configuration</field>
+        <field name="res_model">eps.koprol.setting</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Koprol Configuration" parent="eps_menu.eps_proposal_conf_menuitem" id="eps_koprol_setting_menuitem" action="view_eps_koprol_setting_action" sequence="100"/>
+    </data>
+</odoo>

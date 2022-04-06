@@ -29,10 +29,9 @@
 	            		<button name="%(eps_approval.eps_cancel_approval_wizard_action)d" states="waiting_for_approval" string="Cancel Approval" type="action" context="{'model_name':'eps.proposal','update_value':{'approval_state':'b','state':'draft'}}"/>
 						<!-- <button name="%(eps_approval.eps_cancel_approved_wizard_action)d" states="approved" string="Cancel Approval" type="action" context="{'model_name':'eps.proposal','update_value':{'approval_state':'b','state':'draft'}}"/> -->
                         <field name="state" widget="statusbar" statusbar_visible="draft,waiting_for_approval,approved,done"/>
-                        <field name='type' invisible="1"/>
                     </header>
 					<sheet>
-						<!-- <div class="oe_button_box" name="button_box">
+						<div class="oe_button_box" name="button_box">
 	                        <button type="object"  name="action_view_initiatives"
 	                            class="oe_stat_button"
 	                            icon="fa-pencil-square-o" attrs="{'invisible':[('state', 'in', ('draft','waiting_for_approval'))]}"
@@ -41,12 +40,13 @@
 	                            <field name="initiatives_count" widget="statinfo" string="Initiatives"/>
 	                            <field name='initiatives_ids' invisible="1"/>
 	                        </button>
-	                    </div> -->
+	                    </div>
                         <h2>
                             <field name='name' readonly="1"/>
                         </h2>
 						<group col="4" colspan="4">
                             <field name='date' readonly="1"/>
+                            <field name='type' attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='nama_proposal' attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='company_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='branch_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>

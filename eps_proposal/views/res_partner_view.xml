@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+        <record id="view_res_partner_proposal_form" model="ir.ui.view">
+            <field name="name">res.partner.proposal.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet" position="before">
+                    <header>
+                        <button name="action_request_approval" class="oe_highlight" string="RFA" type="object" attrs="{'invisible':['|',('supplier_rank','!=',1),('state','!=','draft')]}"/>
+                        <button name="action_approve" class="oe_highlight" attrs="{'invisible':['|',('supplier_rank','!=',1),('state','!=','waiting_for_approval')]}" string="Approve" type="object"/>
+                        <button string="Reject" name="%(eps_approval.eps_reject_approval_wizard_action)d" type="action" attrs="{'invisible':['|',('supplier_rank','!=',1),('state','!=','waiting_for_approval')]}" context="{'model_name':'res.partner','update_value':{'approval_state':'r','state':'draft'}}" />
+                        <button name="%(eps_approval.eps_cancel_approval_wizard_action)d" attrs="{'invisible':['|',('supplier_rank','!=',1),('state','!=','waiting_for_approval')]}" string="Cancel Approval" type="action" context="{'model_name':'res.partner','update_value':{'approval_state':'b','state':'draft'}}"/>
+                        <field name="state" widget="statusbar" attrs="{'invisible':[('supplier_rank','!=',1)]}"/>
+                        <button name="action_set_draft" class="oe_highlight" string="Update Data" type="object" attrs="{'invisible':['|',('supplier_rank','!=',1),('state','!=','approved')]}"/>
+                        <field name="supplier_rank" invisible="1"/>
+                    </header>
+                </xpath>
+                <field name="name" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="company_type" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="bank_ids" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="property_supplier_payment_term_id" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="street" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="street2" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="city" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="state_id" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="country_id" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="zip" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="phone" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="mobile" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="email" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="website" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="category_id" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <!-- <field name="user_id" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field> -->
+                <field name="property_payment_term_id" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <!-- <field name="receipt_reminder_email" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field> -->
+                <field name="ref" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>
+                <field name="industry_id" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
+                </field>        
+                <xpath expr="//page[@name='accounting']/group/group[@name='banks']/field[@name='bank_ids']/tree/field[@name='acc_holder_name']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//page[@name='accounting']/group/group[@name='banks']/field[@name='bank_ids']/tree/field[@name='acc_holder_name']" position="after">
+                    <field name="surat_pernyataan_kepemilikan_rekening_doc" widget="binary" filename="surat_pernyataan_kepemilikan_rekening_doc_name"/>
+                    <field name="fc_buku_tabungan_doc" widget="binary" filename="fc_buku_tabungan_doc_name"/>
+                    <field name="surat_pernyataan_kepemilikan_rekening_doc_name" invisible="1"/>
+                    <field name="fc_buku_tabungan_doc_name" invisible="1"/>
+                </xpath>
+                <field name="vat" position="attributes">
+                    <attribute name="string">NPWP</attribute>
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')],'required':[('company_type','=','company')]}</attribute>
+                </field>
+                <field name="vat" position="before">
+                    <field name="nik" attrs="{'readonly':[('state','!=','draft')]}"/>
+                </field>
+                <field name="vat" position="after">
+                    <field name="country_code" invisible="1"/>
+                    <field name="ecommerce" attrs="{'readonly':[('state','!=','draft')]}"/>
+                    <field name="pkp" attrs="{'invisible': [('country_id', '!=', False), ('country_code', '!=', 'ID')],'readonly':[('state','!=','draft')]}"/>
+                </field>
+                <page name="accounting" position="inside">
+                    <group string="Indonesian Taxes"  attrs="{'invisible': [('pkp', '!=', True)]}">
+                        <group>
+                            <field name="kode_transaksi" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="tax_address" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="tax_name" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        </group>
+                    </group>
+                </page>
+                <page name="accounting" position="after">
+                    <page string="Legal" name="legal">
+                        <group col="4">
+                            <field name="company_profile_doc" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="siup" attrs="{'readonly':[('state','!=','draft')]} "/>
+                            <field name="siup_validity" attrs="{'readonly':[('state','!=','draft')]} "/>
+                            <field name="siup_doc" attrs="{'readonly':[('state','!=','draft')]} " />
+                            <field name="ktp_doc" attrs="{'readonly':[('state','!=','draft')]} "/>
+                            <field name="vat_doc" attrs="{'readonly':[('state','!=','draft')]} " />
+                            <field name="sppkp_doc" attrs="{'readonly':[('state','!=','draft')]}" filename="sppkp_doc_name"/>
+                            <field name="akta_pendirian_perusahaan" attrs="{'readonly':[('state','!=','draft')]} "/>
+                            <field name="akta_pendirian_perusahaan_doc" attrs="{'readonly':[('state','!=','draft')]} "/>
+                            <field name="nib" attrs="{'readonly':[('state','!=','draft')]} "/>
+                            <field name="nib_validity" attrs="{'readonly':[('state','!=','draft')]} "/>
+                            <field name="nib_doc" attrs="{'readonly':[('state','!=','draft')]} " />
+                            <field name="vendor_registration_doc" attrs="{'readonly':[('state','!=','draft')]} "/>
+                            <field name="vendor_registration_doc_name" invisible="1"/>
+                            <field name="siup_doc_name" invisible="1"/>
+                            <field name="company_profile_doc_name" invisible="1"/>
+                            <field name="ktp_doc_name" invisible="1"/>
+                            <field name="vat_doc_name" invisible="1"/>
+                            <field name="sppkp_doc_name" invisible="1"/>
+                            <field name="akta_pendirian_perusahaan_doc_name" invisible="1"/>
+                            <field name="nib_doc_name" invisible="1"/>
+                        </group>
+
+                    </page>
+                    <page string="Approval">
+                        <field name="approval_ids">
+                            <tree string="Approval" editable="bottom" create="false" edit="false" delete="false" >
+                                <field name="matrix_sequence"/>
+                                <field name="group_id"/>
+                                <field name="limit"/>
+                                <field name="state"/>
+                                <field name="reason"/>
+                                <field name="user_id"/>
+                                <field name="tanggal"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Audit Trail">
+                      <group>
+                          <group>
+                              <field name="create_uid" readonly="1"></field>
+                              <field name="create_date" readonly="1"></field>
+                          </group>
+                          <group>                           
+                              <field name="write_uid" readonly="1"></field>
+                              <field name="write_date" readonly="1"></field>
+                          </group>
+                      </group>
+                  </page>
+                </page>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -67,21 +67,32 @@ class eps_matrix_approval_line(models.Model):
     sla_days = fields.Integer('SLA Approval Days')
 
     def request_by_value(self,object,value,view_id=None):
-        matrix = self.search([
-            ('model_id','=',object.__class__.__name__),
-            ('company_id','=',object['company_id'].id),
-            ('branch_id','=',object['branch_id'].id),
-            ('divisi_id','=',object['divisi_id'].id),
-            ('department_id','=',object['department_id'].id)
-          ],order="limit asc")
-        
-        if not matrix:
+        if object.company_id and object.branch_id:
             matrix = self.search([
-            ('model_id','=',object.__class__.__name__),
-            ('company_id','=',object['company_id'].id),
-            ('branch_id','=',object['branch_id'].id),
-            ('divisi_id','=',object['divisi_id'].id),
-          ],order="limit asc")
+                ('model_id','=',object.__class__.__name__),
+                ('company_id','=',object['company_id'].id),
+                ('branch_id','=',object['branch_id'].id),
+                ('divisi_id','=',object['divisi_id'].id),
+                ('department_id','=',object['department_id'].id)
+              ],order="limit asc")
+            
+            if not matrix:
+                matrix = self.search([
+                ('model_id','=',object.__class__.__name__),
+                ('company_id','=',object['company_id'].id),
+                ('branch_id','=',object['branch_id'].id),
+                ('divisi_id','=',object['divisi_id'].id),
+              ],order="limit asc")
+                if not matrix:
+                    raise Warning("Transaksi ini tidak memiliki matrix approval")
+        else:
+            matrix = self.search([
+                ('model_id','=',object.__class__.__name__),
+                ('company_id','=',self._context.get('company_id',False)),
+                ('branch_id','=',self._context.get('branch_id',False)),
+                ('divisi_id','=',self._context.get('divisi_id',False)),
+              ],order="limit asc")
+
             if not matrix:
                 raise Warning("Transaksi ini tidak memiliki matrix approval")
         
@@ -252,7 +263,7 @@ class eps_matrix_approval_line(models.Model):
                                                             ('transaction_id','=',trx.id),
                                                           ],order="limit asc")
         if not approval_lines_ids:
-            raise exceptions(('Perhatian !'), ("Transaksi ini tidak memiliki detail approval. Cek kembali Matrix Approval."))
+            raise ValidationError("Transaksi ini tidak memiliki detail approval. Cek kembali Matrix Approval.")
         
         reject_all = False
         for approval_line in approval_lines_ids:
@@ -284,7 +295,7 @@ class eps_matrix_approval_line(models.Model):
                                                             ('transaction_id','=',trx.id),
                                                           ],order="limit asc")
         if not approval_lines_ids:
-            raise exceptions(('Perhatian !'), ("Transaksi ini tidak memiliki detail approval. Cek kembali Matrix Approval."))
+            raise ("Transaksi ini tidak memiliki detail approval. Cek kembali Matrix Approval.")
         
         reject_all = False
         for approval_line in approval_lines_ids:
