@@ -172,3 +172,10 @@ class EmployeeJob(models.Model):
     _inherit = "hr.job"
 
     group_id = fields.Many2one('res.groups','Group')
+
+
+class EmployeeDepartment(models.Model):
+    _inherit = "hr.department"
+
+    code = fields.Char(string='Code')
+    tops_id = fields.Char('TOPS ID')

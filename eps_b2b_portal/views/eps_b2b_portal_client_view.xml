@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_eps_b2b_portal_client_tree" model="ir.ui.view">
+        <field name="name">eps.b2b.portal.client.tree</field>
+        <field name="model">eps.b2b.portal.client</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="user_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_eps_b2b_portal_client_form" model="ir.ui.view">
+        <field name="name">eps.b2b.portal.client.form</field>
+        <field name="model">eps.b2b.portal.client</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_secret" type="object" string="Generate Secret" attrs="{'invisible':[('user_id','=',False)]}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="user_id" required="1" options="{'no_open':True,'no_create':True}"/>
+                        <field name="api_client_id"/>
+                        <field name="api_key_id"/>
+                        <field name="username"/>
+                        <field name="password" password="True" />
+                    </group>
+                    <group string="Partners">
+                        <field name="partner_ids" options="{'no_create': True}" nolabel="1">
+                            <tree editable="top" create='false'>
+                                <field name="partner_id" options="{'no_open':True,'no_create':True}"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_eps_b2b_portal_client" model="ir.actions.act_window">
+        <field name="name">Client</field>
+        <field name="res_model">eps.b2b.portal.client</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="eps_b2b_portal_client_menuitem" parent="eps_b2b_portal_configuration_menuitem" action="action_eps_b2b_portal_client" sequence="01"/>
+</odoo>

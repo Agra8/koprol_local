@@ -14,9 +14,23 @@
                         <button name="%(eps_approval.eps_cancel_approval_wizard_action)d" attrs="{'invisible':['|',('supplier_rank','!=',1),('state','!=','waiting_for_approval')]}" string="Cancel Approval" type="action" context="{'model_name':'res.partner','update_value':{'approval_state':'b','state':'draft'}}"/>
                         <field name="state" widget="statusbar" attrs="{'invisible':[('supplier_rank','!=',1)]}"/>
                         <button name="action_set_draft" class="oe_highlight" string="Update Data" type="object" attrs="{'invisible':['|',('supplier_rank','!=',1),('state','!=','approved')]}"/>
+                        <button name="push_to_tops" type="object" string="Push to TOPS"/>
                         <field name="supplier_rank" invisible="1"/>
                     </header>
                 </xpath>
+
+                <field name="company_type" position="after">
+                    <div class="o_row">
+                        <label for="is_supplier_showroom"/>
+                        <field name="is_supplier_showroom" attrs="{'readonly':[('state','!=','draft')]}" placeholder="Supplier Showroom"/>
+                        <label for="is_supplier_bengkel"/>
+                        <field name="is_supplier_bengkel" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <label for="is_supplier_umum"/>
+                        <field name="is_supplier_umum" attrs="{'readonly':[('state','!=','draft')]}"/>
+                    </div>
+                </field>
+
+
                 <field name="name" position="attributes">
                     <attribute name="attrs">{'readonly':[('state','!=','draft')]}</attribute>
                 </field>
@@ -81,6 +95,7 @@
                     <attribute name="invisible">0</attribute>
                 </xpath>
                 <xpath expr="//page[@name='accounting']/group/group[@name='banks']/field[@name='bank_ids']/tree/field[@name='acc_holder_name']" position="after">
+                    <field name="branch"/>
                     <field name="surat_pernyataan_kepemilikan_rekening_doc" widget="binary" filename="surat_pernyataan_kepemilikan_rekening_doc_name"/>
                     <field name="fc_buku_tabungan_doc" widget="binary" filename="fc_buku_tabungan_doc_name"/>
                     <field name="surat_pernyataan_kepemilikan_rekening_doc_name" invisible="1"/>
@@ -97,6 +112,9 @@
                     <field name="country_code" invisible="1"/>
                     <field name="ecommerce" attrs="{'readonly':[('state','!=','draft')]}"/>
                     <field name="pkp" attrs="{'invisible': [('country_id', '!=', False), ('country_code', '!=', 'ID')],'readonly':[('state','!=','draft')]}"/>
+                    <field name="code" />
+                    <field name="status_api" />
+                    <field name="action_api"/>
                 </field>
                 <page name="accounting" position="inside">
                     <group string="Indonesian Taxes"  attrs="{'invisible': [('pkp', '!=', True)]}">

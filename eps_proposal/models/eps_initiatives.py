@@ -44,6 +44,12 @@ class Initiatives(models.Model):
                 tender_count = len(self.env['eps.tender'].search([('initiatives_id','=',record.id)]))
             record.tender_count = tender_count
 
+    def _compute_purchase(self):
+        for record in self:
+            purchase_count = 0
+            purchase_count = len(self.env['purchase.order'].search([('initiatives_id','=',record.id)]))
+            record.purchase_count = purchase_count
+
 
     name = fields.Char('Name', required=True, default='/')
     date = fields.Date('Date', required=True, tracking=True, default=_get_default_date)
@@ -68,6 +74,7 @@ class Initiatives(models.Model):
     date_start = fields.Date('Date Start')
     date_end = fields.Date('Date End')
     tender_count = fields.Integer(compute="_compute_tender", string='Tender Count', default=0)
+    purchase_count = fields.Integer(compute="_compute_purchase", string='Tender Count', default=0)
 
     @api.onchange('proposal_line_id')
     def _onchange_proposal_line(self):
@@ -90,7 +97,7 @@ class Initiatives(models.Model):
         for record in self:
             # if not record.initiatives_line_ids:
             #     raise ValidationError('Detail Initiatives masih kosong!')
-            if not record.quotation_line_ids.filtered(lambda x:x.state=='proposed'):
+            if not record.quotation_line_ids.filtered(lambda x:x.state=='proposed') and not record.initiatives_line_ids:
                 raise ValidationError('Tidak ada Quotation yang dipropose!')
 
     def action_request_approval(self):
@@ -183,6 +190,37 @@ class Initiatives(models.Model):
             record.write({'state': 'waiting_for_tender'})
         return True
 
+    def _prepare_po_data(self):
+        per_vendor = {}
+        data = {}
+        line = []
+        for rec in self:
+            for line in rec.initiatives_line_ids.filtered(lambda x: not x.purchase_lines):
+                key = line.supplier_id
+                if not per_vendor.get(key,False):
+                    per_vendor[key] = {}
+                    per_vendor[key]['order_line']=[]
+                    per_vendor[key]['company_id']=rec.company_id.id
+                    per_vendor[key]['branch_id']=rec.branch_id.id
+                    per_vendor[key]['divisi_id']=rec.branch_id.id
+                    per_vendor[key]['department_id']=rec.department_id.id
+                    per_vendor[key]['initiatives_id']=rec.id
+                    per_vendor[key]['partner_id']=line.supplier_id.id
+
+
+                per_vendor[key]['order_line'].append([0,0,{
+                    'branch_id': line.branch_id.id,
+                    'product_id': line.product_id.id,
+                    'name': line.product_id.name,
+                    'date_planned': datetime.now(),
+                    'product_qty': line.quantity,
+                    'price_unit': line.price_unit,
+                    'taxes_id': [(6, 0, line.tax_id.ids)],
+                    'initiatives_line_id': line.id
+                    }])
+                    
+        return per_vendor
+
     def action_validate(self):
         """
         if initiative type == Kontrak Payung then create pricelist based on initiatives line
@@ -192,9 +230,15 @@ class Initiatives(models.Model):
 
         """
         for rec in self:
+            if not rec.initiatives_line_ids:
+                raise ValidationError('Tidak ada detail inisiatif!')
             if rec.type=='Kontrak Payung':
                 for line in rec.initiatives_line_ids:
                     self.env['product.supplierinfo'].create(line._prepare_vendor_pricelist())
+            else:
+                po_data = rec._prepare_po_data()
+                for k,value in po_data.items():
+                    self.env['purchase.order'].create(value)
 
             rec.write({'state': 'done'})
 
@@ -226,6 +270,33 @@ class Initiatives(models.Model):
 
         return result
 
+    def action_view_purchase(self, purchase=False):
+        """This function returns an action that display existing tender of
+        given initiatives ids. When only one found, show the initatives
+        immediately.
+        """
+        if not purchase:
+            # initiatives_ids may be filtered depending on the user. To ensure we get all
+            # initiatives related to the proposal, we read them in sudo to fill the
+            # cache.
+            purchase = self.env['purchase.order'].search([('initiatives_id','=',self.id)])
+
+        result = self.env['ir.actions.act_window']._for_xml_id('purchase.purchase_form_action')
+        # choose the view_mode accordingly
+        if len(purchase) > 1:
+            result['domain'] = [('id', 'in', purchase.ids)]
+        # elif len(initiatives) == 1:
+        else:
+            res = self.env.ref('purchase.purchase_order_form', False)
+            form_view = [(res and res.id or False, 'form')]
+            if 'views' in result:
+                result['views'] = form_view + [(state, view) for state, view in result['views'] if view != 'form']
+            else:
+                result['views'] = form_view
+            result['res_id'] = purchase.id
+        
+
+        return result
 
 class InitiativesLines(models.Model):
     _name = "eps.initiatives.line"
@@ -244,6 +315,8 @@ class InitiativesLines(models.Model):
     price_tax = fields.Float(compute='_compute_amount', string='Tax', store=True)
     company_id = fields.Many2one('res.company', related='initiatives_id.company_id', string='Company', store=True, readonly=True)
     currency_id = fields.Many2one(related='initiatives_id.company_id.currency_id', store=True, string='Currency', readonly=True)
+    purchase_lines = fields.One2many('purchase.order.line', 'initiatives_line_id', string='Order Line')
+    quotation_line_id = fields.Many2one('eps.quotation.line', string='Quotation Line')
 
     @api.depends('quantity', 'discount', 'price_unit', 'tax_id')
     def _compute_amount(self):

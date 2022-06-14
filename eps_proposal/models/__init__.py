@@ -6,3 +6,5 @@ from . import eps_tender
 from . import product
 from . import res_partner
 from . import eps_koprol_setting
+from . import purchase
+from . import account_payment_term

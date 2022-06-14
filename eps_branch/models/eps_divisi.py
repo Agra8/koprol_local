@@ -11,6 +11,8 @@ class Divisi(models.Model):
 
     name = fields.Char(string='Name', required=True)
     company_id = fields.Many2one('res.company', string='Company', index=True,default=_get_company)
+    code = fields.Char(string='Code')
+    tops_id = fields.Char('TOPS ID')
     
     @api.constrains('company_id','name')
     def _check_name(self):

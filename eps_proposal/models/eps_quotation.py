@@ -69,7 +69,7 @@ class Quotation(models.Model):
     @api.constrains('supplier_id')
     def _check_supplier(self):
         for record in self:
-            if not record.supplier_id.vendor_registration_doc_name:
+            if not record.supplier_id.vendor_registration_doc:
                 check_record = self.env['eps.initiatives.line'].search([('supplier_id','=',record.supplier_id.id),
                                                                         ('initiatives_id','!=',record.initiatives_id.id),
                                                                         ('initiatives_id.state','=','done')
@@ -224,12 +224,14 @@ class QuotationLines(models.Model):
     price_subtotal = fields.Float(compute='_compute_amount', string='Subtotal', store=True)
     price_total = fields.Float(compute='_compute_amount', string='Total (Tax Included)', store=True)
     price_tax = fields.Float(compute='_compute_amount', string='Tax', store=True)
+    product_type = fields.Selection([('consu','Consumable'),('service','Service')], string='Product Type')
 
     @api.onchange('product_id')
     def onchange_product(self):
         if self.product_id:
             self.name = self.product_id.name
             self.categ_id = self.product_id.categ_id.id
+            self.product_type = self.product_id.type
 
     @api.depends('quantity', 'discount', 'price_unit', 'tax_id')
     def _compute_amount(self):
@@ -255,7 +257,7 @@ class QuotationLines(models.Model):
             'name': line.name,
             'purchase_ok': True,
             'categ_id': line.categ_id.id,
-            'type': 'consu',
+            'type': line.product_type,
             }
             product = self.env['product.product'].create(product_vals)
         return product
@@ -272,7 +274,8 @@ class QuotationLines(models.Model):
             'quantity' : line.quantity,
             'price_unit' : line.price_unit,
             'discount' : line.discount,
-            'tax_id' : [(6,0,line.tax_id.ids)]
+            'tax_id' : [(6,0,line.tax_id.ids)],
+            'quotation_line_id': line.id
             }
         return data
 

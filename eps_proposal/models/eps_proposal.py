@@ -399,6 +399,11 @@ class ProposalLine(models.Model):
     _description = 'Proposal Line'
     _rec_name = 'categ_id'
 
+    @api.depends('initiatives_ids.state','initiatives_ids.amount_total')
+    def _compute_reserved_amount(self):
+        for rec in self:
+            rec.reserved_amount = sum(x.amount_total for x in rec.initiatives_ids.filtered(lambda y: y.state=='done'))
+
     proposal_id = fields.Many2one('eps.proposal', string='Proposal', ondelete='cascade')
     categ_id = fields.Many2one('eps.category', string='Proposal Category', required=True)
     price = fields.Float(string='Unit Price')
@@ -406,6 +411,8 @@ class ProposalLine(models.Model):
     filename_penawaran = fields.Char(string="Filename Penawaran")
     filename_upload_penawaran = fields.Char(string="Filename upload Penawaran")
     file_penawaran_show = fields.Binary(string="File Penawaran", compute='_compute_file_penawaran' ,help="")
+    reserved_amount = fields.Float(compute=_compute_reserved_amount, store=True, string='Reserved Amount')
+    initiatives_ids = fields.One2many('eps.initiatives','proposal_line_id', string='Detail Initiatives')
 
     @api.constrains('price')
     def _check_price(self):

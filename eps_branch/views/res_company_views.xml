@@ -11,7 +11,13 @@
                      <br/>
                      <label for="code" class="oe_edit_only"/> 
                      <h1><field name="code" required="1"/></h1>
-                </field>    
+                     <br/>
+                     <label for="business_id" class="oe_edit_only"/> 
+                     <h1><field name="business_id" required="1"/></h1>
+                </field>  
+                <field name="partner_id" position="after">
+                    <field name="tops_id"/>
+                </field>
             </field>
         </record>
     </data>

@@ -8,6 +8,7 @@
 				<tree string="Divisi">
 					<field name="company_id"/>
 					<field name="name"/>
+					<field name="code"/>
 				</tree>
 			</field>
 		</record>
@@ -20,6 +21,8 @@
 					<sheet>
 						<group col="4" colspan="4">
 							<field name="name"/>
+							<field name="code"/>
+							<field name="tops_id"/>
 							<field name="company_id" required="1" options="{'no_open':True,'no_create':True}"/>
 						</group>
 						<notebook>

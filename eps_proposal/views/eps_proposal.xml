@@ -86,6 +86,7 @@
                                     <tree>
                                         <field name="categ_id"/>
                                         <field name="price"/>
+                                        <field name="reserved_amount" readonly="1"/>
                                         <field name="filename_penawaran"/>
                                     </tree>
                                 </field>
