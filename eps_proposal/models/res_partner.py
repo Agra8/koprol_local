@@ -183,6 +183,43 @@ class Partner(models.Model):
             
         return True
 
+    def test_push_to_tops(self):
+        for rec in self:
+            # self.validity_check_api()
+            config = self.env['eps.b2b.api.configuration'].sudo().check_config('tops')
+            if not config :
+                raise ValidationError("Config B2B belum dibuat")
+            url = config.base_url
+            uid = request.session.uid
+            # self.validity_check_api()
+            # key = self.company_id.unilife_api_key
+            end_point = '/tes.php'
+            payload = {}
+            files = [
+
+            ]
+            headers = {
+              'api_key': config.api_key,
+              'Content-Type': 'application/json',
+            }
+
+            response = requests.get(url+end_point, headers=headers,verify=True)
+            status_code = (response.status_code)
+            content = json.loads(response.content)
+            status = content.get('status',False)
+            message = content.get('message',False) 
+            ip_address=request.httprequest.headers.environ['REMOTE_ADDR']
+
+            response_time=False
+            
+            if status_code == 200:
+                response_time = self.start_end_date_request()
+                raise ValidationError('Berhasil')
+            else :
+                raise ValidationError('Error')
+            
+        return True
+
     def _prepare_data_api(self):
         SupplierID = self.code
         action = self.action_api
