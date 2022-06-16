@@ -59,7 +59,6 @@ class Initiatives(models.Model):
     department_id = fields.Many2one('hr.department', domain="[('company_id','=',company_id)]", string='Department', required=True, tracking=True)
     proposal_id = fields.Many2one('eps.proposal', required=True, string='Proposal', domain="[('company_id','=',company_id),('branch_id','=',branch_id),('divisi_id','=',divisi_id),('department_id','=',department_id),('state','=','approved')]", tracking=True)
     proposal_line_id = fields.Many2one('eps.proposal.line', domain="[('proposal_id','=',proposal_id)]", string='Category', tracking=True, required=True)
-    reserved_amount = fields.Float('Reserved Amount')
     remarks = fields.Text('Remarks')
     initiatives_line_ids = fields.One2many('eps.initiatives.line', 'initiatives_id', string='Detail Initiatives')
     type = fields.Selection([('One Time Purchase','One Time Purchase'),('Kontrak Payung','Kontrak Payung'),('Tender','Tender')], string='Type', required=True, default='One Time Purchase')
@@ -75,6 +74,8 @@ class Initiatives(models.Model):
     date_end = fields.Date('Date End')
     tender_count = fields.Integer(compute="_compute_tender", string='Tender Count', default=0)
     purchase_count = fields.Integer(compute="_compute_purchase", string='Tender Count', default=0)
+    proposal_amount = fields.Float(related='proposal_line_id.price', store=True, string='Proposal Amount')
+    reserved_amount = fields.Float(related='proposal_line_id.reserved_amount', store=True,string='Reserved Amount')
 
     @api.onchange('proposal_line_id')
     def _onchange_proposal_line(self):
@@ -103,7 +104,13 @@ class Initiatives(models.Model):
     def action_request_approval(self):
         self.validity_check()
         amount_approval = sum(q.quotation_amount for q in self.quotation_line_ids.filtered(lambda x:x.state=='proposed'))
-        self.env['eps.matrix.approval.line'].request_by_value(self, amount_approval)
+        koprol_setting = self.env['eps.koprol.setting'].sudo().search([])
+        if not koprol_setting:
+            raise ValidationError('Konfigurasi registrasi vendor belum lengkap, silahkan setting terlebih dahulu')
+        self.env['eps.matrix.approval.line'].with_context(company_id=koprol_setting.default_company_initiatives_approval_id.id,
+            branch_id=koprol_setting.default_branch_initiatives_approval_id.id,
+            divisi_id=koprol_setting.default_divisi_initiatives_approval_id.id,
+            ).request_by_value(self, amount_approval)
         self.write({'state':'waiting_for_approval', 'approval_state':'rf'})
 
     def action_approve(self):

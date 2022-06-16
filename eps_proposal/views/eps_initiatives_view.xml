@@ -65,6 +65,8 @@
                             <field name='department_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='proposal_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='proposal_line_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="proposal_amount" readonly="1"/>
+                            <field name="reserved_amount" readonly="1"/>
                             <label for="date_start" string="Validity" attrs="{'readonly': [('state','!=','draft')],'invisible':[('type','!=','Kontrak Payung')]}"/>
                                 <div class="o_row" attrs="{'readonly': [('state','!=','draft')],'invisible':[('type','!=','Kontrak Payung')]}"><field name="date_start" attrs="{'readonly': [('state','!=','draft')],'invisible':[('type','!=','Kontrak Payung')],'required':[('type','=','Kontrak Payung')]}"/> to <field name="date_end" attrs="{'readonly': [('state','!=','draft')],'invisible':[('type','!=','Kontrak Payung')],'required':[('type','=','Kontrak Payung')]}"/></div>
                             <field name="currency_id" invisible="1"/>

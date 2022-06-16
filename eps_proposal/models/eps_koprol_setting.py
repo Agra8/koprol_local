@@ -7,6 +7,9 @@ class KoprolSetting(models.Model):
     default_company_vendor_approval_id = fields.Many2one('res.company', string='Default Company for Vendor Approval', required=True)
     default_branch_vendor_approval_id = fields.Many2one('res.branch', string='Default Branch for Vendor Approval', required=True)
     default_divisi_vendor_approval_id = fields.Many2one('eps.divisi', string='Default Division for Vendor Approval', required=True)
+    default_company_initiatives_approval_id = fields.Many2one('res.company', string='Default Company for Vendor Approval', required=True)
+    default_branch_initiatives_approval_id = fields.Many2one('res.branch', string='Default Branch for Vendor Approval', required=True)
+    default_divisi_initiatives_approval_id = fields.Many2one('eps.divisi', string='Default Division for Vendor Approval', required=True)
 
     @api.constrains('default_company_vendor_approval_id','default_company_vendor_approval_id','default_company_vendor_approval_id')
     def _check_double_entries(self):
