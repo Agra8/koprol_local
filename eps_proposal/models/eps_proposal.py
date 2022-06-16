@@ -36,7 +36,7 @@ class Proposal(models.Model):
     branch_id = fields.Many2one('res.branch', string='Branch', required=True, tracking=True, domain="[('company_id','=',company_id)]")
     divisi_id = fields.Many2one('eps.divisi', string='Divisi', required=True, tracking=True, domain="[('company_id','=',company_id)]")
     department_id = fields.Many2one('hr.department', domain="[('company_id','=',company_id)]", string='Department', required=True, tracking=True)
-    employee_id = fields.Many2one('hr.employee', string='PIC', required=True, tracking=True, domain="[('company_id','=',company_id),('branch_id','=',branch_id),('divisi_id','=',divisi_id),('department_id','=',department_id)]")
+    employee_id = fields.Many2one('hr.employee', string='PIC', required=True, tracking=True)
     pic_contact = fields.Char(related='employee_id.mobile_phone', string="PIC's Contact", tracking=True)
     latar_belakang = fields.Text(string='Latar Belakang', tracking=True)
     sasaran_tujuan = fields.Text(string='Sasaran dan Tujuan', tracking=True)

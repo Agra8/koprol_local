@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- <record id="eps_purchase_order_view_form" model="ir.ui.view">
+            <field name="name">eps.purchase.order.view.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name='branch_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
+                </xpath>
+            </field>
+        </record> -->
+
+        <record model="ir.ui.view" id="eps_snk_po_tree_view">
+			<field name="name">eps.snk.po.tree</field>
+			<field name="model">eps.snk.po</field>
+			<field name="arch" type="xml">
+				<tree string="Syarat dan Ketentuan" editable="top" default_order="name">
+                    <field name='name' readonly="1"/>
+                    <field name='parent_id' options="{'no_create': True,'no_open': True}"/>
+                    <field name='sequence'/>
+                    <field name='isi'/>
+				</tree>
+			</field>
+		</record>
+
+        <record model="ir.ui.view" id="eps_snk_po_form_view">
+			<field name="name">eps.snk.po.form</field>
+			<field name="model">eps.snk.po</field>
+			<field name="arch" type="xml">
+				<form string="Proposal">
+                    <sheet>
+                        <group>
+                            <!-- <field name='kategori'/> -->
+                            <field name='sequence'/>
+                            <field name='isi' widget="html"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- <record id="eps_snk_po_search" model="ir.ui.view">
+            <field name="name">eps.snk.po.search</field>
+            <field name="model">eps.snk.po</field>
+            <field name="arch" type="xml">
+                <search string="SNK PO">
+                    <group string="Group By..">
+                         <filter string="Kategori" domain="[]" name="group_by_kategori" context="{'group_by':'kategori'}"/>
+                    </group>
+                </search>
+            </field>
+        </record> -->
+
+        <record id="action_eps_snk_po" model="ir.actions.act_window">
+            <field name="name">PO Master S &amp; K</field>
+            <field name="res_model">eps.snk.po</field>
+            <field name="view_mode">tree,form</field>
+            
+        </record>
+
+        <menuitem id="eps_master_snk_po_menuitem" parent="eps_menu.eps_master_conf_menuitem" action="action_eps_snk_po" sequence="99"/>
+
+    </data>
+</odoo>

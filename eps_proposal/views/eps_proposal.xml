@@ -52,7 +52,7 @@
                             <field name='branch_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='divisi_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='department_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
-                            <field name='employee_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='employee_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('company_id','=',company_id),('branch_id','=',branch_id),('divisi_id','=',divisi_id),('department_id','=',department_id)]"/>
                             <field name='pic_contact' attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='latar_belakang' widget='html' attrs="{'readonly': [('state','!=','draft')]}" colspan="4"/>
                             <field name='sasaran_tujuan' widget='html' attrs="{'readonly': [('state','!=','draft')]}" colspan="4"/>

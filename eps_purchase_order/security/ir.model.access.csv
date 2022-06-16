@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_eps_snk_po_read,access.eps.snk.po.read,model_eps_snk_po,group_eps_snk_po_read,1,0,0,0
+access_eps_snk_po_update,access.eps.snk.po.update,model_eps_snk_po,group_eps_snk_po_update,0,1,1,0
+access_eps_snk_po_delete,access.eps.snk.po.delete,model_eps_snk_po,group_eps_snk_po_delete,0,0,0,1
