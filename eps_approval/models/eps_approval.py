@@ -67,84 +67,86 @@ class eps_matrix_approval_line(models.Model):
     sla_days = fields.Integer('SLA Approval Days')
 
     def request_by_value(self,object,value,view_id=None):
-        if object.company_id and object.branch_id and not self._context.get('bypass_check_entity'):
-            matrix = self.search([
-                ('model_id','=',object.__class__.__name__),
-                ('company_id','=',object['company_id'].id),
-                ('branch_id','=',object['branch_id'].id),
-                ('divisi_id','=',object['divisi_id'].id),
-                ('department_id','=',object['department_id'].id)
-              ],order="limit asc")
-            
-            if not matrix:
+        matrix_data = []
+        if not self._context.get('bypass_check_master_approval'):
+            if object.company_id and object.branch_id and not self._context.get('bypass_check_entity'):
                 matrix = self.search([
-                ('model_id','=',object.__class__.__name__),
-                ('company_id','=',object['company_id'].id),
-                ('branch_id','=',object['branch_id'].id),
-                ('divisi_id','=',object['divisi_id'].id),
-              ],order="limit asc")
+                    ('model_id','=',object.__class__.__name__),
+                    ('company_id','=',object['company_id'].id),
+                    ('branch_id','=',object['branch_id'].id),
+                    ('divisi_id','=',object['divisi_id'].id),
+                    ('department_id','=',object['department_id'].id)
+                  ],order="limit asc")
+                
+                if not matrix:
+                    matrix = self.search([
+                    ('model_id','=',object.__class__.__name__),
+                    ('company_id','=',object['company_id'].id),
+                    ('branch_id','=',object['branch_id'].id),
+                    ('divisi_id','=',object['divisi_id'].id),
+                  ],order="limit asc")
+                    if not matrix:
+                        raise Warning("Transaksi ini tidak memiliki matrix approval")
+            else:
+                matrix = self.search([
+                    ('model_id','=',object.__class__.__name__),
+                    ('company_id','=',self._context.get('company_id',False)),
+                    ('branch_id','=',self._context.get('branch_id',False)),
+                    ('divisi_id','=',self._context.get('divisi_id',False)),
+                  ],order="limit asc")
+
                 if not matrix:
                     raise Warning("Transaksi ini tidak memiliki matrix approval")
-        else:
-            matrix = self.search([
-                ('model_id','=',object.__class__.__name__),
-                ('company_id','=',self._context.get('company_id',False)),
-                ('branch_id','=',self._context.get('branch_id',False)),
-                ('divisi_id','=',self._context.get('divisi_id',False)),
-              ],order="limit asc")
+            
+            user_limit = 0
+            min_value = min([x.limit for x in matrix])
+            min_sequence = min([x.matrix_sequence for x in matrix])
+            prev_sequence = 1
+            state = 'IN'
+            
+            first_record = True
 
-            if not matrix:
-                raise Warning("Transaksi ini tidak memiliki matrix approval")
-        
-        user_limit = 0
-        min_value = min([x.limit for x in matrix])
-        min_sequence = min([x.matrix_sequence for x in matrix])
-        prev_sequence = 1
-        state = 'IN'
-        matrix_data = []
-        first_record = True
-
-        for data in matrix :
-            approval_start_date = False
-            expected_date = False
-            if data.matrix_sequence==min_sequence:
-                if first_record:
-                    state='IN'
-                    first_record = False
+            for data in matrix :
+                approval_start_date = False
+                expected_date = False
+                if data.matrix_sequence==min_sequence:
+                    if first_record:
+                        state='IN'
+                        first_record = False
+                    else:
+                        state='WA'
+                    approval_start_date = date.today()
+                    expected_date = date.today() + timedelta(days = data.sla_days)
                 else:
-                    state='WA'
-                approval_start_date = date.today()
-                expected_date = date.today() + timedelta(days = data.sla_days)
-            else:
-                state='IWA'
+                    state='IWA'
 
-            matrix_data.append({
-              'value':value,
-              'group_id':data.group_id.id,
-              'transaction_id':object.id,
-              'model_id':data.model_id.id,
-              'limit':data.limit,
-              'state': state,
-              'view_id': view_id,
-              'company_id': data.company_id.id,
-              'branch_id': data.branch_id.id,
-              'divisi_id': data.divisi_id.id,
-              'department_id': data.department_id.id,
-              'matrix_sequence': data.matrix_sequence,
-              'expected_date': expected_date,
-              'approval_start_date': approval_start_date,
-              'sla_days': data.sla_days,
-            })
-            
-            
-            if user_limit < data.limit:
-                user_limit = data.limit
+                matrix_data.append({
+                  'value':value,
+                  'group_id':data.group_id.id,
+                  'transaction_id':object.id,
+                  'model_id':data.model_id.id,
+                  'limit':data.limit,
+                  'state': state,
+                  'view_id': view_id,
+                  'company_id': data.company_id.id,
+                  'branch_id': data.branch_id.id,
+                  'divisi_id': data.divisi_id.id,
+                  'department_id': data.department_id.id,
+                  'matrix_sequence': data.matrix_sequence,
+                  'expected_date': expected_date,
+                  'approval_start_date': approval_start_date,
+                  'sla_days': data.sla_days,
+                })
+                
+                
+                if user_limit < data.limit:
+                    user_limit = data.limit
 
-            prev_sequence=data.matrix_sequence
-    
-        if user_limit < value:
-            #raise Warning(('Perhatian !'), ("Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval.") % (value, user_limit))
-            raise ValidationError(_('Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval."' % (value, user_limit) ) )
+                prev_sequence=data.matrix_sequence
+        
+            if user_limit < value:
+                #raise Warning(('Perhatian !'), ("Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval.") % (value, user_limit))
+                raise ValidationError(_('Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval."' % (value, user_limit) ) )
         if self._context.get('per_reviewer'):
             for rev in self._context.get('per_reviewer'):
                 matrix_data.append(rev)

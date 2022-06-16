@@ -83,10 +83,11 @@ class Quotation(models.Model):
             if record.quotation_amount<=0:
                 raise ValidationError('Quotation amount harus >0 !')
 
-    @api.constrains('amount_total')
+    @api.constrains('quotation_line_ids')
     def _check_amount_total(self):
         for record in self:
-            if record.initiatives_state=='approved' and record.quotation_amount!=record.amount_total:
+            amount_total = sum(x.price_total for x in record.quotation_line_ids)
+            if record.initiatives_state=='approved' and record.quotation_line_ids and record.quotation_amount!=amount_total:
                 raise ValidationError('Quotation amount %s tidak sama dengan Total quotation line!' % (record.name))
 
     @api.constrains('initiatives_id')

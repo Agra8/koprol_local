@@ -47,6 +47,8 @@ class Tender(models.Model):
 
     def action_aanweizing(self):
         for rec in self:
+            if not rec.tender_participant_ids:
+                raise ValidationError('Tender Participants belum diisi')
             rec.write({'state': 'aanweizing'})
 
     def action_klarifikasi(self):
@@ -68,7 +70,31 @@ class Tender(models.Model):
 
     def action_request_approval(self):
         self.validity_check()
-        self.env['eps.matrix.approval.line'].request_by_value(self, 10)
+        per_reviewer = []
+
+        amount_approval = max(list(line.sequence for line in self.tender_participant_ids))
+        min_amount_approval = min(list(line.sequence for line in self.tender_participant_ids))
+       
+        for line in self.tender_participant_ids:
+            per_reviewer.append({'value':amount_approval,
+                  'group_id': line.employee_id.job_id.group_id.id,
+                  'transaction_id':self.id,
+                  'model_id': self.env['ir.model'].search([('model','=',self.__class__.__name__)]).id,
+                  'limit': line.sequence,
+                  'state': 'IN' if line.sequence==min_amount_approval else 'IWA',
+                  'view_id': False,
+                  'company_id': line.employee_id.company_id.id,
+                  'branch_id': line.employee_id.branch_id.id,
+                  'divisi_id': line.employee_id.divisi_id.id,
+                  'department_id': line.employee_id.department_id.id,
+                  'matrix_sequence': line.sequence,
+                  'sla_days': 0
+                  })
+        self.env['eps.matrix.approval.line'].with_context(
+            bypass_check_master_approval=True,
+            per_reviewer=per_reviewer
+            ).request_by_value(self, amount_approval)
+
         self.write({'state':'waiting_for_approval', 'approval_state':'rf'})
 
     def action_approve(self):
@@ -101,3 +127,4 @@ class TenderParticipant(models.Model):
     tender_id = fields.Many2one('eps.tender', ondelete='cascade')
     employee_id = fields.Many2one('hr.employee', string='Employee', required=True)
     type = fields.Selection([('User','User'),('Komite','Komite'),('Panitia','Panitia')], string='Type', required=True)
+    sequence = fields.Integer('Sequence')
