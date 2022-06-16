@@ -210,7 +210,7 @@ class Initiatives(models.Model):
                     per_vendor[key]['order_line']=[]
                     per_vendor[key]['company_id']=rec.company_id.id
                     per_vendor[key]['branch_id']=rec.branch_id.id
-                    per_vendor[key]['divisi_id']=rec.branch_id.id
+                    per_vendor[key]['divisi_id']=rec.divisi_id.id
                     per_vendor[key]['department_id']=rec.department_id.id
                     per_vendor[key]['initiatives_id']=rec.id
                     per_vendor[key]['partner_id']=line.supplier_id.id
