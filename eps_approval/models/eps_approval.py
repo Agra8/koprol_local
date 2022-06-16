@@ -67,7 +67,7 @@ class eps_matrix_approval_line(models.Model):
     sla_days = fields.Integer('SLA Approval Days')
 
     def request_by_value(self,object,value,view_id=None):
-        if object.company_id and object.branch_id:
+        if object.company_id and object.branch_id and not self._context.get('bypass_check_entity'):
             matrix = self.search([
                 ('model_id','=',object.__class__.__name__),
                 ('company_id','=',object['company_id'].id),

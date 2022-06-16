@@ -1,5 +1,5 @@
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError,Warning
+from odoo.exceptions import ValidationError,Warning,UserError
 import subprocess
 import base64
 import os
@@ -109,7 +109,8 @@ class Initiatives(models.Model):
             raise ValidationError('Konfigurasi registrasi vendor belum lengkap, silahkan setting terlebih dahulu')
         self.env['eps.matrix.approval.line'].with_context(company_id=koprol_setting.default_company_initiatives_approval_id.id,
             branch_id=koprol_setting.default_branch_initiatives_approval_id.id,
-            divisi_id=koprol_setting.default_divisi_initiatives_approval_id.id,
+            divisi_id=koprol_setting.default_divisi_initiatives_approval_id.id, 
+            bypass_check_entity=True
             ).request_by_value(self, amount_approval)
         self.write({'state':'waiting_for_approval', 'approval_state':'rf'})
 
