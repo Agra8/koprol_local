@@ -82,7 +82,7 @@ class Tender(models.Model):
 
     @api.model
     def create(self,vals):
-        vals['name'] = self.env['ir.sequence'].get_per_branch(vals['branch_id'], 'TEN')
+        vals['name'] = self.env['ir.sequence'].sudo().get_per_branch(vals['branch_id'], 'TEN')
         vals['date'] = self._get_default_date()
         ids = super(Tender,self).create(vals)    
         return ids

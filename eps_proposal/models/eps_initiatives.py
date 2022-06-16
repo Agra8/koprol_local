@@ -116,7 +116,7 @@ class Initiatives(models.Model):
 
     @api.model
     def create(self,vals):
-        vals['name'] = self.env['ir.sequence'].get_per_branch(vals['branch_id'], 'IN')
+        vals['name'] = self.env['ir.sequence'].sudo().get_per_branch(vals['branch_id'], 'IN')
         vals['date'] = self._get_default_date()
         ids = super(Initiatives,self).create(vals)    
         return ids

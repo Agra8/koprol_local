@@ -106,7 +106,7 @@ class Quotation(models.Model):
 
     @api.model
     def create(self,vals):
-        vals['name'] = self.env['ir.sequence'].get_per_form('QUO')
+        vals['name'] = self.env['ir.sequence'].sudo().get_per_form('QUO')
         vals['date'] = self._get_default_date()
         if vals.get('file_document'):
             file_document = vals['file_document']
