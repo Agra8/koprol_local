@@ -36,13 +36,6 @@ class eps_snk_po (models.Model):
     name = fields.Char('Code')
     isi = fields.Text(string="Isi S&K")
     sequence = fields.Integer(string="Urutan S&K", default=_get_sequence)
-    # kategori = fields.Selection([
-    #     ('A','A. Syarat Umum'),
-    #     ('B','B. Barang dan Jasa'),
-    #     ('C','C. Pengiriman'),
-    #     ('D','D. Pembayaran'),
-    #     ('E','E. Komitmen Etika Bisnis'),
-    #     ], string='Kategori', default='category', required=True)
     parent_id = fields.Many2one('eps.snk.po', string='Parent')
     child_ids = fields.One2many('eps.snk.po', 'parent_id', string='Childs')
 
@@ -53,4 +46,14 @@ class eps_snk_po (models.Model):
         else:
             vals['name'] = str(vals['sequence'])
         return super(eps_snk_po,self).create(vals) 
+
+    def write(self,vals):
+        if all (k in vals for k in ("parent_id","sequence")):
+            vals['name'] = self.browse(vals['parent_id']).name+'/'+str(vals['sequence']) 
+        elif ("parent_id" in vals) and ("sequence" not in vals):
+            vals['name'] = self.browse(vals['parent_id']).name+'/'+str(self.sequence)
+        elif ("parent_id" not in vals) and ("sequence" in vals):
+            vals['name'] = self.parent_id.name+'/'+str(self.sequence)
+
+        return super(eps_snk_po,self).write(vals) 
     

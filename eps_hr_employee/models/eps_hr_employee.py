@@ -82,9 +82,13 @@ class eps_hr_employee (models.Model):
         if vals.get('work_email'):
             self.partner_id.write({'email':vals.get('work_email')})
         if vals.get('tgl_keluar'):
+            if self.user_id:
+                self.user_id.sudo().write({'active':False})
             self.partner_id.write({'active':False})
         if vals.get('tgl_keluar')==False:
             self.partner_id.write({'active':True})
+            if self.user_id:
+                self.user_id.sudo().write({'active':True})
         
         if vals.get('area_id',False):
             if self.user_id:
@@ -130,6 +134,14 @@ class eps_hr_employee (models.Model):
         if vals.get('is_user') == False: 
             if self.user_id:
                 user_id = self.user_id
+        if vals.get('job_id',False) and self.user_id:
+            jobs = self.env['hr.job'].sudo().browse(vals['job_id'])
+            if not jobs.group_id:
+                raise Warning('Perhatian ! User Group belum diisi di Master Job.')    
+            group_id = jobs.group_id.id
+            self.user_id.sudo().write({'groups_id':False})
+            self.user_id.sudo().write({'groups_id':[(6,0,[group_id])]})
+            
         return super(eps_hr_employee, self).write(vals)
 
     def unlink(self, context=None):

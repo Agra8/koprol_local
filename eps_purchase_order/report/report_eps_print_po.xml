@@ -29,7 +29,7 @@
         </record>
 
         <template id="external_layout_print_po">
-            <div class="header" style="font-family: 'Trebuchet MS', sans-serif; font-size:12px;">
+            <div class="header" style="font-family: 'Helvetica'; font-size:12px;">
                 <table>
                     <tr>
                         <td width="500pt">
@@ -57,7 +57,7 @@
                                 <tr>
                                     <td width="30%">Page</td>
                                     <td>:</td>
-                                    <td><li class="list-inline-item"><span class="page"/> / <span class="topage"/></li></td>
+                                    <td><span class="page"/> / <span class="topage"/></td>
                                 </tr>
                             </table>
                         </td>
@@ -74,7 +74,7 @@
                         color:white;
                     }
                     table {
-                        font-family:'Trebuchet MS', sans-serif; 
+                        font-family:'Helvetica'; 
                         font-size:13px;
                     }
                     th, td {
@@ -164,13 +164,13 @@
                                     <td style="border: 1px solid black; border-collapse: collapse;">
                                         Unit
                                     </td>
-                                    <td style="border: 1px solid black; border-collapse: collapse;">
+                                    <td style="border: 1px solid black; border-collapse: collapse;" align="right">
                                         <t t-esc="'{0:,.2f}'.format(line.price_subtotal)" />
                                     </td>
-                                    <td style="border: 1px solid black; border-collapse: collapse;">
+                                    <td style="border: 1px solid black; border-collapse: collapse;" align="right">
                                         0
                                     </td>
-                                    <td style="border: 1px solid black; border-collapse: collapse;">
+                                    <td style="border: 1px solid black; border-collapse: collapse;" align="right">
                                         <t t-esc="'{0:,.2f}'.format(line.price_subtotal)" />
                                     </td>
                                 </tr>
@@ -182,7 +182,7 @@
                                 <td style="border: 1px solid black; border-collapse: collapse;" colspan="2">
                                     Sub Total
                                 </td>
-                                <td style="border: 1px solid black; border-collapse: collapse;">
+                                <td style="border: 1px solid black; border-collapse: collapse;" align="right">
                                     <t t-esc="'{0:,.2f}'.format(sp_obj.amount_untaxed)" />
                                 </td>
                             </tr>
@@ -193,7 +193,7 @@
                                 <td style="border: 1px solid black; border-collapse: collapse;" colspan="2">
                                     Discount
                                 </td>
-                                <td style="border: 1px solid black; border-collapse: collapse;">
+                                <td style="border: 1px solid black; border-collapse: collapse;" align="right">
                                     0
                                 </td>
                             </tr>
@@ -204,7 +204,7 @@
                                 <td style="border: 1px solid black; border-collapse: collapse;" colspan="2">
                                     PPN (11%)
                                 </td>
-                                <td style="border: 1px solid black; border-collapse: collapse;">
+                                <td style="border: 1px solid black; border-collapse: collapse;" align="right">
                                     <t t-esc="'{0:,.2f}'.format(sp_obj.amount_tax)" />
                                 </td>
                             </tr>
@@ -215,7 +215,7 @@
                                 <td style="border: 1px solid black; border-collapse: collapse;" colspan="2">
                                     Biaya Lain-lain
                                 </td>
-                                <td style="border: 1px solid black; border-collapse: collapse;">
+                                <td style="border: 1px solid black; border-collapse: collapse;" align="right">
                                     0
                                 </td>
                             </tr>
@@ -226,7 +226,7 @@
                                 <th style="border: 1px solid black; border-collapse: collapse;" colspan="2">
                                     Total
                                 </th>
-                                <th style="border: 1px solid black; border-collapse: collapse;">
+                                <th style="border: 1px solid black; border-collapse: collapse;" align="right">
                                     <t t-esc="'{0:,.2f}'.format(sp_obj.amount_total)" />
                                 </th>
                             </tr>
@@ -240,24 +240,16 @@
                             <tr>
                                 <td style="border: 1px solid black; border-collapse: collapse;">Type</td>
                                 <td style="border: 1px solid black; border-collapse: collapse;">: <t t-esc="sp_obj.payment_term_id.name" /></td>
-                                <td rowspan="4" align="center" style="border: 1px solid black; border-collapse: collapse;">
+                                <td rowspan="2" align="center" style="border: 1px solid black; border-collapse: collapse;">
                                     <b>PT. TUNAS RIDEAN TBK</b> <br/>
                                     Jl. Pecenongan No.62 Kebon Kelapa Gambir<br/>
                                     Jakarta Pusat<br/>
                                     NPWP : 01.310.233.0-054.000
                                 </td>
                             </tr>
-                            <tr>
-                                <td style="border: 1px solid black; border-collapse: collapse;">Cash In Advance</td>
-                                <td style="border: 1px solid black; border-collapse: collapse;">: DP %</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; border-collapse: collapse;"></td>
-                                <td style="border: 1px solid black; border-collapse: collapse;">: Pelunasan %</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; border-collapse: collapse;"></td>
-                                <td style="border: 1px solid black; border-collapse: collapse;">: Retensi %</td>
+                            <tr height="100px">
+                                <td style="border: 1px solid black; border-collapse: collapse;" valign="top">Cash In Advance</td>
+                                <td style="border: 1px solid black; border-collapse: collapse;" valign="top">: <t t-esc="sp_obj.payment_term_id.note" /></td>
                             </tr>
                         </table>
                         <br/>

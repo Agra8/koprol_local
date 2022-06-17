@@ -76,6 +76,8 @@ class Tender(models.Model):
         min_amount_approval = min(list(line.sequence for line in self.tender_participant_ids))
        
         for line in self.tender_participant_ids:
+            if not line.employee_id.job_id.group_id:
+                raise ValidationError('Perhatian ! User Group (%s) Karyawan (%s) belum diisi di Master Job.' % (line.employee_id.job_id.name,line.employee_id.name))
             per_reviewer.append({'value':amount_approval,
                   'group_id': line.employee_id.job_id.group_id.id,
                   'transaction_id':self.id,
