@@ -163,6 +163,72 @@
 		
 		<menuitem id="eps_matrix_approval_menu" name="Matrix Approval" sequence="3" parent="eps_menu.eps_master_top_menu" action="eps_matrix_approval_action"/>
 
+		<record model="ir.ui.view" id="eps_approval_transaction_tree_view2">
+		    <field name="name">eps.approval.transaction.tree</field>
+		    <field name="model">eps.approval.transaction</field>
+		    <field name="mode">primary</field>
+		    <field name="arch" type="xml" >
+		    		        	
+		        <tree string="Approval Matrix Biaya" create="0" delete="0">
+		        	<field name="transaction_no"/>
+		        	<field name="company_id"/>
+		        	<field name="branch_id"/>
+		        	<field name="divisi_id"/>
+		        	<field name="department_id"/>
+		        	<field name="model_id" string="Form"/>
+		        	<field name="value"/>
+		        	<field name="tanggal"/>
+		        	<field name="state" />
+		        	<button name="get_transaction" context="{'portal':'portal'}" type="object" string="Open"/>
+
+		        </tree>
+		     </field>
+		</record>
+
+		<record model="ir.actions.act_window" id="eps_approval_portal_action">
+		    <field name="name">Portal Approval</field>
+		    <field name="res_model">eps.approval.transaction</field>
+		    <field name="view_mode">tree</field>
+		    <field name="domain">[('state','=','IN'),('is_mygroup','=',True)]</field>
+		    <field name="view_id" ref="eps_approval_transaction_tree_view2"/>
+		</record>
+
+		<record id="eps_approval_transaction_search_view" model="ir.ui.view">
+            <field name="name">eps.approval.transaction.search</field>
+            <field name="model">eps.approval.transaction</field>
+            <field name="arch" type="xml">
+                <search string="Search Approval">
+                    <field name="transaction_no"/>
+		        	<field name="company_id"/>
+		        	<field name="branch_id"/>
+		        	<field name="divisi_id"/>
+		        	<field name="department_id"/>
+		        	<field name="model_id" string="Form"/>
+		        	<field name="value"/>
+		        	<field name="tanggal"/>
+		        	<field name="state" />
+                    <group expand="0" string="Group By">
+                        <filter string="Company" name="company_group" icon="terp-personal" domain="[]" context="{'group_by':'company_id'}"/>
+                        <filter string="Branch" name="branch_group" icon="terp-personal" domain="[]" context="{'group_by':'branch_id'}"/>
+                        <filter string="Status" name="state_group" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+                    </group> 
+                </search>
+            </field>
+        </record>
+
+		<menuitem id="eps_matrix_approval_portal_menu" name="Portal Approval" sequence="101" parent="mail.menu_root_discuss" action="eps_approval_portal_action"/>
+
+
+
+		<record model="ir.actions.act_window" id="eps_approval_portal_veto_action">
+		    <field name="name">Portal Approval Veto</field>
+		    <field name="res_model">eps.approval.transaction</field>
+		    <field name="view_mode">tree</field>
+		    <field name="domain">[('state','=','WA'),('is_mygroup','=',True)]</field>
+		    <field name="view_id" ref="eps_approval_transaction_tree_view2"/>
+		</record>
+
+		<menuitem id="eps_matrix_approval_portal_veto_menu" name="Portal Approval Veto" sequence="201" parent="mail.menu_root_discuss" action="eps_approval_portal_veto_action"/>
    	
     	          
  	</data>

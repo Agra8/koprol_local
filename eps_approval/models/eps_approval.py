@@ -430,6 +430,29 @@ class eps_matrix_approval_line(models.Model):
 class eps_approval_transaction(models.Model):
     _name = "eps.approval.transaction"
 
+    def _get_transaction_no(self):
+        for rec in self:
+            if rec.model_id.model in ('account.voucher','wtc.account.voucher','wtc.dn.nc'):
+                rec.transaction_no = self.env[rec.model_id.model].browse(rec.transaction_id).number            
+            else :
+                rec.transaction_no = self.env[rec.model_id.model].browse(rec.transaction_id).name
+        
+    def _get_groups(self):
+        x = self.env['res.users'].browse(self._uid)['groups_id']
+        #is self.group_id in x ?
+        self.is_mygroup = self.group_id in x 
+    
+    def _cek_groups(self,operator,value):
+         
+        group_ids = self.env['res.users'].browse(self._uid)['groups_id']
+         
+        if operator == '=' and value :
+            where = [('group_id', 'in', [x.id for x in group_ids])]
+        else :
+            where = [('group_id', 'not in', [x.id for x in group_ids])]
+ 
+        return where
+
     transaction_id = fields.Integer('Transaction ID')
     value = fields.Float('Value',digits=(12,2))
     model_id = fields.Many2one('ir.model',string='Form/Model')
@@ -450,6 +473,21 @@ class eps_approval_transaction(models.Model):
     sequence = fields.Integer(string='Integer')
     approval_start_date = fields.Date(string='Start Date')
     sla_days = fields.Integer('SLA Approval Days')
+    transaction_no = fields.Char(string="Transaction No")
+    is_mygroup = fields.Boolean(compute='_get_groups', string="is_mygroup", method=True, search='_cek_groups')
+
+    @api.model
+    def create(self,vals):
+        model_id = self.env['ir.model'].browse(vals.get('model_id'))
+        if model_id.model in ('account.voucher','wtc.account.voucher','wtc.dn.nc'):
+            vals['transaction_no'] = self.env[model_id.model].browse(vals.get('transaction_id')).number            
+        else :
+            vals['transaction_no'] = self.env[model_id.model].browse(vals.get('transaction_id')).name 
+        ids = super(eps_approval_transaction,self).create(vals) 
+
+        return ids
+
+
         
     def get_part_of_day(self,h):
         return (
@@ -582,6 +620,45 @@ class eps_approval_transaction(models.Model):
                     'tipe_email': 'reminder'
                 })
                 messages=""
+
+    def get_transaction(self):  
+        query = """
+                SELECT perm_read
+                FROM ir_model_access 
+                WHERE model_id = %s
+                AND group_id IN (SELECT hid FROM res_groups_implied_rel WHERE gid = %s)
+            """ % (self.model_id.id, self.group_id.id)
+        self._cr.execute(query)
+        ress = self._cr.fetchall()
+        if len(ress) < 1 :
+            return False
+        if any([x[0] for x in ress]) :
+            if self.view_id == False :
+                return {
+                    'name': self.model_id.name,
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_model': self.model_id.model,
+                    'type': 'ir.actions.act_window',
+                    'nodestroy': True,
+                    'target': 'new',
+                    'res_id': self.transaction_id
+                    }  
+            else :
+                return {
+                    'name': self.model_id.name,
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_model': self.model_id.model,
+                    'type': 'ir.actions.act_window',
+                    'nodestroy': True,
+                    'target': 'new',
+                    'res_id': self.transaction_id,
+                    'view_id':self.view_id.id
+                    }
+        else :
+            return False
+    
 
 class eps_reject_approval(models.TransientModel):
     _name = "eps.reject.approval"
