@@ -24,7 +24,7 @@
                         <button name="%(eps_approval.eps_cancel_approval_wizard_action)d" attrs="{'invisible':['|',('supplier_rank','!=',1),('state','!=','waiting_for_approval')]}" string="Cancel Approval" type="action" context="{'model_name':'res.partner','update_value':{'approval_state':'b','state':'draft'}}"/>
                         <field name="state" widget="statusbar" attrs="{'invisible':[('supplier_rank','!=',1)]}"/>
                         <button name="action_set_draft" class="oe_highlight" string="Update Data" type="object" attrs="{'invisible':['|',('supplier_rank','!=',1),('state','!=','approved')]}"/>
-                        <button name="push_to_tops" type="object" string="Push to TOPS"/>
+                        <button name="push_to_tops" type="object" string="Push to TOPS" groups="eps_menu.group_sys_admin"/>
                         <field name="supplier_rank" invisible="1"/>
                     </header>
                 </xpath>
@@ -123,8 +123,8 @@
                     <field name="ecommerce" attrs="{'readonly':[('state','!=','draft')]}"/>
                     <field name="pkp" attrs="{'invisible': [('country_id', '!=', False), ('country_code', '!=', 'ID')],'readonly':[('state','!=','draft')]}"/>
                     <field name="code" attrs="{'readonly':[('state','!=','draft')]}"/>
-                    <field name="status_api" />
-                    <field name="action_api"/>
+                    <field name="status_api" groups="eps_menu.group_sys_admin"/>
+                    <field name="action_api" groups="eps_menu.group_sys_admin"/>
                 </field>
                 <page name="accounting" position="inside">
                     <group string="Indonesian Taxes"  attrs="{'invisible': [('pkp', '!=', True)]}">

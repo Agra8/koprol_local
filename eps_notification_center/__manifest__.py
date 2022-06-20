@@ -15,6 +15,7 @@ Notification Center
         'security/ir.model.access.csv',
         'views/eps_nc_res_config_settings.xml',
         'data/approval_mail_template.xml',
-        'data/approval_mail_template_reminder.xml'
+        'data/approval_mail_template_reminder.xml',
+        'data/scheduled_actions_data.xml'
     ]
 }

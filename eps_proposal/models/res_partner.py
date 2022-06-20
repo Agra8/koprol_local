@@ -181,7 +181,6 @@ class Partner(models.Model):
                 self.env['eps.api.log'].sudo().create_log_api(status_code,status,message,message,uid,vals,response,end_point,ip_address,request_time,response_time)
                 self.write({'status_api':'error'})
             
-        return True
 
     def test_push_to_tops(self):
         for rec in self:
@@ -321,6 +320,11 @@ class Partner(models.Model):
 
         }
         return json.dumps(body_raw)
+
+    def push_to_tops_by_cron(self):
+        records = self.search([('status_api','in',('draft','error'))])
+        for record in records:
+            record.push_to_tops()
 
 class PartnerBank(models.Model):
     _inherit = "res.partner.bank"

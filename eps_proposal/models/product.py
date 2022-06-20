@@ -118,7 +118,6 @@ class ProductProduct(models.Model):
                 # response.close()
                     
             
-        return True
 
     def _prepare_data_api(self):
         action = self.action_api
@@ -159,6 +158,11 @@ class ProductProduct(models.Model):
         }
 
         return json.dumps(body_raw)
+
+    def push_to_tops_by_cron(self):
+        records = self.search([('status_api','in',('draft','error'))])
+        for record in records:
+            record.push_to_tops()
 
 
 class SupplierInfo(models.Model):

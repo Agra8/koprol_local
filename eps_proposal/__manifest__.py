@@ -30,6 +30,7 @@ Proposal
         'views/purchase_view.xml',
         'views/account_payment_term_view.xml',
         'security/res_groups.xml',
+        'data/scheduled_actions_data.xml'
         # 'security/ir.model.access.csv',
     ]
 }

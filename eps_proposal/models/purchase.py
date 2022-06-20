@@ -34,6 +34,12 @@ class Purchase(models.Model):
     tops_po_number = fields.Char("TOPS PO Number")
     tops_pr_number = fields.Char("TOPS PR Number")
 
+    @api.model
+    def create(self,vals):
+        vals['name'] = self.env['ir.sequence'].sudo().get_per_branch(vals['branch_id'], 'PO')
+        ids = super(Purchase,self).create(vals)    
+        return ids
+
     def push_to_tops(self):
         for rec in self:
             config = self.env['eps.b2b.api.configuration'].sudo().check_config('tops')
@@ -87,8 +93,6 @@ class Purchase(models.Model):
                 self.write({'status_api':'error'})
                 # response.close()
                     
-            
-        return True
 
     def _prepare_data_api(self):
         Items = []
@@ -170,6 +174,11 @@ class Purchase(models.Model):
 
         }
         return json.dumps(body_raw)
+
+    def push_to_tops_by_cron(self):
+        records = self.search([('status_api','in',('draft','error'))])
+        for record in records:
+            record.push_to_tops()
 
 class PurchaseLine(models.Model):
     _inherit = "purchase.order.line"

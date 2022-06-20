@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <group name="first" position="after">
                     <group name="proposal" >
-                        <group string="Proposal Config">
+                        <group string="Proposal Config" groups="eps_menu.group_sys_admin">
                             <field name="proposal_categ_id"/>
                             <field name="asset_category_id"/>
                             <field name="tops_parent_id"/>
@@ -25,12 +25,12 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//header" position="inside">
-                    <button name="push_to_tops" type="object" string="Push to TOPS"/>
+                    <button name="push_to_tops" type="object" string="Push to TOPS" groups="eps_menu.group_sys_admin"/>
                 </xpath>
                 <field name="categ_id" position="after">
-                    <field name="tops_product_id"/>
-                    <field name="status_api" />
-                    <field name="action_api"/>
+                    <field name="tops_product_id" groups="eps_menu.group_sys_admin"/>
+                    <field name="status_api" groups="eps_menu.group_sys_admin"/>
+                    <field name="action_api" groups="eps_menu.group_sys_admin"/>
                 </field>
             </field>
         </record>
