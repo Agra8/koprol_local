@@ -438,7 +438,7 @@ class eps_approval_transaction(models.Model):
                 rec.transaction_no = self.env[rec.model_id.model].browse(rec.transaction_id).name
         
     def _get_groups(self):
-        x = self.env['res.users'].browse(self._uid)['groups_id']
+        x = self.env['res.users'].sudo().browse(self._uid)['groups_id']
         #is self.group_id in x ?
         self.is_mygroup = self.group_id in x 
     

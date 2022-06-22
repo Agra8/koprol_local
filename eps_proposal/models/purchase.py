@@ -111,7 +111,7 @@ class Purchase(models.Model):
             Items.append({
                 "ID": line.product_id.tops_product_id, 
                 "Code": line.product_id.default_code or '',
-                "Description": line.name,
+                "Description": line.product_id.name,
                 "ParentID": line.product_id.categ_id.tops_parent_id,
                 "PricePerPiece": line.price_unit,
                 "unit": "UNIT",
