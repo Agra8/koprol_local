@@ -32,6 +32,9 @@
                     <field name="status_api" groups="eps_menu.group_sys_admin"/>
                     <field name="action_api" groups="eps_menu.group_sys_admin"/>
                 </field>
+                <field name="categ_id" position="attributes">
+                    <attribute name="domain">[('parent_id','!=',False)]</attribute>
+                </field>
                 <field name="company_id" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
