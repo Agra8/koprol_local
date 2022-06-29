@@ -41,7 +41,7 @@ class Purchase(models.Model):
         return ids
 
     def push_to_tops(self):
-        for rec in self:
+        for rec in self.filtered(lambda x:x.status_api in ('error','draft')):
             config = self.env['eps.b2b.api.configuration'].sudo().check_config('tops')
             if not config :
                 raise ValidationError("Config B2B belum dibuat")

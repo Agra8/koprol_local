@@ -63,7 +63,7 @@
 	                                        name="tax_id"
 	                                        widget="many2many_tags"
 	                                        options="{'no_create': True}"
-	                                        domain="[('type_tax_use','=','purchase')]"
+	                                        domain="[('type_tax_use','=','purchase'),('company_id','=',parent.company_id)]"
 	                                        optional="show"
 	                                    />
 	                                    <field name="discount" string="Disc.%" optional="show" widget="product_discount"/>

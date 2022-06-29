@@ -306,6 +306,21 @@ class Initiatives(models.Model):
 
         return result
 
+    def get_full_url(self):
+        self.ensure_one()
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        url_params = {
+            'id': self.id,
+            'view_type': 'form',
+            'model': self._name,
+            'menu_id': self.env.ref('eps_menu.eps_proposal_top_menu').id,
+            'action': self.env.ref('eps_proposal.eps_initiatives_action').id,
+        }
+        params = '/web?#%s' % url_encode(url_params)
+        full_url = base_url + params
+        # full_url = full_url.replace('#','%23').replace('&','%26')
+        return full_url
+
 class InitiativesLines(models.Model):
     _name = "eps.initiatives.line"
     _description = 'Initiatives Lines'

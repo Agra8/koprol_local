@@ -69,13 +69,13 @@ class ProductProduct(models.Model):
         return ids
 
     def write(self,vals):
-        if vals.get('default_code') or vals.get('name') or vals.get('categ_id') or vals.get('active'):
+        if (vals.get('default_code') or vals.get('name') or vals.get('categ_id') or vals.get('active')) and self.status_api=='done':
             vals['action_api'] = 'EDIT'
             vals['status_api'] = 'draft'
         return super(ProductProduct,self).write(vals)
 
     def push_to_tops(self):
-        for rec in self:
+        for rec in self.filtered(lambda x:x.status_api in ('error','draft')):
             config = self.env['eps.b2b.api.configuration'].sudo().check_config('tops')
             if not config :
                 raise ValidationError("Config B2B belum dibuat")

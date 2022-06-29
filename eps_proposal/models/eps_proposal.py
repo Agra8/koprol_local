@@ -1,5 +1,5 @@
 from odoo import api, fields, models, _, SUPERUSER_ID
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError,Warning
 import subprocess
 import base64
 import os
@@ -43,7 +43,7 @@ class Proposal(models.Model):
     rencana_pengajuan = fields.Text(string='Rencana Pengajuan', tracking=True)
     # estimasi_biaya = fields.Text(string='Estimasi Biaya')
     proposal_line_ids = fields.One2many('eps.proposal.line', 'proposal_id', string='Lines')
-    total = fields.Float(string='Total(grandtotal)', compute='_compute_total', tracking=True)
+    total = fields.Float(string='Total (grandtotal exclude PPN)', compute='_compute_total', tracking=True)
     file_document = fields.Binary(string="File Document")
     filename_document = fields.Char(string="File Document")
     filename_upload_document = fields.Char(string="Filename upload Document")
@@ -170,7 +170,7 @@ class Proposal(models.Model):
         }
         params = '/web?#%s' % url_encode(url_params)
         full_url = base_url + params
-        full_url = full_url.replace('#','%23').replace('&','%26')
+        # full_url = full_url.replace('#','%23').replace('&','%26')
         return full_url
 
     def generate_qr_code(self, text, img_name, template):

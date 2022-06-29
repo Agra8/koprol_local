@@ -1,7 +1,7 @@
 {
     'name':"EPS - Proposal",
     'version':'10.0.1.0.0',
-    'depends':['eps_menu', 'eps_config_files','eps_branch','eps_approval', 'mail', 'product', 'purchase','base_suspend_security','eps_hr_employee','eps_notification_center'],
+    'depends':['eps_menu', 'eps_config_files','eps_branch','eps_approval', 'mail', 'product', 'purchase','base_suspend_security','eps_hr_employee','eps_notification_center','l10n_id_efaktur'],
     # 'external_dependencies': {
     #     'python': [
     #         'docx2pdf',

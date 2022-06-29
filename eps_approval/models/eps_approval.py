@@ -158,10 +158,11 @@ class eps_matrix_approval_line(models.Model):
             sequence+=1
         
         create_approval = self.env['eps.approval.transaction'].create(sorted_matrix_data)
-        proposal_model = self.env['ir.model'].sudo().search([('model','=','eps.proposal')])
+        proposal_model = self.env['ir.model'].sudo().search([('model','in',('eps.proposal', 'eps.initiatives','eps.tender'))])
         for approval in create_approval.filtered(lambda x:x.state=='IN'):
-            if approval.model_id.id == proposal_model.id:
-                self.send_notif_email(approval)
+            for x in proposal_model:
+                if approval.model_id.id == x.id:
+                    self.send_notif_email(approval)
         return True
 
     def approve(self, trx):
@@ -226,7 +227,7 @@ class eps_matrix_approval_line(models.Model):
             prev_sequence = approval_line.matrix_sequence
             prev_state = approval_line.state
         
-        proposal_model = self.env['ir.model'].sudo().search([('model','=','eps.proposal')])
+        proposal_model = self.env['ir.model'].sudo().search([('model','in',('eps.proposal', 'eps.initiatives','eps.tender'))])
         if user_limit:
             for approval_line in approval_lines_ids:
                 if approval_line.state in ('IN','WA'):
@@ -247,8 +248,9 @@ class eps_matrix_approval_line(models.Model):
                     
                     if approval_line.state == 'IN':
                         approval_line.approval_start_date = date.today()
-                        if approval_line.model_id.id == proposal_model.id:
-                            self.send_notif_email(approval_line)
+                        for x in proposal_model:
+                            if approval_line.model_id.id == x.id:
+                                self.send_notif_email(approval_line)
                         
                 prev_sequence = approval_line.matrix_sequence
     
@@ -338,92 +340,95 @@ class eps_matrix_approval_line(models.Model):
         }
         params = '/web?#%s' % url_encode(url_discuss)
         link_discuss = base_url + params
-        link_discuss = link_discuss.replace('#','%23').replace('&','%26')
+        # link_discuss = link_discuss.replace('#','%23').replace('&','%26')
         now = datetime.now() + timedelta(hours=7)
+        if trx_id.model_id.model == 'eps.proposal':
+            requestor = transaksi.employee_id
+            reference = transaksi.nama_proposal
+        elif trx_id.model_id.model == 'eps.initiatives':
+            requestor = transaksi.proposal_id.employee_id
+            reference = transaksi.proposal_id.nama_proposal
+        elif trx_id.model_id.model == 'eps.tender':
+            requestor = transaksi.initiatives_id.proposal_id.employee_id
+            reference = transaksi.initiatives_id.proposal_id.nama_proposal
         messages="""
-            <p>Here's your outstanding approval on KOPROL:</p>
             <br/>
+            <p><a href="%s">%s</a> from %s %s %s %s waiting for your approval for:</p>""" % (str(link_discuss), requestor.name, requestor.department_id.name, requestor.divisi_id.name, requestor.branch_id.name, requestor.company_id.name ) +"""
             <table>
                 <tbody>
                     <tr>
-                        <td colspan="3">Good %s"""% self.env['eps.approval.transaction'].get_part_of_day(now.hour) +""" </td>
-                        <td rowspan="4" align="center">
-                            <img  width="100" height="100"  src="%s" /> """ % qr_code +"""
-                        </td>
+                        <td rowspan="8" width="50pt"></td>
+                        <td>Transaction</td>
+                        <td>: </td>
+                        <td>%s</td> """ % trx_id.model_id.name +"""
                     </tr>
                     <tr>
-                        <td>Ticket #</td>
+                        <td>Document No.</td>
                         <td>: </td>
                         <td><a href="%s">%s</a> </td> """ % (transaksi.get_full_url(),str(transaksi.name)) +"""
                     </tr>
                     <tr>
-                        <td>Subject</td>
-                        <td>: </td>
-                        <td><a href="%s">%s</a> </td> """ % (transaksi.get_full_url(),str(transaksi.nama_proposal)) +"""
-                    </tr>
-                    <tr>
-                        <td>Entity</td>
+                        <td>Unit Bisnis</td>
                         <td>: </td>
                         <td>%s </td> """ % str(transaksi.company_id.name) +"""
                     </tr>
                     <tr>
-                        <td>Branch</td>
+                        <td>Branch/Division</td>
                         <td>: </td>
-                        <td>%s </td> """ % str(transaksi.branch_id.name) +"""
+                        <td>%s/%s </td> """ % (str(transaksi.branch_id.name),str(transaksi.divisi_id.name)) +"""
                     </tr>
                     <tr>
-                        <td>Division</td>
+                        <td>Total Value</td>
                         <td>: </td>
-                        <td>%s </td> """ % str(transaksi.divisi_id.name) +"""
-                        <td><i>Scan QR Code for detail & Approval</i></td>
+                        <td>%s </td> """ % trx_id.value +"""
                     </tr>
                     <tr>
-                        <td>Requestor</td>
+                        <td>Remarks</td>
                         <td>: </td>
-                        <td><a href="%s">%s</a> </td> """ % (str(link_discuss),str(transaksi.employee_id.name)) +"""
+                        <td> - </td>
                     </tr>
                     <tr>
-                        <td>Expected Date</td>
-                        <td>: </td> 
-                        <td>%s </td> """ % str(trx_id.expected_date) +"""
+                        <td>Reference</td>
+                        <td>: </td>
+                        <td>%s</td> """ % reference +"""
                     </tr>
                     <tr>
-                        <td>Total Estimation</td>
+                        <td>Status</td>
                         <td>: </td>
-                        <td>Rp. %s </td> """ % str(trx_id.value) +"""
-                    </tr>
-                    <tr>
-                        <td>Description</td>
-                        <td>: </td>
-                        <td>%s</td> """ % str(transaksi.latar_belakang) +"""
+                        <td> - </td>
                     </tr>
                 </tbody>
             </table>
-            <br/>
+            Please click on the link or QR Code below to Approve or Reject the transactions.<br/>
+            <a href='%s'>%s<a> """%(transaksi.get_full_url(),transaksi.get_full_url())+"""<br/>
+            <img  width="100" height="100"  src="%s" /> """ % qr_code +"""<br/><br/>
+            Regards,<br/>
+            <b>Administratror</b>
         """
 
         ins_trx.append([4, trx_id.id, False])
             
-        messages+="""
-            <hr />
-            <i>This message is automaticaly generated by KOPROL System</i>
-        """
+        # messages+="""
+        #     <hr />
+        #     <i>This message is automaticaly generated by KOPROL System</i>
+        # """
         group = trx_id.group_id
         job_ids = self.env['hr.job'].sudo().search([('group_id','=',group.id)])
         cc_to = []
-        cc_to.append([4, transaksi.employee_id.id, False])
+        cc_to.append([4, requestor.id, False])
         for job_id in job_ids:
             employees = self.env['hr.employee'].sudo().search([('job_id','=',job_id.id)])
             for employee in employees:
                 if (transaksi.company_id in employee.user_id.company_ids) and (transaksi.branch_id in employee.user_id.branch_ids):
+                    message_sent = """<p>Dear Mr./Mrs. %s</p> """ % employee.name + messages
                     self.env['eps.notification.center'].sudo().create({
                         'approval_transaction_ids': ins_trx,
                         'form_id': trx_id.view_id.id,
                         'transaction_id': trx_id.transaction_id,
-                        'message': messages,
+                        'message': message_sent,
                         'notify_to': employee.user_id.id,
                         'cc_to': cc_to,
-                        'subject' : "[KOPROL SYSTEM - %s] %s" %(transaksi.name, transaksi.nama_proposal),
+                        'subject' : "[KOPROL SYSTEM - %s] %s" %(transaksi.name, reference),
                         'tipe_email' : 'normal'
                     })
 
@@ -642,7 +647,8 @@ class eps_approval_transaction(models.Model):
                     'type': 'ir.actions.act_window',
                     'nodestroy': True,
                     'target': 'new',
-                    'res_id': self.transaction_id
+                    'res_id': self.transaction_id,
+                    'flags': {'mode': 'readonly'}
                     }  
             else :
                 return {
@@ -654,7 +660,8 @@ class eps_approval_transaction(models.Model):
                     'nodestroy': True,
                     'target': 'new',
                     'res_id': self.transaction_id,
-                    'view_id':self.view_id.id
+                    'view_id':self.view_id.id,
+                    'flags': {'mode': 'readonly'}
                     }
         else :
             return False

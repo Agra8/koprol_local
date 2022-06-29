@@ -63,7 +63,7 @@ class Partner(models.Model):
         ('draft','Draft'),
         ('error','Error'),
         ('not_found','not_found'),
-        ('done','Done')],string="API Product",default='draft')
+        ('done','Done')],string="API Vendor",default='draft')
     action_api = fields.Selection([
         ('I','ADD'),
         ('U','EDIT'),
@@ -92,7 +92,7 @@ class Partner(models.Model):
         return ids
 
     def write(self,vals):
-        if vals.get('code') or vals.get('name') or vals.get('child_ids') or vals.get('street')\
+        if (vals.get('code') or vals.get('name') or vals.get('child_ids') or vals.get('street')\
         or vals.get('phone')\
         or vals.get('mobile')\
         or vals.get('bank_ids')\
@@ -103,7 +103,7 @@ class Partner(models.Model):
         or vals.get('is_supplier_showroom')\
         or vals.get('is_supplier_bengkel')\
         or vals.get('is_supplier_umum')\
-        or vals.get('nib_validity'):
+        or vals.get('nib_validity')) and self.status_api=='done':
 
             vals['action_api'] = 'U'
             vals['status_api'] = 'draft'
@@ -138,7 +138,7 @@ class Partner(models.Model):
             record.write({'state':'draft'})
 
     def push_to_tops(self):
-        for rec in self:
+        for rec in self.filtered(lambda x:x.status_api in ('error','draft')):
             # self.validity_check_api()
             config = self.env['eps.b2b.api.configuration'].sudo().check_config('tops')
             if not config :

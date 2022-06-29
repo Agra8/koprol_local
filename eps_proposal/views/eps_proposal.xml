@@ -147,6 +147,8 @@
 						<field name="message_follower_ids"/>
 						<field name="message_ids"/>
 					</div>
+					<footer>
+					</footer>
 				</form>
 			</field>
 		</record> 

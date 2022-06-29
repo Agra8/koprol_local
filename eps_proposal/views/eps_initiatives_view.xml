@@ -141,6 +141,7 @@
 					                            </div>
 					                            <field name="filename_upload_document" invisible="1"/>
                                             	<field name="file_document_show" widget="pdf_viewer" attrs="{'invisible':[('filename_document','=',False)]}"/>
+                                            	<field name='company_id' invisible="1"/>
 											</group>
 											<notebook>
 												<page string="Quotation Lines" attrs="{'invisible': [('state','not in',('proposed','won'))]}">
@@ -156,7 +157,7 @@
 						                                        name="tax_id"
 						                                        widget="many2many_tags"
 						                                        options="{'no_create': True}"
-						                                        domain="[('type_tax_use','=','purchase')]"
+						                                        domain="[('type_tax_use','=','purchase'),('company_id','=',parent.company_id)]"
 						                                        optional="show"
 						                                    />
 						                                    <field name="discount" string="Disc.%" optional="show" widget="product_discount"/>
@@ -232,6 +233,8 @@
 						<field name="message_follower_ids"/>
 						<field name="message_ids"/>
 					</div>
+					<footer>
+					</footer>
 				</form>
 			</field>
 		</record> 
