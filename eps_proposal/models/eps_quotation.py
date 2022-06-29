@@ -1,5 +1,5 @@
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, Warning
 import subprocess
 import base64
 import os
@@ -233,6 +233,7 @@ class QuotationLines(models.Model):
             self.name = self.product_id.name
             self.categ_id = self.product_id.categ_id.id
             self.product_type = self.product_id.type
+            self.tax_id = [(6, 0, self.product_id.supplier_taxes_id.ids)]
 
     @api.depends('quantity', 'discount', 'price_unit', 'tax_id')
     def _compute_amount(self):
@@ -259,6 +260,7 @@ class QuotationLines(models.Model):
             'purchase_ok': True,
             'categ_id': line.categ_id.id,
             'type': line.product_type,
+            'supplier_taxes_id': [(6, 0, line.tax_id.ids)]
             }
             product = self.env['product.product'].create(product_vals)
         return product
