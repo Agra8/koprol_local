@@ -48,8 +48,8 @@ function addRow(value) {
                                           <option value="">(Silahkan Pilih)</option>
                                           <t t-foreach="tipe_sistem" t-as="tipe_sistem">
                                               <option t-attf-value="#{tipe_sistem.id}">
-                                                	<t t-esc="tipe_sistem.name"/> -
-                                                  	<t t-esc="tipe_sistem.company_id.name"/>
+                                                  <t t-esc="tipe_sistem.name"/> -
+                                                  <t t-esc="tipe_sistem.company_id.name"/>
                                               </option>
                                           </t>
                                         </select>
@@ -195,26 +195,24 @@ $(document).on('change', '.input-types', function() {
 	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
 	requestTipeSistem = document.getElementById('tipe_sistem').children;
 	valueRequest = this.value.split('-');
-	// selectorTipeSistem = `select[id="request_id_${idRequest[2]}"]`;
-	// requestTipeSistemForm = document.querySelector(selectorTipeSistem);
-	// requestTipeSistemForm.innerHTML = '';
+	selectorTipeSistem = `select[id="request_id_${idRequest[2]}"]`;
+	requestTipeSistemForm = document.querySelector(selectorTipeSistem);
+	requestTipeSistemForm.innerHTML = '';
 
-	// if (this.value != '') {
-	// 	var opt = document.createElement('option');
-	// 	opt.value = 'NULL';
-	// 	opt.innerHTML = '(Silahkan Pilih)';
-	// 	requestTipeSistemForm.appendChild(opt);
-	// }
+	if (this.value != '') {
+		var opt = document.createElement('option');
+		opt.value = 'NULL';
+		opt.innerHTML = '(Silahkan Pilih)';
+		requestTipeSistemForm.appendChild(opt);
+	}
 
-	// [].forEach.call(requestTipeSistem, function(e) {
-	// 	var temporaryTipe = e.value.split('-');
-	// 	if (temporaryTipe[1] == company_id) {
-	// 		var options = document.createElement('option');
-	// 		options.value = temporaryTipe[0];
-	// 		options.innerHTML = e.innerText;
-	// 		requestTipeSistemForm.appendChild(options);
-	// 	}
-	// });
+	[].forEach.call(requestTipeSistem, function(e) {
+		var temporaryTipe = e.value.split('-');
+		var options = document.createElement('option');
+		options.value = temporaryTipe[0];
+		options.innerHTML = e.innerText;
+		requestTipeSistemForm.appendChild(options);
+	});
 
 	document.getElementById(`request_id_${idRequest[2]}`).style.display = 'none';
 	// document.getElementById(`request_id_${idRequest[2]}`).disabled = true;

@@ -1,21 +1,21 @@
 <odoo>
     <data>
-         <!-- Tree view -->
-         <record id="eps_request_form_line_view_tree" model="ir.ui.view">
+        <!-- Tree view -->
+        <record id="eps_request_form_line_view_tree" model="ir.ui.view">
             <field name="name">eps.request.form.line.view.tree</field>
             <field name="model">eps.request.form.line</field>
             <field name="type">tree</field>
-            <field name="priority" eval="8"/>
+            <field name="priority" eval="8" />
             <field name="arch" type="xml">
                 <tree string="Request Form Line" default_order="create_date desc">
-                    <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule"/>
-                    <field name="name"/>
-                    <field name="request_id"/>
-                    <field name="user_request" string="User Request"/>
-                    <field name="employee_id"/>
-                    <field name="create_date" string="Date"/>
-                    <field name="state"/>
-                    <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('employee_id', '!=', False)]}"/>
+                    <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule" />
+                    <field name="name" />
+                    <field name="request_id" />
+                    <field name="user_request" string="User Request" />
+                    <field name="employee_id" />
+                    <field name="create_date" string="Date" />
+                    <field name="state" />
+                    <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('employee_id', '!=', False)]}" />
                 </tree>
             </field>
         </record>
@@ -24,81 +24,84 @@
         <record id="eps_request_form_line_view_form" model="ir.ui.view">
             <field name="name">eps.request.form.line.form</field>
             <field name="model">eps.request.form.line</field>
-            <field name="priority" eval="1"/>
+            <field name="priority" eval="1" />
             <field name="arch" type="xml">
                 <form string="eps Request Form Line">
                     <header>
-                        <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|','|',('state', 'in', ['open','approved','rejected','done']), ('value_approval', '=', '0'), ('request_state', '=', 'draft')]}"/>
-                        <button name="action_reject" string="Reject" class="oe_higlight" type="object"  attrs="{'invisible': ['|','|',('state', 'in', ['open','approved','rejected','done']), ('value_approval', '=', '0'), ('request_state', '=', 'draft')]}"/>
-                        <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('employee_id', '!=', False)]}"/>
-                        <button name="action_assign" type="object" string="Delegate" attrs="{'invisible': ['|', ('state', 'in', ['rejected','done']),('employee_id', '=', False)]}" class="oe_stat_button"/>
-                        <button name="action_done" type="object" string="Done" class="oe_stat_button" attrs="{'invisible': [('state', 'in', ['draft','approved','rejected','done'])]}"/>
-                        <button name="action_cancel" string="Cancel" states="draft,open,approved" class="oe_stat_button" type="object"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,approved,rejected,open,done"/>
+                        <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|','|',('state', 'in', ['open','approved','rejected','done']), ('value_approval', '=', '0'), ('request_state', '=', 'draft')]}" />
+                        <button name="action_reject" string="Reject" class="oe_higlight" type="object" attrs="{'invisible': ['|','|',('state', 'in', ['open','approved','rejected','done']), ('value_approval', '=', '0'), ('request_state', '=', 'draft')]}" />
+                        <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('employee_id', '!=', False)]}" />
+                        <button name="action_assign" type="object" string="Delegate" attrs="{'invisible': ['|', ('state', 'in', ['rejected','done']),('employee_id', '=', False)]}" class="oe_stat_button" />
+                        <button name="action_done" type="object" string="Done" class="oe_stat_button" attrs="{'invisible': [('state', 'in', ['draft','approved','rejected','done'])]}" />
+                        <button name="action_cancel" string="Cancel" states="draft,open,approved" class="oe_stat_button" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved,open,done" />
                     </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_open_request_form" type="object" class="oe_stat_button" icon="fa-file-text-o" string="Request Form" />
+                        </div>
                         <group>
                             <group>
-                                <field name="request_form_id" options="{'no_open':True,'no_create':True}"/>
-                                <field name="keterangan"/>
-                                <field name="request_id" options="{'no_open':True,'no_create':True}"/>
-                                <field name="teams_id" options="{'no_open':True,'no_create':True}"/>
-                                <field name="request_form_id" invisible="1"/>
-                                <field name="request_state" invisible="1"/>
-                                <field name="employee_id"/>
-                                <field name="date" readonly="1"/>
-                                <field name="value_approval"/>
-                                <field name="type_file" invisible="1"/>
+                                <field name="request_form_id" options="{'no_open':True,'no_create':True}" />
+                                <field name="keterangan" />
+                                <field name="request_id" options="{'no_open':True,'no_create':True}" />
+                                <field name="teams_id" options="{'no_open':True,'no_create':True}" />
+                                <field name="request_form_id" invisible="1" />
+                                <field name="request_state" invisible="1" />
+                                <field name="employee_id" />
+                                <field name="date" readonly="1" />
+                                <field name="value_approval" />
+                                <field name="type_file" invisible="1" />
                                 <field name="file_pdf" widget="pdf_viewer" attrs="{'invisible': [('type_file', 'in', ('png', 'jpg','jpeg', 'tiff', 'tif', 'drawio','xls','xlsx','doc','docx','zip','rar', 'NULL'))]}" />
-                                <field name="file_image" widget="image" attrs="{'invisible': [('type_file', 'in', ('pdf','tiff', 'tif', 'drawio','xls','xlsx','doc','docx','zip','rar', 'NULL'))]}"/>
-                                <field name="filename" invisible="1"/>
-                                <field name="file_download" filename="filename"/>
-                                
+                                <field name="file_image" widget="image" attrs="{'invisible': [('type_file', 'in', ('pdf','tiff', 'tif', 'drawio','xls','xlsx','doc','docx','zip','rar', 'NULL'))]}" />
+                                <field name="filename" invisible="1" />
+                                <field name="file_download" filename="filename" />
+
                             </group>
                         </group>
                         <notebook>
                             <page string="Approval" attrs="{'invisible': [('value_approval', '=', '0')]}">
                                 <field name="approval_ids">
                                     <tree>
-                                        <field name="group_id"/>
-                                        <field name="user_id"/>
-                                        <field name="branch_id"/>
-                                        <field name="reason"/>
-                                        <field name="tanggal"/>
-                                        <field name="state"/>
+                                        <field name="group_id" />
+                                        <field name="user_id" />
+                                        <field name="branch_id" />
+                                        <field name="reason" />
+                                        <field name="tanggal" />
+                                        <field name="state" />
                                     </tree>
                                 </field>
                             </page>
                             <page string="Additional Approval" attrs="{'invisible': [('state', '!=', 'draft'),('additional_approval_ids', '=', False)]}">
                                 <field name="additional_approval_ids">
                                     <tree>
-                                        <field name="group_id" string="Groups" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                        <field name="employee_id" string="Nama Approval" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                        <field name="date"/>
-                                        <field name="tanggal_approved" string="Tanggal Approved" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                        <field name="tanggal_reject" string="Tanggal Reject" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                        <field name="alasan_reject" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
-                                        <field name="state" string="Status" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}"/>
+                                        <field name="group_id" string="Groups" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" />
+                                        <field name="employee_id" string="Nama Approval" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" />
+                                        <field name="date" />
+                                        <field name="tanggal_approved" string="Tanggal Approved" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" />
+                                        <field name="tanggal_reject" string="Tanggal Reject" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" />
+                                        <field name="alasan_reject" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" />
+                                        <field name="state" string="Status" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed','cancel'])]}" />
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Audit Trail" >
+                            <page string="Audit Trail">
                                 <group>
                                     <group>
-                                        <field name="create_uid" readonly="1" attrs="{'invisible':[('create_uid','=',False)]}"/>
-                                        <field name="create_date" readonly="1" attrs="{'invisible':[('create_date','=',False)]}"/>
-                                        <field name="request_uid" readonly="1" attrs="{'invisible':[('request_uid','=',False)]}"/>
-                                        <field name="reject_date" readonly="1" attrs="{'invisible':[('reject_date','=',False)]}"/>
-                                        <field name="reject_uid" readonly="1" attrs="{'invisible':[('reject_uid','=',False)]}"/>
-                                        <field name="request_date" readonly="1" attrs="{'invisible':[('request_date','=',False)]}"/>
+                                        <field name="create_uid" readonly="1" attrs="{'invisible':[('create_uid','=',False)]}" />
+                                        <field name="create_date" readonly="1" attrs="{'invisible':[('create_date','=',False)]}" />
+                                        <field name="request_uid" readonly="1" attrs="{'invisible':[('request_uid','=',False)]}" />
+                                        <field name="reject_date" readonly="1" attrs="{'invisible':[('reject_date','=',False)]}" />
+                                        <field name="reject_uid" readonly="1" attrs="{'invisible':[('reject_uid','=',False)]}" />
+                                        <field name="request_date" readonly="1" attrs="{'invisible':[('request_date','=',False)]}" />
                                     </group>
                                     <group>
-                                        <field name="write_uid" readonly="1" attrs="{'invisible':[('write_uid','=',False)]}"/>
-                                        <field name="write_date" readonly="1" attrs="{'invisible':[('write_date','=',False)]}"/>
-                                        <field name="approve_uid" readonly="1" attrs="{'invisible':[('approve_uid','=',False)]}"/>
-                                        <field name="approve_date" readonly="1" attrs="{'invisible':[('approve_date','=',False)]}"/>
-                                        <field name="done_uid" readonly="1" attrs="{'invisible':[('done_uid','=',False)]}"/>
-                                        <field name="done_date" readonly="1" attrs="{'invisible':[('done_date','=',False)]}"/>
+                                        <field name="write_uid" readonly="1" attrs="{'invisible':[('write_uid','=',False)]}" />
+                                        <field name="write_date" readonly="1" attrs="{'invisible':[('write_date','=',False)]}" />
+                                        <field name="approve_uid" readonly="1" attrs="{'invisible':[('approve_uid','=',False)]}" />
+                                        <field name="approve_date" readonly="1" attrs="{'invisible':[('approve_date','=',False)]}" />
+                                        <field name="done_uid" readonly="1" attrs="{'invisible':[('done_uid','=',False)]}" />
+                                        <field name="done_date" readonly="1" attrs="{'invisible':[('done_date','=',False)]}" />
                                     </group>
                                 </group>
                             </page>
@@ -106,26 +109,27 @@
                         <sheet>
                             <div class="oe_chatter">
                                 <field name="message_follower_ids" widget="mail_followers"/>
-                                <field name="message_ids" widget="mail_thread"/>
-                            </div>   
+                                <field name="activity_ids"/>
+                                <field name="message_ids" options="{'open_attachments': False}" widget="mail_thread"/>
+                            </div>
                         </sheet>
                     </sheet>
                 </form>
             </field>
         </record>
-        
+
         <!-- Search view -->
         <record id="eps_request_form_line_search" model="ir.ui.view">
             <field name="name">eps.request.form.line.search</field>
             <field name="model">eps.request.form.line</field>
             <field name="arch" type="xml">
                 <search string="Request Form Line">
-                    <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule" select="True"/>
-                    <field name="branch_id" select="True"/>
-                    <field name="name" string="Transaksi"/>
-                    <filter name="state_open" string="Open" domain="[('state', '=', 'open')]"/>
-                    <filter name="state_draft" string="Request Line Draft" domain="[('state', '=', 'draft')]"/>
-                    <filter name="state_done" string="Done" domain="[('state', '=', 'done')]"/>
+                    <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule" select="True" />
+                    <field name="branch_id" select="True" />
+                    <field name="name" string="Transaksi" />
+                    <filter name="state_open" string="Open" domain="[('state', '=', 'open')]" />
+                    <filter name="state_draft" string="Request Line Draft" domain="[('state', '=', 'draft')]" />
+                    <filter name="state_done" string="Done" domain="[('state', '=', 'done')]" />
                 </search>
             </field>
         </record>
@@ -133,61 +137,63 @@
         <!-- Action window -->
         <record id="eps_request_form_line_action" model="ir.actions.server">
             <field name="name">Request Form Line</field>
-            <field name="model_id" ref="model_eps_request_form_line"/>
+            <field name="model_id" ref="model_eps_request_form_line" />
             <field name="state">code</field>
             <field name="code">
                 action=env['eps.request.form.line'].eps_request_form_line_view()
             </field>
         </record>
-        
+
         <!-- form assign -->
         <record id="eps_request_form_line_assign_form" model="ir.ui.view">
             <field name="name">eps.request.form.line.assign</field>
             <field name="model">eps.request.form.line</field>
             <field name="type">form</field>
-            <field name="priority" eval="18"/>
+            <field name="priority" eval="18" />
             <field name="arch" type="xml">
                 <form string="Assign Request">
                     <sheet>
                         <group>
                             <group>
-                                <field name="employee_id"  options="{'no_create': True,'no_open': True}"/>
-                                <field name="jumlah_task" readonly="1"/>
+                                <field name="company_id" invisible="1" />
+                                <field name="teams_id" options="{'no_create': True, 'no_open': True}" domain="[('company_ids', 'in', company_id)]" />
+                                <field name="employee_id" options="{'no_create': True,'no_open': True}" />
+                                <field name="jumlah_task" string="Outstanding Task" readonly="1" />
                             </group>
                         </group>
                         <footer>
-                            <button name="action_save_pic" string="Save" type="object" class="oe_highlight"/>
-                            <button name="Cancel" special="cancel"/>
+                            <button name="action_save_pic" string="Save" type="object" class="oe_highlight" />
+                            <button name="Cancel" special="cancel" />
                         </footer>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <!-- form domain assign -->
+        <!-- form domain assign
         <record id="eps_request_form_line_domain_assign_form" model="ir.ui.view">
-        <field name="name">eps.request.form.line.domain.assign</field>
-        <field name="model">eps.request.form.line</field>
-        <field name="type">form</field>
-        <field name="priority" eval="18"/>
-        <field name="arch" type="xml">
-            <form string="Assign Request">
-                <sheet>
-                    <group>
+            <field name="name">eps.request.form.line.domain.assign</field>
+            <field name="model">eps.request.form.line</field>
+            <field name="type">form</field>
+            <field name="priority" eval="18" />
+            <field name="arch" type="xml">
+                <form string="Assign Request">
+                    <sheet>
                         <group>
-                            <field name="teams_id" options="{'no_create: True, 'no_open': True}"/>
-                            <field name="employee_id" domain="[('id', 'in', context.get('domain_employee_ids', []))]"  options="{'no_create': True,'no_open': True}"/>
-                            <field name="jumlah_task" readonly="1" string="Outstanding Task"/>
+                            <group>
+                                <field name="teams_id" options="{'no_create: True, 'no_open': True}" />
+                                <field name="employee_id" domain="[('id', 'in', context.get('domain_employee_ids', []))]" options="{'no_create': True,'no_open': True}" />
+                                <field name="jumlah_task" readonly="1" string="Outstanding Task" />
+                            </group>
                         </group>
-                    </group>
-                    <footer>
-                        <button name="action_save_pic" string="Save" type="object" class="oe_highlight"/>
-                        <button name="Cancel" special="cancel"/>
-                    </footer>
-                </sheet>
-            </form>
-        </field>
-        </record>
+                        <footer>
+                            <button name="action_save_pic" string="Save" type="object" class="oe_highlight" />
+                            <button name="Cancel" special="cancel" />
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record> -->
 
         <!-- form reject -->
         <record id="eps_request_form_line_reject_form" model="ir.ui.view">
@@ -199,11 +205,11 @@
                     <sheet>
                         <h3>Silahkan isi alasan anda</h3>
                         <group col="4" colspan="4">
-                            <field name="reason" widget="text_emojis" nolabel="1" required="1"/>
+                            <field name="reason" widget="text_emojis" nolabel="1" required="1" />
                         </group>
                         <footer>
-                            <button name="action_reject_form" string="Reject" type="object" class="oe_highlight"/>
-                            <button name="Cancel" special="cancel"/>
+                            <button name="action_reject_form" string="Reject" type="object" class="oe_highlight" />
+                            <button name="Cancel" special="cancel" />
                         </footer>
                     </sheet>
                 </form>
@@ -217,42 +223,55 @@
             <field name="priority">10</field>
             <field name="arch" type="xml">
                 <kanban version="7.0" default_group_by="state" class="o_kanban_mobile" sample="1" default_order="create_date desc">
-                    <field name="state"/>
-                    <field name="request_form_id"/>
-                    <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule"/>
-                    <field name="employee_id"/>
-                    <field name="request_id"/>
-                    <field name="keterangan"/>
-                    <field name="date"/>
-                    <field name="value_approval"/>
-                    <progressbar field="state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;overdue&quot;: &quot;danger&quot;, &quot;today&quot;: &quot;warning&quot;}"/>
+                    <field name="state" />
+                    <field name="request_form_id" />
+                    <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule" />
+                    <field name="employee_id" />
+                    <field name="request_id" />
+                    <field name="keterangan" />
+                    <field name="date" />
+                    <field name="value_approval" />
+                    <progressbar field="state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;overdue&quot;: &quot;danger&quot;, &quot;today&quot;: &quot;warning&quot;}" />
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click">
                                 <div class="oe_kanban_details">
-                             
+
                                     <ul>
                                         <li>
-                                            <i><h5><field name="request_id"></field></h5></i>
+                                            <i>
+                                                <h5>
+                                                    <field name="request_id"></field>
+                                                </h5>
+                                            </i>
                                         </li>
                                         <li>
-                                            Keterangan: <field name="keterangan"/>
+                                            Header:
+                                            <field name="request_form_id" />
                                         </li>
                                         <li>
-                                            PIC: <b><field name="employee_id"></field></b>
+                                            Keterangan:
+                                            <field name="keterangan" />
                                         </li>
                                         <li>
-                                            Date: <field name="create_date"/>
+                                            PIC:
+                                            <b>
+                                                <field name="employee_id"></field>
+                                            </b>
+                                        </li>
+                                        <li>
+                                            Date:
+                                            <field name="create_date" />
                                         </li>
                                     </ul>
                                 </div>
                                 <a type="button">
-                                <button name="action_assign" style="color: green;"  class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['rejected','open','done']), ('employee_id', '!=', False)]}">
-                                    <span>
+                                    <button name="action_assign" style="color: green;" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('employee_id', '!=', False)]}">
+                                        <span>
                                         Assign
                                     </span>
-                                </button>
-                                </a>    
+                                    </button>
+                                </a>
                             </div>
                         </t>
                     </templates>
@@ -261,7 +280,7 @@
         </record>
 
 
-        <menuitem id="eps_request_form_line_menu" name="Request Detail" parent="eps_request_form_sub_menu" action="eps_request_form_line_action" sequence="20"/>
+        <menuitem id="eps_request_form_line_menu" name="Request Detail" parent="eps_request_form_sub_menu" action="eps_request_form_line_action" sequence="20" />
 
 
     </data>
