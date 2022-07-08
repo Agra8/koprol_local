@@ -208,11 +208,11 @@
                           <div class="col-12 form-group s_website_form_field s_website_form_model_required" data-type="char" data-name="Field">
                             <div class="row s_col_no_bgcolor s_col_no_resize">
                               <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="2hvgthz7mmr">
-                                <span class="s_website_form_label_content">Mobile Phone</span>
+                                <span class="s_website_form_label_content">NIK</span>
                                 <span class="s_website_form_mark"> *</span>
                               </label>
                               <div class="col-sm">
-                                <input type="text" class="form-control s_website_form_input" name="no_telp" required="true" placeholder="628 XXXX XXXX" title="Please enter valid phone number" id="2hvgthz7mmr" />
+                                <input type="text" class="form-control s_website_form_input" name="nik" required="true" placeholder="DMMK0000"  id="2hvgthz7mmr" />
                               </div>
                             </div>
                           </div>

@@ -25,9 +25,13 @@
     # always loaded
     'data': [
         
+        'security/res_groups.xml',
+        'security/ir.model.access.csv',
+        'security/ir_rule.xml',
         'views/menu.xml',
         'views/eps_request_form_view.xml',
         'views/eps_master_jrf_arf_view.xml',
+        'views/eps_master_jrf_arf_kategori_view.xml',
         'views/eps_request_form_line_view.xml',
         
         # 'data/data_master_arf_jrf.xml',
@@ -36,9 +40,6 @@
 
         'report/eps_request_form_report_wizard.xml',
 
-        'security/ir.model.access.csv',
-        'security/ir_rule.xml',
-        'security/res_groups.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

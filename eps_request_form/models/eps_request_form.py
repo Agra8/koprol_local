@@ -48,6 +48,7 @@ class RequestForm(models.Model):
     total_approval = fields.Float(string='Approval Percentage')
     name_pegawai = fields.Char(string='Nama Pegawai')
     no_telp = fields.Char(string="Nomor Telp")
+    nik = fields.Char(string="NIK")
     email = fields.Char(string='Email')
     state = fields.Selection(string='State', selection=[('draft', 'Draft'), (
         'rfa', 'Waiting for Approval'), ('open', 'Open'), ('done', 'Done')], default='draft')
@@ -75,7 +76,7 @@ class RequestForm(models.Model):
     request_line_ids = fields.One2many(
         comodel_name='eps.request.form.line', inverse_name='request_form_id', string='Request')
     job_title = fields.Many2one(comodel_name='hr.job', string='Job Title')
-
+    partner_id = fields.Many2one('res.partner', string='Partner', required=True)
     # 9: constraints & sql constraints
 
     # 10: compute/depends & on change methods
@@ -86,10 +87,21 @@ class RequestForm(models.Model):
             branch_obj = self.env['res.branch'].suspend_security().browse(
                 vals['branch_id'])
             doc_code = branch_obj.code
+            nik = vals.get('nik')
             vals['name'] = self.env['ir.sequence'].suspend_security(
             ).get_per_doc_code(doc_code, 'RF')
             vals['divisi_id'] = self.env['eps.divisi'].suspend_security().search([
                 ('name', '=', 'Umum')]).id
+            partner = self.env['res.partner'].sudo().search([('default_code','=',nik)],limit=1)
+            if not partner:
+                partner = self.env['res.partner'].sudo().create({
+                    'name': vals.get('name_pegawai'),
+                    'default_code':vals.get('nik'),
+                    'email': vals.get('email'),
+                    'type': 'contact',
+                    'is_branch': False
+                })
+            vals['partner_id'] = partner.id
             create = super(RequestForm, self).create(vals)
             template_mail = request.env.ref(
                 'eps_request_form.template_mail_request_form_notif_accept')
@@ -349,6 +361,7 @@ class RequestFormLine(models.Model):
         comodel_name='eps.request.form.approval', inverse_name='request_form_line_id', string='Additional Approval JRF/ARF')
     teams_id = fields.Many2one(comodel_name='eps.teams.master',
                                string='Teams')
+    partner_id = fields.Many2one(comodel_name='res.partner', string='Partner', related='request_form_id.partner_id',required=True)
 
     @api.model
     def create(self, vals: dict):
@@ -365,12 +378,14 @@ class RequestFormLine(models.Model):
             file_upload = vals['file_upload']
             vals['file_upload'] = False
         ids = super(RequestFormLine, self).create(vals)
+        ids.message_subscribe(ids.partner_id.ids)
         if file_upload:
             tmp_lampiran = vals['filename'].split('.')
             filename_up = f'[{ids.id}]{tmp_lampiran[0]}-{str(vals["request_line_id"])}-request_form.{tmp_lampiran[len(tmp_lampiran) - 1]}'
             self.env['eps.config.files'].suspend_security(
             ).upload_file(filename_up, file_upload)
             ids.filename_upload = filename_up
+        
 
         #  ids.approval_ids.write({'user_id': employee_id.user_id.id})
         return ids

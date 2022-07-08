@@ -80,11 +80,14 @@ class WebsiteForm(Home):
 
         value = data['record']
 
-        if not value.get('no_telp').isdigit() or len(value.get('no_telp')) < 11 or len(value.get('no_telp')) > 14:
-            request._cr.rollback()
-            return json.dumps({
-                'error': _("Nomor Telp tidak sesuai format")
-            })
+        if 'nik' in value:
+            value['nik'] = str(value.get('nik'))
+
+        # if not value.get('no_telp').isdigit() or len(value.get('no_telp')) < 11 or len(value.get('no_telp')) > 14:
+        #     request._cr.rollback()
+        #     return json.dumps({
+        #         'error': _("Nomor Telp tidak sesuai format")
+        #     })
 
         if 'company_id' in value:
             value['company_id'] = int(value.get('company_id'))
@@ -106,7 +109,7 @@ class WebsiteForm(Home):
 
         if 'request_sistem_ids' in value:
             del value['request_sistem_ids']
-
+        
         request_id = request.env[model_record.model].sudo().create(value)
         if data['attachments']:
             attachment = data['attachments']
@@ -178,7 +181,7 @@ class WebsiteForm(Home):
             data['record']['request_line_keterangan[]'] = self.convert_list(
                 data['record']['request_line_keterangan[]'], 'description')
             for idx, datas in enumerate(data['record']['request_line_ids']):
-                tipe_request_obj = request.env['eps.master.jrf.arf'].browse(
+                tipe_request_obj = request.env['eps.master.jrf.arf'].sudo().browse(
                     datas['form_id'])
                 request_line_ids.append([0, 0, {
                     'request_id': datas['form_id'],

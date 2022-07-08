@@ -81,6 +81,7 @@ class TypeRequest(models.Model):
 
     # 8: fields
     name = fields.Char(string='Name')
+    code_request = fields.Char(string='Code')
 
     # Audit Trail
 
@@ -92,17 +93,18 @@ class TypeRequest(models.Model):
         res = []
         for record in self:
             name = record.name
+            code = record.code_request
             if not record.name:
-                name = '%s' % (name)
+                name = '%s - %s' % (code,name)
             else:
-                name = '%s' % (record.name)
-            res.append((record.id, name))
+                name = '%s - %s' % (code,name)
+            res.append((record.id, name, code))
         return res
 
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
         args = args or []
         if name:
-            args = [('name', operator, name)] + args
+            args = ['|',('name', operator, name),('code_request',operator,code_request)] + args
         categories = self.search(args, limit=limit)
         return categories.name_get()

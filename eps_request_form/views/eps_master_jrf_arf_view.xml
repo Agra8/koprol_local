@@ -87,6 +87,6 @@
         </record>
 
 
-        <menuitem id="eps_master_jrf_arf_menu" name="Master JRF / ARF" parent="eps_master_jrf_arf_sub_menu" action="eps_master_jrf_arf_action" sequence="20" />
+        <menuitem id="eps_master_jrf_arf_menu" name="Master JRF / ARF" parent="eps_master_jrf_arf_sub_menu" action="eps_master_jrf_arf_action" sequence="20" groups="eps_request_form.group_eps_request_form_configuration_read"/>
     </data>
 </odoo>

@@ -280,7 +280,7 @@
         </record>
 
 
-        <menuitem id="eps_request_form_line_menu" name="Request Detail" parent="eps_request_form_sub_menu" action="eps_request_form_line_action" sequence="20" />
+        <menuitem id="eps_request_form_line_menu" name="Request Detail" parent="eps_request_form_sub_menu" action="eps_request_form_line_action" sequence="20" groups="eps_request_form.group_eps_request_form_read"/>
 
 
     </data>

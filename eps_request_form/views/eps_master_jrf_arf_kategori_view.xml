@@ -2,91 +2,41 @@
 <odoo>
     <data>
         <!-- tree view -->
-        <record id="eps_master_jrf_arf_tree" model="ir.ui.view">
-            <field name="name">eps.master.jrf.arf</field>
+        <record id="eps_request_form_type_tree" model="ir.ui.view">
+            <field name="name">eps.request.form.type</field>
             <field name="model">eps.request.form.type</field>
             <field name="type">tree</field>
             <field name="priority" eval="8" />
             <field name="arch" type="xml">
-                <tree string="Master JRF / ARF">
+                <tree string="Tipe Request" editable="top">
                     <field name="name" />
-                    <field name="company_id" />
-                    <field name="teams_id" />
+                    <field name="code_request"/>
                 </tree>
             </field>
         </record>
 
-        <!-- Form View -->
-        <record id="eps_master_jrf_arf_form" model="ir.ui.view">
-            <field name="name">eps.master.jrf.arf.form</field>
-            <field name="model">eps.master.jrf.arf</field>
-            <field name="type">form</field>
-            <field name="priority" eval="8" />
-            <field name="arch" type="xml">
-                <form string="Master JRF / ARF">
-                    <sheet>
-                        <group>
-                            <group>
-                                <field name="name" />
-                                <field name="company_id" options="{'no_open':True,'no_create':True}" />
-                                <field name="type_form_id" options="{'no_open':True,'no_create':True}" />
-                            </group>
-                            <group>
-                                <field name="approval_default" />
-                                <field name="teams_id" options="{'no_open':True,'no_create':True}" />
-                                <field name="company_ids" widget="many2many_tags" />
-                            </group>
-                        </group>
-                        <notebook>
-                            <page string="Audit Trail">
-                                <group>
-                                    <group>
-                                        <field name="create_uid" readonly="1" />
-                                        <field name="create_date" readonly="1" />
-                                    </group>
-                                    <group>
-                                        <field name="write_uid" readonly="1" />
-                                        <field name="write_date" readonly="1" />
-                                    </group>
-                                </group>
-                            </page>
-                        </notebook>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
+  
         <!-- search view -->
-        <record id="eps_master_jrf_arf_search" model="ir.ui.view">
-            <field name="name">eps.master.jrf.arf.search</field>
-            <field name="model">eps.master.jrf.arf</field>
+        <record id="eps_request_form_type_search" model="ir.ui.view">
+            <field name="name">eps.request.form.type.search</field>
+            <field name="model">eps.request.form.type</field>
             <field name="arch" type="xml">
-                <search string="Master JRF / ARF">
+                <search string="Tipe Request">
                     <field name="name" />
-                    <field name="company_id" />
-                    <field name="teams_id" />
+                    <field name="code_request" />
                 </search>
             </field>
         </record>
 
         <!-- action window -->
-        <record id="eps_master_jrf_arf_action" model="ir.actions.act_window">
-            <field name="name">Master JRF / ARF</field>
+        <record id="eps_request_form_type_action" model="ir.actions.act_window">
+            <field name="name">Tipe Request</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">eps.master.jrf.arf</field>
+            <field name="res_model">eps.request.form.type</field>
             <field name="view_mode">tree,form</field>
-            <field name="context">{"search_default_fieldname":1}</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                    Click to add a new JRF / ARF
-                </p>
-                <p>
-                    Click the Create button to add a new JRF / ARF
-                </p>
-            </field>
         </record>
 
 
-        <menuitem id="eps_master_jrf_arf_menu" name="Master JRF / ARF" parent="eps_master_jrf_arf_sub_menu" action="eps_master_jrf_arf_action" sequence="20" />
+        <menuitem id="eps_request_form_type_menu" name="Tipe Request" parent="eps_master_jrf_arf_sub_menu" action="eps_request_form_type_action" sequence="20" groups="eps_request_form.group_eps_request_form_configuration_read" />
     </data>
 </odoo>
