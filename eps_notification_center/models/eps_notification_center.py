@@ -34,3 +34,8 @@ class NotificationCenter(models.Model):
                 }
         mail.send_mail(self.id, email_values=mail_values, force_send=True)
         self.write({'state' : 'sent'})
+
+    def send_notification_by_cron(self, limit_cron=15):
+        records = self.search([('state','=','draft')],limit=limit_cron)
+        for record in records:
+            record.action_sent_notif()

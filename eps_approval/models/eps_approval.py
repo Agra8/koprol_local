@@ -14,9 +14,9 @@ class eps_matrix_approval(models.Model):
     _description = "Matrix Approval"
 
     company_id = fields.Many2one('res.company', string='Company')         
-    branch_id = fields.Many2one('res.branch','Cabang')
-    divisi_id = fields.Many2one('eps.divisi','Divisi')
-    department_id = fields.Many2one('hr.department','Department')
+    branch_id = fields.Many2one('res.branch','Cabang', domain="[('company_id','=',company_id)]")
+    divisi_id = fields.Many2one('eps.divisi','Divisi', domain="[('company_id','=',company_id)]")
+    department_id = fields.Many2one('hr.department','Department', domain="[('company_id','=',company_id)]")
     approval_line = fields.One2many('eps.matrix.approval.line','approval_id')
     view_id = fields.Many2one('ir.ui.view',string='Form View')
     model_id = fields.Many2one('ir.model',string='Form/Model')
@@ -68,70 +68,87 @@ class eps_matrix_approval_line(models.Model):
     divisi_id = fields.Many2one(related='approval_id.divisi_id', readonly=True)
     department_id = fields.Many2one(related='approval_id.department_id', readonly=True)
 
-    def request_by_value(self,object,value,view_id=None,send_email=True):
-        matrix = self.search([
-            ('model_id','=',object.__class__.__name__),
-            ('company_id','=',object['company_id'].id),
-            ('branch_id','=',object['branch_id'].id),
-            ('divisi_id','=',object['divisi_id'].id),
-            ('department_id','=',object['department_id'].id)
-          ],order="limit asc")
-        
-        if not matrix:
-            matrix = self.search([
-            ('model_id','=',object.__class__.__name__),
-            ('company_id','=',object['company_id'].id),
-            ('branch_id','=',object['branch_id'].id),
-            ('divisi_id','=',object['divisi_id'].id),
-          ],order="limit asc")
-            if not matrix:
-                raise Warning("Transaksi ini tidak memiliki matrix approval")
-        
-        user_limit = 0
-        min_value = min([x.limit for x in matrix])
-        min_sequence = min([x.matrix_sequence for x in matrix])
-        prev_sequence = 1
-        state = 'IN'
+    def request_by_value(self,object,value,view_id=None):
         matrix_data = []
-        
-
-        for data in matrix :
-            approval_start_date = False
-            expected_date = False
-            if data.matrix_sequence==min_sequence:
-                state='IN'
-                approval_start_date = date.today()
-                expected_date = date.today() + timedelta(days = data.sla_days)
+        if not self._context.get('bypass_check_master_approval'):
+            if object.company_id and object.branch_id and not self._context.get('bypass_check_entity'):
+                matrix = self.search([
+                    ('model_id','=',object.__class__.__name__),
+                    ('company_id','=',object['company_id'].id),
+                    ('branch_id','=',object['branch_id'].id),
+                    ('divisi_id','=',object['divisi_id'].id),
+                    ('department_id','=',object['department_id'].id)
+                  ],order="limit asc")
+                
+                if not matrix:
+                    matrix = self.search([
+                    ('model_id','=',object.__class__.__name__),
+                    ('company_id','=',object['company_id'].id),
+                    ('branch_id','=',object['branch_id'].id),
+                    ('divisi_id','=',object['divisi_id'].id),
+                  ],order="limit asc")
+                    if not matrix:
+                        raise Warning("Transaksi ini tidak memiliki matrix approval")
             else:
-                state='IWA'
+                matrix = self.search([
+                    ('model_id','=',object.__class__.__name__),
+                    ('company_id','=',self._context.get('company_id',False)),
+                    ('branch_id','=',self._context.get('branch_id',False)),
+                    ('divisi_id','=',self._context.get('divisi_id',False)),
+                  ],order="limit asc")
 
-            matrix_data.append({
-              'value':value,
-              'group_id':data.group_id.id,
-              'transaction_id':object.id,
-              'model_id':data.model_id.id,
-              'limit':data.limit,
-              'state': state,
-              'view_id': view_id,
-              'company_id': data.company_id.id,
-              'branch_id': data.branch_id.id,
-              'divisi_id': data.divisi_id.id,
-              'department_id': data.department_id.id,
-              'matrix_sequence': data.matrix_sequence,
-              'expected_date': expected_date,
-              'approval_start_date': approval_start_date,
-              'sla_days': data.sla_days,
-            })
+                if not matrix:
+                    raise Warning("Transaksi ini tidak memiliki matrix approval")
             
+            user_limit = 0
+            min_value = min([x.limit for x in matrix])
+            min_sequence = min([x.matrix_sequence for x in matrix])
+            prev_sequence = 1
+            state = 'IN'
             
-            if user_limit < data.limit:
-                user_limit = data.limit
+            first_record = True
 
-            prev_sequence=data.matrix_sequence
-    
-        if user_limit < value:
-            #raise Warning(('Perhatian !'), ("Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval.") % (value, user_limit))
-            raise ValidationError(_('Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval."'))
+            for data in matrix :
+                approval_start_date = False
+                expected_date = False
+                if data.matrix_sequence==min_sequence:
+                    if first_record:
+                        state='IN'
+                        first_record = False
+                    else:
+                        state='WA'
+                    approval_start_date = date.today()
+                    expected_date = date.today() + timedelta(days = data.sla_days)
+                else:
+                    state='IWA'
+
+                matrix_data.append({
+                  'value':value,
+                  'group_id':data.group_id.id,
+                  'transaction_id':object.id,
+                  'model_id':data.model_id.id,
+                  'limit':data.limit,
+                  'state': state,
+                  'view_id': view_id,
+                  'company_id': data.company_id.id,
+                  'branch_id': data.branch_id.id,
+                  'divisi_id': data.divisi_id.id,
+                  'department_id': data.department_id.id,
+                  'matrix_sequence': data.matrix_sequence,
+                  'expected_date': expected_date,
+                  'approval_start_date': approval_start_date,
+                  'sla_days': data.sla_days,
+                })
+                
+                
+                if user_limit < data.limit:
+                    user_limit = data.limit
+
+                prev_sequence=data.matrix_sequence
+        
+            if user_limit < value:
+                #raise Warning(('Perhatian !'), ("Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval.") % (value, user_limit))
+                raise ValidationError(_('Nilai transaksi %d. Nilai terbersar di matrix approval: %d. Cek kembali Matrix Approval."' % (value, user_limit) ) )
         if self._context.get('per_reviewer'):
             for rev in self._context.get('per_reviewer'):
                 matrix_data.append(rev)
@@ -143,10 +160,11 @@ class eps_matrix_approval_line(models.Model):
             sequence+=1
         
         create_approval = self.env['eps.approval.transaction'].create(sorted_matrix_data)
-        proposal_model = self.env['ir.model'].sudo().search([('model','=','eps.proposal')])
+        proposal_model = self.env['ir.model'].sudo().search([('model','in',('eps.proposal', 'eps.initiatives','eps.tender'))])
         for approval in create_approval.filtered(lambda x:x.state=='IN'):
-            if approval.model_id.id == proposal_model.id:
-                self.send_notif_email(approval)
+            for x in proposal_model:
+                if approval.model_id.id == x.id:
+                    self.send_notif_email(approval)
         return True
 
     def approve(self, trx):
@@ -163,6 +181,7 @@ class eps_matrix_approval_line(models.Model):
         user_limit = 0
         prev_sequence = 1
         prev_state = ''
+        last_approval = False
 
         for approval_line in approval_lines_ids:
             if approval_line.state == 'IN':
@@ -170,6 +189,7 @@ class eps_matrix_approval_line(models.Model):
                     if approval_line.limit > user_limit:
                         user_limit = approval_line.limit
                         approve_all = approval_line.value <= user_limit
+                        last_approval = approval_line.group_id
                         approval_line.write({
                               'state':'OK',
                               'user_id':self._uid,
@@ -209,7 +229,7 @@ class eps_matrix_approval_line(models.Model):
             prev_sequence = approval_line.matrix_sequence
             prev_state = approval_line.state
         
-        proposal_model = self.env['ir.model'].sudo().search([('model','=','eps.proposal')])
+        proposal_model = self.env['ir.model'].sudo().search([('model','in',('eps.proposal', 'eps.initiatives','eps.tender'))])
         if user_limit:
             for approval_line in approval_lines_ids:
                 if approval_line.state in ('IN','WA'):
@@ -219,24 +239,27 @@ class eps_matrix_approval_line(models.Model):
                         'user_id':self._uid,
                         'tanggal':datetime.now(),
                       })
+                        last_approval = approval_line.group_id
                     elif approval_line.limit <= user_limit:
                         approval_line.write({
                         'state':'OK',
                         'user_id':self._uid,
                         'tanggal':datetime.now(),
                       })
+                        last_approval = approval_line.group_id
                     
                     if approval_line.state == 'IN':
                         approval_line.approval_start_date = date.today()
-                        if approval_line.model_id.id == proposal_model.id:
-                            self.send_notif_email(approval_line)
+                        for x in proposal_model:
+                            if approval_line.model_id.id == x.id:
+                                self.send_notif_email(approval_line)
                         
                 prev_sequence = approval_line.matrix_sequence
     
         if approve_all:
             return 1
         elif user_limit:
-            return 2
+            return {'last_approval':last_approval,'user_limit':user_limit}
         return 0
 
     def reject(self, trx, reason):
@@ -246,7 +269,7 @@ class eps_matrix_approval_line(models.Model):
                                                             ('transaction_id','=',trx.id),
                                                           ],order="limit asc")
         if not approval_lines_ids:
-            raise exceptions(('Perhatian !'), ("Transaksi ini tidak memiliki detail approval. Cek kembali Matrix Approval."))
+            raise ValidationError("Transaksi ini tidak memiliki detail approval. Cek kembali Matrix Approval.")
         
         reject_all = False
         for approval_line in approval_lines_ids:
@@ -278,7 +301,7 @@ class eps_matrix_approval_line(models.Model):
                                                             ('transaction_id','=',trx.id),
                                                           ],order="limit asc")
         if not approval_lines_ids:
-            raise exceptions(('Perhatian !'), ("Transaksi ini tidak memiliki detail approval. Cek kembali Matrix Approval."))
+            raise ("Transaksi ini tidak memiliki detail approval. Cek kembali Matrix Approval.")
         
         reject_all = False
         for approval_line in approval_lines_ids:
@@ -319,97 +342,123 @@ class eps_matrix_approval_line(models.Model):
         }
         params = '/web?#%s' % url_encode(url_discuss)
         link_discuss = base_url + params
-        link_discuss = link_discuss.replace('#','%23').replace('&','%26')
+        # link_discuss = link_discuss.replace('#','%23').replace('&','%26')
         now = datetime.now() + timedelta(hours=7)
+        if trx_id.model_id.model == 'eps.proposal':
+            requestor = transaksi.employee_id
+            reference = transaksi.nama_proposal
+        elif trx_id.model_id.model == 'eps.initiatives':
+            requestor = transaksi.proposal_id.employee_id
+            reference = transaksi.proposal_id.nama_proposal
+        elif trx_id.model_id.model == 'eps.tender':
+            requestor = transaksi.initiatives_id.proposal_id.employee_id
+            reference = transaksi.initiatives_id.proposal_id.nama_proposal
         messages="""
-            <p>Here's your outstanding approval on KOPROL:</p>
             <br/>
+            <p><a href="%s">%s</a> from %s %s %s %s waiting for your approval for:</p>""" % (str(link_discuss), requestor.name, requestor.department_id.name, requestor.divisi_id.name, requestor.branch_id.name, requestor.company_id.name ) +"""
             <table>
                 <tbody>
                     <tr>
-                        <td colspan="3">Good %s"""% self.env['eps.approval.transaction'].get_part_of_day(now.hour) +""" </td>
-                        <td rowspan="4" align="center">
-                            <img  width="100" height="100"  src="%s" /> """ % qr_code +"""
-                        </td>
+                        <td rowspan="8" width="50pt"></td>
+                        <td>Transaction</td>
+                        <td>: </td>
+                        <td>%s</td> """ % trx_id.model_id.name +"""
                     </tr>
                     <tr>
-                        <td>Ticket #</td>
+                        <td>Document No.</td>
                         <td>: </td>
                         <td><a href="%s">%s</a> </td> """ % (transaksi.get_full_url(),str(transaksi.name)) +"""
                     </tr>
                     <tr>
-                        <td>Subject</td>
-                        <td>: </td>
-                        <td><a href="%s">%s</a> </td> """ % (transaksi.get_full_url(),str(transaksi.nama_proposal)) +"""
-                    </tr>
-                    <tr>
-                        <td>Entity</td>
+                        <td>Unit Bisnis</td>
                         <td>: </td>
                         <td>%s </td> """ % str(transaksi.company_id.name) +"""
                     </tr>
                     <tr>
-                        <td>Branch</td>
+                        <td>Branch/Division</td>
                         <td>: </td>
-                        <td>%s </td> """ % str(transaksi.branch_id.name) +"""
+                        <td>%s/%s </td> """ % (str(transaksi.branch_id.name),str(transaksi.divisi_id.name)) +"""
                     </tr>
                     <tr>
-                        <td>Division</td>
+                        <td>Total Value</td>
                         <td>: </td>
-                        <td>%s </td> """ % str(transaksi.divisi_id.name) +"""
-                        <td><i>Scan QR Code for detail & Approval</i></td>
+                        <td>%s </td> """ % trx_id.value +"""
                     </tr>
                     <tr>
-                        <td>Requestor</td>
+                        <td>Remarks</td>
                         <td>: </td>
-                        <td><a href="%s">%s</a> </td> """ % (str(link_discuss),str(transaksi.employee_id.name)) +"""
+                        <td> - </td>
                     </tr>
                     <tr>
-                        <td>Expected Date</td>
-                        <td>: </td> 
-                        <td>%s </td> """ % str(trx_id.expected_date) +"""
+                        <td>Reference</td>
+                        <td>: </td>
+                        <td>%s</td> """ % reference +"""
                     </tr>
                     <tr>
-                        <td>Total Estimation</td>
+                        <td>Status</td>
                         <td>: </td>
-                        <td>Rp. %s </td> """ % str(trx_id.value) +"""
-                    </tr>
-                    <tr>
-                        <td>Description</td>
-                        <td>: </td>
-                        <td>%s</td> """ % str(transaksi.latar_belakang) +"""
+                        <td> - </td>
                     </tr>
                 </tbody>
             </table>
-            <br/>
+            Please click on the link or QR Code below to Approve or Reject the transactions.<br/>
+            <a href='%s'>%s<a> """%(transaksi.get_full_url(),transaksi.get_full_url())+"""<br/>
+            <img  width="100" height="100"  src="%s" /> """ % qr_code +"""<br/><br/>
+            Regards,<br/>
+            <b>Administratror</b>
         """
 
         ins_trx.append([4, trx_id.id, False])
             
-        messages+="""
-            <hr />
-            <i>This message is automaticaly generated by KOPROL System</i>
-        """
+        # messages+="""
+        #     <hr />
+        #     <i>This message is automaticaly generated by KOPROL System</i>
+        # """
         group = trx_id.group_id
         job_ids = self.env['hr.job'].sudo().search([('group_id','=',group.id)])
         cc_to = []
-        cc_to.append([4, transaksi.employee_id.id, False])
+        cc_to.append([4, requestor.id, False])
         for job_id in job_ids:
             employees = self.env['hr.employee'].sudo().search([('job_id','=',job_id.id)])
             for employee in employees:
                 if (transaksi.company_id in employee.user_id.company_ids) and (transaksi.branch_id in employee.user_id.branch_ids):
+                    message_sent = """<p>Dear Mr./Mrs. %s</p> """ % employee.name + messages
                     self.env['eps.notification.center'].sudo().create({
                         'approval_transaction_ids': ins_trx,
                         'form_id': trx_id.view_id.id,
                         'transaction_id': trx_id.transaction_id,
-                        'message': messages,
+                        'message': message_sent,
                         'notify_to': employee.user_id.id,
                         'cc_to': cc_to,
-                        'subject' : "[KOPROL SYSTEM - %s] %s" %(transaksi.name, transaksi.nama_proposal),
+                        'subject' : "[KOPROL SYSTEM - %s] %s" %(transaksi.name, reference),
                         'tipe_email' : 'normal'
                     })
 
 class eps_approval_transaction(models.Model):
     _name = "eps.approval.transaction"
+
+    def _get_transaction_no(self):
+        for rec in self:
+            if rec.model_id.model in ('account.voucher','wtc.account.voucher','wtc.dn.nc'):
+                rec.transaction_no = self.env[rec.model_id.model].browse(rec.transaction_id).number            
+            else :
+                rec.transaction_no = self.env[rec.model_id.model].browse(rec.transaction_id).name
+        
+    def _get_groups(self):
+        x = self.env['res.users'].sudo().browse(self._uid)['groups_id']
+        #is self.group_id in x ?
+        self.is_mygroup = self.group_id in x 
+    
+    def _cek_groups(self,operator,value):
+         
+        group_ids = self.env['res.users'].browse(self._uid)['groups_id']
+         
+        if operator == '=' and value :
+            where = [('group_id', 'in', [x.id for x in group_ids])]
+        else :
+            where = [('group_id', 'not in', [x.id for x in group_ids])]
+ 
+        return where
 
     transaction_id = fields.Integer('Transaction ID')
     value = fields.Float('Value',digits=(12,2))
@@ -431,6 +480,21 @@ class eps_approval_transaction(models.Model):
     sequence = fields.Integer(string='Integer')
     approval_start_date = fields.Date(string='Start Date')
     sla_days = fields.Integer('SLA Approval Days')
+    transaction_no = fields.Char(string="Transaction No")
+    is_mygroup = fields.Boolean(compute='_get_groups', string="is_mygroup", method=True, search='_cek_groups')
+
+    @api.model
+    def create(self,vals):
+        model_id = self.env['ir.model'].browse(vals.get('model_id'))
+        if model_id.model in ('account.voucher','wtc.account.voucher','wtc.dn.nc'):
+            vals['transaction_no'] = self.env[model_id.model].browse(vals.get('transaction_id')).number            
+        else :
+            vals['transaction_no'] = self.env[model_id.model].browse(vals.get('transaction_id')).name 
+        ids = super(eps_approval_transaction,self).create(vals) 
+
+        return ids
+
+
         
     def get_part_of_day(self,h):
         return (
@@ -563,6 +627,47 @@ class eps_approval_transaction(models.Model):
                     'tipe_email': 'reminder'
                 })
                 messages=""
+
+    def get_transaction(self):  
+        query = """
+                SELECT perm_read
+                FROM ir_model_access 
+                WHERE model_id = %s
+                AND group_id IN (SELECT hid FROM res_groups_implied_rel WHERE gid = %s)
+            """ % (self.model_id.id, self.group_id.id)
+        self._cr.execute(query)
+        ress = self._cr.fetchall()
+        if len(ress) < 1 :
+            return False
+        if any([x[0] for x in ress]) :
+            if self.view_id == False :
+                return {
+                    'name': self.model_id.name,
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_model': self.model_id.model,
+                    'type': 'ir.actions.act_window',
+                    'nodestroy': True,
+                    'target': 'new',
+                    'res_id': self.transaction_id,
+                    'flags': {'mode': 'readonly'}
+                    }  
+            else :
+                return {
+                    'name': self.model_id.name,
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_model': self.model_id.model,
+                    'type': 'ir.actions.act_window',
+                    'nodestroy': True,
+                    'target': 'new',
+                    'res_id': self.transaction_id,
+                    'view_id':self.view_id.id,
+                    'flags': {'mode': 'readonly'}
+                    }
+        else :
+            return False
+    
 
 class eps_reject_approval(models.TransientModel):
     _name = "eps.reject.approval"

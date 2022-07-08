@@ -20,6 +20,9 @@
 				<field name="parent_id" position="attributes">
 					<attribute name="string">Superior</attribute>
 				</field>
+				<field name="work_email" position="attributes">
+					<attribute name="attrs">{'required':[('is_user','=',True)]}</attribute>
+				</field>
 				<field name="department_id" position="after">
 					<field name="job_id" required="1" options="{'no_show':True,'no_create':True,'no_open':True}"/>
 					<field name="branch_id" required="1" options="{'no_show':True,'no_create':True,'no_open':True}" domain="[('company_id','=', company_id)]"/>
@@ -55,6 +58,18 @@
                 </xpath>
 
              
+            </field>
+        </record>
+
+         <record id='view_eps_employee_department_form' model='ir.ui.view'>
+            <field name='name'>eps.employee.department.form</field>
+            <field name='model'>hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="code" />
+                    <field name="tops_id"/>
+                </field>             
             </field>
         </record>
 

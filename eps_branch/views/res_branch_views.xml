@@ -24,6 +24,7 @@
 							<group>
 								<field name="create_date" invisible="1"/>
 								<field name="code" attrs="{'readonly': [('create_date','!=',False)]}"/>
+								<field name="tops_id"/>
 								<field name="name" required="1"/>
 								<field name="company_id" required="1" options="{'no_open':True,'no_create':True}"/>
 								<field name="profit_centre" required="1"/>

@@ -8,19 +8,32 @@
         <field name="page_height">0</field>
         <field name="page_width">0</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">0</field>
+        <field name="margin_top">15</field>
         <field name="margin_bottom">32</field>
         <field name="margin_left">7</field>
         <field name="margin_right">7</field>
         <field name="header_line" eval="False" />
-        <field name="header_spacing">35</field>
+        <field name="header_spacing">15</field>
         <field name="dpi">90</field>
     </record>
 
     <template id="external_layout_standard_custom">
-        <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
-            <span t-esc="o.get_state()" t-att-style="'transform:rotate(300deg); -webkit-transform:rotate(300deg);font-size:150px;top:700px;position:absolute;text-align:center;width:100%;absolute;opacity:0.25;'"/>
+        <div class="header" t-att-style="report_header_style">
+            <table>
+                <tr>
+                    <td style="width:200pt;text-align:right;font-size:25px;background-color:white"><![CDATA[&nbsp;]]></td>
+                    <td style="width:200pt;text-align:right;font-size:25px;background-color:white"><![CDATA[&nbsp;]]></td>
+                    <td style="width:200pt;text-align:right;font-size:25px;background-color:white"><![CDATA[&nbsp;]]></td>
+                    <td style="width:50pt;text-align:right;font-size:40px;background-color:red"><span t-esc="o.get_state()"/></td>
+                </tr>
+            </table>
         </div>
+<!--        <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">-->
+<!--            <span t-esc="o.get_state()"/>-->
+<!--        </div>-->
+<!--        <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">-->
+<!--            <span t-esc="o.get_state()" t-att-style="'transform:rotate(300deg); -webkit-transform:rotate(300deg);font-size:150px;top:700px;position:absolute;text-align:center;width:100%;absolute;opacity:0.25;'"/>-->
+<!--        </div>-->
         <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
 <!--            <span t-esc="o.get_state()" t-att-style="'transform:rotate(300deg); -webkit-transform:rotate(300deg);font-size:150px;top:500px;position:absolute;text-align:center;width:100%;absolute;opacity:0.25;'"/>-->
 
@@ -123,7 +136,7 @@
                     </tr>
                     <tr>
                         <td><span>Expectation Date</span></td>
-                        <td>: <span t-field="o.expected_date"/></td>
+                        <td>: <span t-field="o.date"/></td>
                     </tr>
                     <tr>
                         <td><span>Total Estimation</span></td>

@@ -46,12 +46,13 @@
                         </h2>
 						<group col="4" colspan="4">
                             <field name='date' readonly="1"/>
+                            <field name='type' attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='nama_proposal' attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='company_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='branch_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='divisi_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='department_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
-                            <field name='employee_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name='employee_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': [('state','!=','draft')]}" domain="[('company_id','=',company_id),('branch_id','=',branch_id),('divisi_id','=',divisi_id),('department_id','=',department_id)]"/>
                             <field name='pic_contact' attrs="{'readonly': [('state','!=','draft')]}"/>
                             <field name='latar_belakang' widget='html' attrs="{'readonly': [('state','!=','draft')]}" colspan="4"/>
                             <field name='sasaran_tujuan' widget='html' attrs="{'readonly': [('state','!=','draft')]}" colspan="4"/>
@@ -85,6 +86,7 @@
                                     <tree>
                                         <field name="categ_id"/>
                                         <field name="price"/>
+                                        <field name="reserved_amount" readonly="1"/>
                                         <field name="filename_penawaran"/>
                                     </tree>
                                 </field>
@@ -95,6 +97,20 @@
 	                             	</div>
 	                             	<field name="total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
 	                             </group>
+							</page>
+							<page string="Product Lines" attrs="{'invisible': [('type','=','category')]}">
+								<field name="proposal_product_line_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}" context="{'branch_id': branch_id}">
+                                    <tree editable='top' edit='false'>
+                                    	<field name="branch_id" options="{'no_create': True,'no_open': True}"/>
+                                        <field name="product_id" options="{'no_create': True,'no_open': True}"/>
+                                        <field name="quantity"/>
+                                        <field name="supplier_id" readonly="1" force_save="1"/>
+                                        <field name="price_unit" readonly="1" force_save="1"/>
+	                                    <field name="price_total" widget="monetary" sum="Total"/>
+	                                    <field name="currency_id" invisible="1"/>
+	                                    <field name="company_id" invisible="1"/>
+                                    </tree>
+                                </field>
 							</page>
 							<page string="Approval">
 								<field name="approval_ids">
@@ -131,6 +147,8 @@
 						<field name="message_follower_ids"/>
 						<field name="message_ids"/>
 					</div>
+					<footer>
+					</footer>
 				</form>
 			</field>
 		</record> 

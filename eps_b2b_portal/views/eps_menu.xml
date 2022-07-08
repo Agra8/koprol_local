@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   	<menuitem id="eps_b2b_portal_web_menu" name="B2B Portal" web_icon="eps_menu,static/src/img/Asset 13.png" sequence="15"/>
+   	<menuitem id="eps_b2b_portal_master_menuitem" name="Master" parent="eps_b2b_portal_web_menu" sequence="01"/>
+    <menuitem id="eps_b2b_portal_configuration_menuitem" name="Configuration" parent="eps_b2b_portal_web_menu" sequence="02"/>
+
+</odoo>
+
+
+

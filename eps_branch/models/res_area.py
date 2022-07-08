@@ -13,7 +13,7 @@ from odoo.exceptions import ValidationError
 # 6: Import of unknown third party lib
 
 class Area(models.Model):
-    _name = "res.area"
+    _inherit = "res.area"
     _description = 'Area'
 
     name = fields.Char(string='Code', required=True)

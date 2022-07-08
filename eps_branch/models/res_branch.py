@@ -58,7 +58,8 @@ class Branch(models.Model):
     interco_account_id = fields.Many2one('account.account',string='Intercompany Account')
     interco_match_account_id = fields.Many2one('account.account',string='Intercompany Match Account')
     pimpinan_id = fields.Many2one('hr.employee',string='Pimpinan')
-    profit_centre = fields.Char(string='Profit Centre',required=True,help='please contact your Accounting Manager to get Profit Center.')
+    profit_centre = fields.Char(string='Profit Centre',required=True,help='please contact your Accounting Manager to get Profit Center.')   
+    tops_id = fields.Char('TOPS ID')
 
     # relation fields
     area_id = fields.Many2one(comodel_name='res.area', string='Area', help='')

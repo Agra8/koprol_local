@@ -1,5 +1,5 @@
-from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo import api, fields, models, _, SUPERUSER_ID
+from odoo.exceptions import ValidationError,Warning
 import subprocess
 import base64
 import os
@@ -11,6 +11,7 @@ from werkzeug.urls import url_encode
 from io import BytesIO
 import pytz
 from pytz import timezone
+import json
 
 class Proposal(models.Model):
     _name = "eps.proposal"
@@ -26,13 +27,14 @@ class Proposal(models.Model):
     def _get_default_date(self):
         return pytz.UTC.localize(datetime.now()).astimezone(timezone('Asia/Jakarta'))
 
+    
     name = fields.Char(string='Proposal Name', required=True, default='/')
     date = fields.Date(string='Tanggal Proposal', required=True, default=_get_default_date)
     nama_proposal = fields.Char(string='Nama Proposal', required=True, tracking=True)
     state = fields.Selection(selection=[('draft','Draft'),('waiting_for_approval','Waiting for Approval'),('approved','Approved'),('rejected','Rejected'),('done','Done')],default='draft',  string='State',  help='', tracking=True)
     company_id = fields.Many2one('res.company', string='Company', required=True, tracking=True)
-    branch_id = fields.Many2one('res.branch', domain="[('company_id','=',company_id)]", string='Branch', required=True, tracking=True)
-    divisi_id = fields.Many2one('eps.divisi', string='Divisi', required=True, tracking=True)
+    branch_id = fields.Many2one('res.branch', string='Branch', required=True, tracking=True, domain="[('company_id','=',company_id)]")
+    divisi_id = fields.Many2one('eps.divisi', string='Divisi', required=True, tracking=True, domain="[('company_id','=',company_id)]")
     department_id = fields.Many2one('hr.department', domain="[('company_id','=',company_id)]", string='Department', required=True, tracking=True)
     employee_id = fields.Many2one('hr.employee', string='PIC', required=True, tracking=True)
     pic_contact = fields.Char(related='employee_id.mobile_phone', string="PIC's Contact", tracking=True)
@@ -41,7 +43,7 @@ class Proposal(models.Model):
     rencana_pengajuan = fields.Text(string='Rencana Pengajuan', tracking=True)
     # estimasi_biaya = fields.Text(string='Estimasi Biaya')
     proposal_line_ids = fields.One2many('eps.proposal.line', 'proposal_id', string='Lines')
-    total = fields.Float(string='Total(grandtotal)', compute='_compute_total', tracking=True)
+    total = fields.Float(string='Total (grandtotal exclude PPN)', compute='_compute_total', tracking=True)
     file_document = fields.Binary(string="File Document")
     filename_document = fields.Char(string="File Document")
     filename_upload_document = fields.Char(string="Filename upload Document")
@@ -59,6 +61,47 @@ class Proposal(models.Model):
     initiatives_ids = fields.One2many('eps.initiatives', 'proposal_id', string='Initiatives', copy=False)
     initiatives_count = fields.Integer(compute="_compute_initiatives", string='Initiatives Count', copy=False, default=0, store=True)
     expected_date = fields.Date('Expected Date')
+    type = fields.Selection([('category','Category'),('product','Product')], string='Type', default='category', required=True)
+    proposal_product_line_ids = fields.One2many('eps.proposal.product.line', 'proposal_id', string='Product Lines')
+
+    # @api.onchange('company_id')
+    # def _onchange_company(self):
+    #     if self.company_id:
+    #         branch_ids = [b.id for b in self.env.user.branch_ids.filtered(lambda x:x.company_id.id==self.company_id.id)]
+    #         print (branch_ids,"<<<<<<<<<<<<<<branch_ids")
+    #         return {'domain' : {'branch_id':[('id','in',branch_ids)],},}
+
+    # def get_custom_domain(self):
+    #     domain = False
+    #     if self.env.uid != SUPERUSER_ID:
+    #         context = self._context or {}
+    #         domain = ('id','=', False)
+    #         branch_employee = self.env.user.branch_ids
+    #         if branch_employee:
+    #             domain = False
+    #             active_employee = branch_employee[0]
+    #             branch_ids = branch_employee.ids
+    #             domain = ('branch_id','in', branch_ids)
+    #         return domain
+
+    # @api.model
+    # def read_group(self, domain, fields, groupby, offset = 0, limit=None, orderby=False, lazy=True):
+    #     custom_domain = self.get_custom_domain()
+    #     if custom_domain:
+    #         domain.append(custom_domain)
+    #     return super(Proposal, self).read_group(domain, fields, groupby, offset = offset, limit=limit, orderby=orderby, lazy=lazy)
+
+    # @api.model
+    # def _search(self, args, offset = 0, limit=None, order=None, count=False, access_rights_uid=None):
+    #     custom_domain = self.get_custom_domain()
+    #     if custom_domain:
+    #         args.append(custom_domain)
+    #     return super(Proposal, self)._search(args, offset, limit, order, count, access_rights_uid)
+
+    @api.onchange('type')
+    def _onchange_type(self):
+        if self.type:
+            self.proposal_product_line_ids = False
 
     @api.depends('proposal_line_ids.price')
     def _compute_total(self):
@@ -75,7 +118,7 @@ class Proposal(models.Model):
 
     @api.model
     def create(self,vals):
-        vals['name'] = self.env['ir.sequence'].get_per_branch(vals['branch_id'], 'PRO')
+        vals['name'] = self.env['ir.sequence'].sudo().get_per_branch(vals['branch_id'], 'PRO')
         if vals.get('file_document'):
             file_document = vals['file_document']
             vals['file_document'] = False
@@ -117,7 +160,7 @@ class Proposal(models.Model):
 
     def get_full_url(self):
         self.ensure_one()
-        base_url = self.env["ir.config_parameter"].get_param("web.base.url")
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         url_params = {
             'id': self.id,
             'view_type': 'form',
@@ -127,7 +170,7 @@ class Proposal(models.Model):
         }
         params = '/web?#%s' % url_encode(url_params)
         full_url = base_url + params
-        full_url = full_url.replace('#','%23').replace('&','%26')
+        # full_url = full_url.replace('#','%23').replace('&','%26')
         return full_url
 
     def generate_qr_code(self, text, img_name, template):
@@ -229,10 +272,42 @@ class Proposal(models.Model):
         p.wait(timeout=10)
         p.communicate()
 
+    def validity_check(self):
+        if not self.proposal_line_ids:
+            raise ValidationError('Category proposal belum diisi!')
+
+    def _prepare_proposal_line(self, proposal_product_line_ids):
+        data = []
+        per_categ = {}
+        for line in proposal_product_line_ids:
+            if not line.product_id.categ_id.proposal_categ_id:
+                raise ValidationError('Proposal category untuk product %s belum disetting, silahkan menghubungi departement GA!' % line.product_id.name)
+            
+            key = line.product_id.categ_id.proposal_categ_id.id
+            if not per_categ.get(key,False):
+                per_categ[key] = {}
+            per_categ[key]['price']=per_categ[key].get('price',0)+line.price_total
+
+        for key,value in per_categ.items():
+            data.append([0,False,{
+                'categ_id': key,
+                'price': value['price']
+                }])
+        return data
+
+
     def action_request_approval(self):
         reviewer_approval = {}
         per_reviewer = []
-        
+
+        if self.type=='product' and self.proposal_product_line_ids:
+            if self.proposal_line_ids:
+                self._cr.execute('delete from eps_proposal_line where proposal_id=%s' % self.id)
+            proposal_line = self._prepare_proposal_line(self.proposal_product_line_ids)
+            self.proposal_line_ids = proposal_line
+
+        self.validity_check()
+
         for line in self.proposal_line_ids.filtered(lambda x:x.categ_id.group_id and x.categ_id.group_id.id):
             key = line.categ_id.group_id.id
             if not reviewer_approval.get(key,False):
@@ -258,7 +333,7 @@ class Proposal(models.Model):
               })
 
         self.env['eps.matrix.approval.line'].with_context(per_reviewer=per_reviewer).request_by_value(self, self.total)
-        sla_proposal = self.env['ir.config_parameter'].get_param('eps_notification_center.sla_approval_proposal')
+        sla_proposal = self.env['ir.config_parameter'].sudo().get_param('eps_notification_center.sla_approval_proposal')
         expected_date = date.today() + timedelta(days = int(sla_proposal))
         self.write({'state':'waiting_for_approval', 'approval_state':'rf', 'expected_date': expected_date})
 
@@ -275,8 +350,8 @@ class Proposal(models.Model):
         immediately.
         """
         if not initiatives:
-            # Invoice_ids may be filtered depending on the user. To ensure we get all
-            # invoices related to the purchase order, we read them in sudo to fill the
+            # initiatives_ids may be filtered depending on the user. To ensure we get all
+            # initiatives related to the proposal, we read them in sudo to fill the
             # cache.
             self.sudo()._read(['initiatives_ids'])
             initiatives = self.initiatives_ids
@@ -294,15 +369,18 @@ class Proposal(models.Model):
             else:
                 result['views'] = form_view
             result['res_id'] = initiatives.id
-        # else:
-        #     result = {'type': 'ir.actions.act_window_close'}
+        
 
         return result
 
-    def get_aging(self, approval_date):
+    def get_aging(self, approval_date, approved_date=False):
         aging = 0
         if approval_date :
-            delta = approval_date - datetime.now().date()
+            if approved_date:
+                date_now = approved_date.date()
+            else:
+                date_now = datetime.now().date()
+            delta = date_now - approval_date
             aging = delta.days
         if aging :
             if aging == 1 :
@@ -321,13 +399,26 @@ class ProposalLine(models.Model):
     _description = 'Proposal Line'
     _rec_name = 'categ_id'
 
-    proposal_id = fields.Many2one('eps.proposal', string='Proposal', required=True)
+    @api.depends('initiatives_ids.state','initiatives_ids.amount_total')
+    def _compute_reserved_amount(self):
+        for rec in self:
+            rec.reserved_amount = sum(x.amount_total for x in rec.initiatives_ids.filtered(lambda y: y.state=='done'))
+
+    proposal_id = fields.Many2one('eps.proposal', string='Proposal', ondelete='cascade')
     categ_id = fields.Many2one('eps.category', string='Proposal Category', required=True)
     price = fields.Float(string='Unit Price')
     file_penawaran = fields.Binary(string="File Penawaran")
     filename_penawaran = fields.Char(string="Filename Penawaran")
     filename_upload_penawaran = fields.Char(string="Filename upload Penawaran")
     file_penawaran_show = fields.Binary(string="File Penawaran", compute='_compute_file_penawaran' ,help="")
+    reserved_amount = fields.Float(compute=_compute_reserved_amount, store=True, string='Reserved Amount')
+    initiatives_ids = fields.One2many('eps.initiatives','proposal_line_id', string='Detail Initiatives')
+
+    @api.constrains('price')
+    def _check_price(self):
+        for record in self:
+            if record.price<=0:
+                raise ValidationError('Unit Price harus >0')
 
     @api.depends('filename_upload_penawaran')
     def _compute_file_penawaran(self):
@@ -369,3 +460,45 @@ class ProposalLine(models.Model):
             self.env['eps.config.files'].upload_file(filename_penawaran_up, file_penawaran)
             vals['filename_upload_penawaran']=filename_penawaran_up
         return super(ProposalLine,self).write(vals)
+
+class ProductLine(models.Model):
+    _name = "eps.proposal.product.line"
+    _description = 'Proposal Product Lines'
+
+    def _get_default_branch(self):
+        return self._context.get('branch_id',False)
+
+
+    proposal_id = fields.Many2one('eps.proposal', string='Proposal', required=True, ondelete='cascade')
+    branch_id = fields.Many2one('res.branch', string='Branch', required=True, default=_get_default_branch)
+    supplier_id = fields.Many2one('res.partner', string='Supplier', required=True)
+    product_id = fields.Many2one('product.product', string='Item', required=True)
+    quantity = fields.Float('Quantity')
+    price_unit = fields.Float('Unit Price')
+    price_total = fields.Monetary(compute='_compute_amount', string='Total', store=True)
+    company_id = fields.Many2one('res.company', related='proposal_id.company_id', string='Company', store=True, readonly=True)
+    currency_id = fields.Many2one(related='proposal_id.company_id.currency_id', store=True, string='Currency', readonly=True)
+
+    @api.depends('quantity', 'price_unit')
+    def _compute_amount(self):
+        """
+        Compute the amounts of the Initiatives line.
+        """
+        for line in self:
+            price_total = line.price_unit * line.quantity
+            line.update({
+                'price_total': price_total,
+            })
+
+    @api.onchange('product_id','quantity')
+    def _onchange_product_quantity(self):
+        if self.product_id and self.company_id:
+            seller = self.product_id.with_company(self.company_id)._select_seller(
+            quantity=self.quantity,
+            date=self.proposal_id.date,
+            )
+            if seller:
+                self.price_unit = seller.price
+                self.supplier_id = seller.name.id
+            else:
+                self.price_unit = 0

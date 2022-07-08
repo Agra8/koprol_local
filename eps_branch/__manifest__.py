@@ -19,8 +19,10 @@ Branch
         'data/res_branch.xml',
         'data/res_area.xml',
         # 'security/ir_rule.xml',
+        'security/ir_rule.xml',
         'security/res_group.xml',
         'security/ir.model.access.csv',
+
     ],
     'external_dependencies': {
         'python': ['validate_email','pytz']
