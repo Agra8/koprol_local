@@ -4,7 +4,7 @@
       <field name="url">request_form</field>
       <field name="is_published">True</field>
       <field name="website_indexed" eval="True" />
-      <field name="name">JRF / ARF Online</field>
+      <field name="name">Ticketing Online</field>
       <field name="type">qweb</field>
       <field name="key">website_request_form.website_request_form</field>
       <field name="arch" type="xml">
@@ -116,7 +116,7 @@
                 </div>
               </section>
               <div id="nextSection" class="s_card card w-75 mx-auto" data-snippet="s_card" data-name="Card" style="background-color: rgb(226, 226, 226) !important;">
-                <h4 class="card-header">JRF / ARF Online</h4>
+                <h4 class="card-header">Ticketing Online</h4>
                 <div class="card-body">
                   <!-- <p class="card-text">Jika anda sudah mengisi formulir sebelumnya, lakukan pengecekan <b>Request</b> anda dengan tombol berikut:</p>
                           <button class="btn btn-outline-info" onclick="showSearch()">Cek Request</button>
