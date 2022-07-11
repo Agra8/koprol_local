@@ -1,5 +1,0 @@
-"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-access_all_res_branch,access_all_res_branch,model_res_branch,,1,0,0,0
-access_admin_res_branch,access_admin_res_branch,model_res_branch,base.group_system,1,1,1,1
-access_all_res_area,access_all_res_area,model_res_area,,1,0,0,0
-access_admin_res_area,access_admin_res_area,model_res_area,base.group_system,1,1,1,1
