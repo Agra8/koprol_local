@@ -10,7 +10,6 @@ import string
 import random
 import cryptocode
 import os
-from winreg import REG_QWORD
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
