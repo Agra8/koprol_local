@@ -33,8 +33,3 @@ install/win32/meta.py
 /share/
 /src/
 
-<<<<<<< HEAD
-#local addons
-database_cleanup
-=======
->>>>>>> 5a1ee4d23b033c9446ee73029d93c81ac2af7c21
