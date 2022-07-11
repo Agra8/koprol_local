@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_report_request_form_wizard" model="ir.ui.view">
+            <field name="name">eps.request.form.report.wizard</field>
+            <field name="model">eps.request.form.report</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Laporan Request Form">
+                    <sheet>
+                        <group attrs="{'invisible': [('state_x','=','get')]}">
+                            <label for="start_date" string="Periode"/>
+                            <div>
+                                <field name="start_date" required="1" placeholder="Start Date" style="width: 47%% !important; margin-right: 3px;"/>
+                                <field name="end_date" required="1" placeholder="End Date" style="width: 47%%;"/> 
+                            </div>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                            <field name="branch_ids" widget="many2many_tags"/>
+                        </group>
+                        <field invisible="1" name="state_x"/>
+                        <newline/>
+                        <group col="4" fill="0" attrs="{'invisible':[('state_x','!=','get')]}">
+                            <separator colspan="4" string="Excel Export Generated. Click link below to download ..." attrs="{'invisible':[('state_x','=','choose')]}"/>
+                            <field name="file" invisible="1" width="100" attrs="{'invisible':[('state_x','=','choose')]}"/>
+                            <field name="data_x" nolabel="1" readonly="0" width="100" filename="file" attrs="{'invisible':[('state_x','=','choose')]}"/>
+                        </group> 
+                    </sheet>          
+	                <footer>
+	                    <button name="excel_laporan" string="Export Data" type="object" class="oe_highlight" attrs="{'invisible':[('state_x','=','get')]}"/>
+	                    <!-- <label string=" or " attrs="{'invisible':[('state_x','=','get')]}"/> -->
+	                    <button string="Cancel" special="cancel" class="btn btn-default" attrs="{'invisible':[('state_x','=','get')]}"/>
+	                </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- action  -->
+        <record id="action_laporan_request_form_wizard" model="ir.actions.act_window">
+            <field name="name">Laporan Request Form</field>
+            <field name="res_model">eps.request.form.report</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_report_request_form_wizard" />
+            <field name="target">new</field>
+        </record>
+
+        <!-- menu -->
+        <menuitem id="eps_request_form_laporan_menu" parent="eps_request_form_report_sub_menu" action="action_laporan_request_form_wizard" sequence="5"/>
+
+    </data>
+</odoo>

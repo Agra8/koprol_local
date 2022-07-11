@@ -24,8 +24,8 @@
                                         <div class="col-lg-10 offset-lg-1 pb24 o_colored_level" style="text-align: center;">
                                             <lord-icon trigger="loop" scale="500" src="/website_request_form/static/src/images/thanks.json"></lord-icon>
                                             <p>Terima kasih <b><t t-esc="nama_employee"/></b> sudah melakukan Approval terhadap transaksi request
-                                              dengan nomor transaksi <b><t t-esc="nama_transaksi"/></b>, dan berikut list request tersebut.</p>
-                                            <p></p>
+                                              dengan nomor transaksi <b><t t-esc="nama_transaksi"/></b></p>
+                                            <!-- <p></p>
                                             <table style="border: 1px; border-color:#555555; font-size: 11px; font-family: Liberation Mono;" cellpadding="5">
                                               <thead>
                                                 <tr>
@@ -43,7 +43,7 @@
                                                   <t t-set="nomor" t-value="nomor+1"/>
                                                 </t>
                                               </tbody>
-                                            </table>
+                                            </table> -->
                                         </div>
                                       </div>
                                     </div>

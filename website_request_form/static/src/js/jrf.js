@@ -19,47 +19,71 @@ function initEvent() {
 }
 
 function addRow(value) {
-	var table = document.getElementById(value);
-	var row = table.insertRow();
-	var index = document.getElementById('request_tbl').children[1].children.length;
-	console.log(index);
+	var newDiv = document.getElementById(value);
+	var index = document.querySelectorAll('.w3-row').length;
+	console.log(newDiv);
 	if (value == 'request_tbl') {
-		row.innerHTML = `        <tr>
-                                          <td class="td-custom">
-                                            <table class="table responsive text-center" >
-                                              <tr>
-                                                <th scope="col">Type Request</th>
-                                                <th scope="col">Request</th>
-                                              </tr>
-                                              <tr>
-                                                <td>
-													<select id="requestform_id_${index}" name="requestform_id" class="form-control s_website_form_input input-types" placeholder="" required="true">
-														<option value="">(Silahkan Pilih)</option>
-														<option value="arf">Access Request</option>
-														<option value="jrf">Job Request</option>
-													</select>
-                                              	</td>
-                                              <td>
-												<select id="request_id_${index}" name="request_line_ids[]" class="form-control s_website_form_input" placeholder="" required="true">
-													<option value="">(Silahkan Pilih)</option>
-												</select>
-                                              </td>
-                                              </tr>
-                                              <tr> 
-                                              <td class="td-custom" colspan="2">
-                                                <textarea class="text-area form-control s_website_form_input s_website_form_model_required" name="request_line_keterangan[]" placeholder="Keterangan" required="true"></textarea>
-                                              </td>
-                                              </tr>
-                                            </table>
-                                          </td>
-                                              <td class="td-custom" style="width:6%;">
-												<button type="button" class="btn custom-btn-primary rounded-circle buttonx" style="font-size: 0.75rem;" onclick="deleteRow(this.parentElement.parentElement)">X</button>
-											  </td>
-                                        </tr>
-					`;
-		document.getElementById(value).insertRow(row);
+		newDiv.insertAdjacentHTML(
+			'beforeend',
+			`        				<div>
+			 						<div class="s_hr text-left pt32 pb18" data-snippet="s_hr" data-name="Separator">
+                                        <hr class="w-100 mx-auto" style="border-top-style: double !important; border-top-width: 5px !important; margin-bottom: 25px;"/>
+                                    </div>
+									<p name="number" style="text-align:left;  font-weight: bold;"></p>
+									<div class="w3-row">
+                                      <label class="w3-col m1 s_website_form_label" style="width: 200px" for="2hvgthz7mmr">
+                                        <span class="s_website_form_label_content">Request</span>
+                                        <span class="s_website_form_mark"> *</span>
+                                      </label>
+                                      <button type="button" class="btn custom-btn-primary rounded-circle buttonx custom-btn-close" style="font-size: 0.75rem;" onclick="deleteRow(this.parentElement.parentElement)">X</button>
+                                      <div class="w3-col m1 w3-center w3-container m4 l3">
+                                        <select id="requestform_id_${index +
+											1}" name="request_line_ids" class="form-control s_website_form_input input-types"  placeholder="" required="true">
+                                           <option value="">Pilih Tipe Request</option>
+                                        </select>
+                                      </div>
+                                      <div class="w3-col m1 w3-center w3-container m4 l6 custom-row">
+                                        <select id="request_id_${index +
+											1}"  name="request_sistem_ids" class="form-control s_website_form_input" placeholder="" required="true">
+                                          <option value="">(Silahkan Pilih)</option>
+                                          <t t-foreach="tipe_sistem" t-as="tipe_sistem">
+                                              <option t-attf-value="#{tipe_sistem.id}">
+                                                  <t t-esc="tipe_sistem.name"/> -
+                                                  <t t-esc="tipe_sistem.company_id.name"/>
+                                              </option>
+                                          </t>
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <div class="form-group s_website_form_field col-12 s_website_form_custom s_website_form_required" data-name="Field" style="padding-top: 15px;">
+                                      <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
+                                          <span class="s_website_form_label_content"></span>
+                                          <span class="s_website_form_mark"> </span>
+                                        </label>
+                                        <div class="col-sm">
+                                          <textarea class="text-area form-control s_website_form_input s_website_form_model_required" name="request_line_keterangan[]" placeholder="Keterangan" required="1"></textarea>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  <div class="form-group s_website_form_field s_website_form_custom" data-name="Field" style="padding-top: 15px;">
+                                      <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
+                                          <span class="s_website_form_label_content">Lampiran</span>
+                                          <span class="s_website_form_mark"> </span>
+                                        </label>
+                                        <div class="col-sm-8" style="padding-left: 30px;">
+                                          <input type="file" class="form-control s_website_form_input" name="attachment"/>
+                                        </div>
+                                      </div>
+                                    </div>
+									</div>
+					`
+		);
 		initEvent();
+		changeAddRequest();
 		tbl('#request_tbl', 'keyup', "input[name='requestform_id']");
+		numberRow();
 	}
 }
 
@@ -75,52 +99,57 @@ function tbl(selector, eventType, childSelector) {
 	}
 }
 
-$(document).on('change', '.input-types', function() {
-	idRequest = this.id.split('_');
-	otherSelector = 'select[id="request_id_' + idRequest[2] + '"]';
-	valueRequest = this.value;
-	request = document.getElementById('requestjrf_').children;
-	requestForm = document.querySelector(otherSelector);
-	requestForm.innerHTML = '';
-	requestFormOption = ``;
-
-	if (this.value != '') {
-		var opt = document.createElement('option');
-		opt.innerHTML = '(Silahkan Pilih)';
-		requestForm.appendChild(opt);
-	}
-
-	[].forEach.call(request, function(el) {
-		var temp = el.value.split('-');
-		if (temp[0] == valueRequest) {
-			var opt = document.createElement('option');
-			opt.value = temp[1];
-			opt.innerHTML = el.innerText;
-			requestForm.appendChild(opt);
-		}
-	});
-
-	initEvent();
-});
-
-$(document).on('change', '.input-company', function() {
+function changeByCompany() {
 	otherSelector = 'select[id="branch"]';
-	valueRequest = this.value;
+	var index = document.querySelectorAll('.w3-row').length;
 	console.log(otherSelector);
 	request = document.getElementById('branchdropdown').children;
+	request_tipe = document.getElementById('requestform_id').children;
+	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
 	requestForm = document.querySelector(otherSelector);
 	requestForm.innerHTML = '';
 	requestFormOption = ``;
 
+	for (let i = 0; i < index; i++) {
+		selectorTipeFormId = document.querySelectorAll('.w3-row')[i].childNodes[5].childNodes[1].id;
+		selectorTipeForm = `select[id="${selectorTipeFormId}"]`;
+		requestTipeForm = document.querySelector(selectorTipeForm);
+		requestTipeForm.innerHTML = '';
+
+		if (this.value != '') {
+			var opts = document.createElement('option');
+			opts.value = 'NULL';
+			opts.innerHTML = '(Pilih Tipe Request)';
+			requestTipeForm.appendChild(opts);
+		}
+
+		[].forEach.call(request_tipe, function(e) {
+			var temporaryTipe = e.value.split('-');
+			if (temporaryTipe[2] == company_id || temporaryTipe[2] == '') {
+				var options = document.createElement('option');
+				options.value = `${temporaryTipe[0]}-${temporaryTipe[1]}`;
+				options.innerHTML = e.innerText;
+				requestTipeForm.appendChild(options);
+			}
+		});
+		requestId = document.querySelectorAll('.w3-row')[i].childNodes[7].childNodes[1].id;
+		document.getElementById(requestId).style.display = 'none';
+		// document.getElementById(`request_id_${i}`).disabled = true;
+		// document.getElementById(`request_id_${i}`).value = 'XXX';
+
+		$(requestId).prop('selectedIndex', 0);
+	}
+
 	if (this.value != '') {
 		var opt = document.createElement('option');
+		opt.value = 'NULL';
 		opt.innerHTML = '(Silahkan Pilih)';
 		requestForm.appendChild(opt);
 	}
 
 	[].forEach.call(request, function(el) {
 		var temp = el.value.split('-');
-		if (temp[0] == valueRequest) {
+		if (temp[0] == company_id) {
 			var opt = document.createElement('option');
 			opt.value = temp[1];
 			opt.innerHTML = el.innerText;
@@ -129,8 +158,79 @@ $(document).on('change', '.input-company', function() {
 	});
 
 	initEvent();
+}
+
+function changeAddRequest() {
+	var index = document.querySelectorAll('.w3-row').length;
+	selectorTipeForm = `select[id="requestform_id_${index}"]`;
+	request_tipe = document.getElementById('requestform_id').children;
+	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
+	requestTipeForm = document.querySelector(selectorTipeForm);
+	requestTipeForm.innerHTML = '';
+
+	if (this.value != '') {
+		var opts = document.createElement('option');
+		opts.value = 'NULL';
+		opts.innerHTML = '(Pilih Tipe Request)';
+		requestTipeForm.appendChild(opts);
+	}
+
+	[].forEach.call(request_tipe, function(e) {
+		var temporaryTipe = e.value.split('-');
+		if (temporaryTipe[2] == company_id) {
+			var options = document.createElement('option');
+			options.value = `${temporaryTipe[0]}-${temporaryTipe[1]}`;
+			options.innerHTML = e.innerText;
+			-requestTipeForm.appendChild(options);
+		}
+	});
+
+	// document.getElementById(`request_id_${index}`).disabled = true;
+	document.getElementById(`request_id_${index}`).style.display = 'none';
+	$(`#request_id_${index}`).prop('selectedIndex', 0);
+}
+
+$(document).on('change', '.input-types', function() {
+	idRequest = this.id.split('_');
+	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
+	requestTipeSistem = document.getElementById('tipe_sistem').children;
+	valueRequest = this.value.split('-');
+	selectorTipeSistem = `select[id="request_id_${idRequest[2]}"]`;
+	requestTipeSistemForm = document.querySelector(selectorTipeSistem);
+	requestTipeSistemForm.innerHTML = '';
+
+	if (this.value != '') {
+		var opt = document.createElement('option');
+		opt.value = 'NULL';
+		opt.innerHTML = '(Silahkan Pilih)';
+		requestTipeSistemForm.appendChild(opt);
+	}
+
+	[].forEach.call(requestTipeSistem, function(e) {
+		var temporaryTipe = e.value.split('-');
+		var options = document.createElement('option');
+		options.value = temporaryTipe[0];
+		options.innerHTML = e.innerText;
+		requestTipeSistemForm.appendChild(options);
+	});
+
+	document.getElementById(`request_id_${idRequest[2]}`).style.display = 'none';
+	// document.getElementById(`request_id_${idRequest[2]}`).disabled = true;
+	$(`#request_id_${idRequest[2]}`).prop('selectedIndex', 0);
+	if (valueRequest[1] == 'Sistem') {
+		// document.getElementById(`request_id_${idRequest[2]}`).disabled = false;
+		document.getElementById(`request_id_${idRequest[2]}`).style.display = 'block';
+	}
 });
 
+// document.getElementById('main_form').addEventListener('keyup', function(event) {
+// 	$('input, select').prop('disabled', false);
+// });
+// $(document).ready(function() {
+// 	$('#main_form').submit(function() {
+// 		$('input, select').prop('disabled', false);
+// 	});
+// });
 function showSearch() {
 	var x = document.getElementById('section_search');
 	if (x.style.display === 'none') {
@@ -142,6 +242,18 @@ function showSearch() {
 
 function deleteRow(value) {
 	value.remove();
+	numberRow();
+}
+
+function numberRow() {
+	let numberRange = document.querySelectorAll('.w3-row').length;
+	let number = 0;
+	let numberInnerHtml = 2;
+	let name = document.getElementsByName('number');
+	for (numberInnerHtml; numberInnerHtml <= numberRange; numberInnerHtml++) {
+		name[number].innerText = 'Nomor: ' + numberInnerHtml;
+		number++;
+	}
 }
 
 // function functionDebug() {

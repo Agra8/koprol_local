@@ -54,12 +54,24 @@ class Branch(models.Model):
     kelurahan = fields.Char(string="Kelurahan")
     kode_pos = fields.Char(string="Kode Pos")
     is_pkp = fields.Boolean('PKP')
+    is_md = fields.Boolean('Is Main Dealer')
     interco_account_id = fields.Many2one('account.account',string='Intercompany Account')
     interco_match_account_id = fields.Many2one('account.account',string='Intercompany Match Account')
     pimpinan_id = fields.Many2one('hr.employee',string='Pimpinan')
     profit_centre = fields.Char(string='Profit Centre',required=True,help='please contact your Accounting Manager to get Profit Center.')   
     tops_id = fields.Char('TOPS ID')
 
+    # relation fields
+    area_id = fields.Many2one(comodel_name='res.area', string='Area', help='')
+    parent_id = fields.Many2one(comodel_name='res.branch', string='Parent Branch', help='')
+    company_id = fields.Many2one(comodel_name='res.company', string='Company', help='')
+    kawil_id = fields.Many2one(comodel_name='hr.employee', string='Kepala Wilayah', domain=[('job_id.sales_force','=','am')])
+    owner_id = fields.Many2one(comodel_name='hr.employee', string='Owner')
+    kacab_id = fields.Many2one(comodel_name='hr.employee', string='Kepala Cabang', domain=[('job_id.sales_force','=','soh')])
+    adh_id = fields.Many2one(comodel_name='hr.employee', string='Admin Head')
+    kabeng_id = fields.Many2one(comodel_name='hr.employee', string='Kepala Bengkel')
+    kasir_id = fields.Many2one(comodel_name='hr.employee', string='Kasir')
+    
     def init(self):
         self._cr.execute("""
             ALTER TABLE IF EXISTS res_branch 

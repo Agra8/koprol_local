@@ -55,16 +55,18 @@ class eps_matrix_approval_line(models.Model):
     _name = "eps.matrix.approval.line"
     _order = "id asc"
 
-    approval_id = fields.Many2one('eps.matrix.approval', string='Matrix Approval')
     matrix_sequence = fields.Integer(string='Sequence', default=10)
     limit = fields.Float(string='Limit')
+    sla_days = fields.Integer('SLA Approval Days')
+
+    # Relation field
+    approval_id = fields.Many2one('eps.matrix.approval', string='Matrix Approval')
     group_id = fields.Many2one('res.groups')
     model_id = fields.Many2one(related='approval_id.model_id', readonly=True)
     company_id = fields.Many2one(related='approval_id.company_id', readonly=True)
     branch_id = fields.Many2one(related='approval_id.branch_id', readonly=True)
     divisi_id = fields.Many2one(related='approval_id.divisi_id', readonly=True)
     department_id = fields.Many2one(related='approval_id.department_id', readonly=True)
-    sla_days = fields.Integer('SLA Approval Days')
 
     def request_by_value(self,object,value,view_id=None):
         matrix_data = []

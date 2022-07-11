@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="eps_request_form_type_tree" model="ir.ui.view">
+            <field name="name">eps.request.form.type</field>
+            <field name="model">eps.request.form.type</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Tipe Request" editable="top">
+                    <field name="name" />
+                    <field name="code_request"/>
+                </tree>
+            </field>
+        </record>
+
+  
+        <!-- search view -->
+        <record id="eps_request_form_type_search" model="ir.ui.view">
+            <field name="name">eps.request.form.type.search</field>
+            <field name="model">eps.request.form.type</field>
+            <field name="arch" type="xml">
+                <search string="Tipe Request">
+                    <field name="name" />
+                    <field name="code_request" />
+                </search>
+            </field>
+        </record>
+
+        <!-- action window -->
+        <record id="eps_request_form_type_action" model="ir.actions.act_window">
+            <field name="name">Tipe Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">eps.request.form.type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem id="eps_request_form_type_menu" name="Tipe Request" parent="eps_master_jrf_arf_sub_menu" action="eps_request_form_type_action" sequence="20" groups="eps_request_form.group_eps_request_form_configuration_read" />
+    </data>
+</odoo>

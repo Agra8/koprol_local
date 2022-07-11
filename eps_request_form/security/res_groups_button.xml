@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Assign Pic -->
+        <record id="group_button_assign_pic" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role" />
+            <field name="name">Eps Request Form Assign PIC</field>
+            <field name="implied_ids" eval="[(4, ref('group_eps_request_form_read'))]" />
+        </record>
+
+        <record id="access_button_waiting_for_approved_edit_employee_read" model="ir.model.access">
+            <field name="model_id" ref="model_hr_employee_edit" />
+            <field name="name">button_waiting_for_approved_edit_employee read</field>
+            <field name="group_id" ref="group_button_waiting_for_approved_edit_employee" />
+            <field name="perm_write">1</field>
+        </record>
+
+
+        <record id="dms_menu.group_sys_admin_button" model="res.groups">
+            <field name="implied_ids" eval="[                
+                (4,ref('group_button_waiting_for_approved_edit_employee')),
+                (4,ref('group_button_approved_edit_employee')),
+                (4,ref('group_button_request_tunasid')),
+                (4,ref('group_button_confirm_employee_salesman')),
+                (4,ref('group_button_request_hondaid')),
+                (4,ref('group_button_approve_employee_salesman')),
+                (4,ref('group_button_approve_revisi_employee_salesman')),
+                (4,ref('group_button_confirm_employee_training')),
+                (4,ref('group_button_hasil_training')),
+                ]" />
+        </record>
+    </data>
+</odoo>

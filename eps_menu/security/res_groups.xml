@@ -18,6 +18,24 @@
             <field name="category_id" ref="eps_role"/>
             <field name="name">System Administrators</field> 
         </record> 
+
+        <record id="module_category_eps" model="ir.module.category">
+			<field name="name">EPS Dealer</field>
+		</record>
+
+        <record id="module_category_eps_md" model="ir.module.category">
+			<field name="name">EPS MD</field>
+		</record>
+
+        <record id="module_category_eps_ho" model="ir.module.category">
+			<field name="name">EPS HO</field>
+		</record>
+
+        <record id="module_category_eps_partner" model="ir.module.category">
+			<field name="name">EPS Partner</field>
+		</record>
+
+
         
         
         

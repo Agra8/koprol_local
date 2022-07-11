@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Read Request Form-->
+        <record id="group_eps_request_form_read" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Request Form Read</field>
+        </record>
+        <record id="access_eps_request_form_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form"/>
+            <field name="name">eps_request_form read</field>
+            <field name="group_id" ref="group_eps_request_form_read"/>
+            <field name="perm_read" eval="True"/>
+        </record> 
+
+        <!-- Read Approval -->
+        <record id="access_eps_request_form_approval_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_approval"/>
+            <field name="name">eps_request_form_approval read</field>
+            <field name="group_id" ref="group_eps_request_form_read"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <!-- Read Line -->
+        <record id="access_eps_request_form_line_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_line"/>
+            <field name="name">eps_request_form_line read</field>
+            <field name="group_id" ref="group_eps_request_form_read"/>
+            <field name="perm_read" eval="True"/>
+        </record> 
+        <record id="access_eps_request_form_line_wizard_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_line_wizard"/>
+            <field name="name">eps_request_form_line_wizard read</field>
+            <field name="group_id" ref="group_eps_request_form_read"/>
+            <field name="perm_read" eval="True"/>
+        </record>  
+
+        <!-- Read Type -->
+        <record id="access_eps_request_form_type_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_type"/>
+            <field name="name">eps_request_form_type read</field>
+            <field name="group_id" ref="group_eps_request_form_read"/>
+            <field name="perm_read" eval="True"/>
+        </record>  
+
+        <!-- Read Master ARF/JRF -->
+        <record id="access_eps_request_form_master_jrf_arf_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_master_jrf_arf"/>
+            <field name="name">eps_request_form_master_jrf_arf read</field>
+            <field name="group_id" ref="group_eps_request_form_read"/>
+            <field name="perm_read" eval="True"/>
+        </record>  
+        
+        <!-- Read Configuration -->
+        <record id="group_eps_request_form_configuration_read" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Request Form Configuration Read</field>
+        </record>
+        <record id="access_eps_request_form_configuration_read" model="ir.model.access">
+            <field name="model_id" ref="model_eps_master_jrf_arf"/>
+            <field name="name">eps_request_form_configuration read</field>
+            <field name="group_id" ref="group_eps_request_form_configuration_read"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <!-- Update Request Form -->
+        <record id="group_eps_request_form_update" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Request Form Update</field>
+        </record>
+        <record id="access_eps_request_form_update" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form"/>
+            <field name="name">eps_request_form update</field>
+            <field name="group_id" ref="group_eps_request_form_update"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_write" eval="True"/>
+        </record>
+
+        <!-- Update Approval -->
+        <record id="access_eps_request_form_approval_update" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_approval"/>
+            <field name="name">eps_request_form_approval update</field>
+            <field name="group_id" ref="group_eps_request_form_update"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_write" eval="True"/>
+        </record>
+
+        <!-- Update Line -->
+        <record id="access_eps_request_form_line_update" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_line"/>
+            <field name="name">eps_request_form_line update</field>
+            <field name="group_id" ref="group_eps_request_form_update"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_write" eval="True"/>
+        </record>
+        <record id="access_eps_request_form_line_wizard_update" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_line_wizard"/>
+            <field name="name">eps_request_form_line_wizard update</field>
+            <field name="group_id" ref="group_eps_request_form_update"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_write" eval="True"/>
+        </record>
+
+        <!-- Update Type -->
+        <record id="access_eps_request_form_type_update" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_type"/>
+            <field name="name">eps_request_form_type update</field>
+            <field name="group_id" ref="group_eps_request_form_update"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_write" eval="True"/>
+        </record>
+
+        <!-- Update Configuration -->
+        <record id="group_eps_request_form_configuration_update" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Request Form Configuration Update</field>
+        </record>
+        <record id="access_eps_request_form_configuration_update" model="ir.model.access">
+            <field name="model_id" ref="model_eps_master_jrf_arf"/>
+            <field name="name">eps_request_form_configuration update</field>
+            <field name="group_id" ref="group_eps_request_form_configuration_update"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_write" eval="True"/>  
+        </record>
+
+        <!-- Delete Request Form -->
+        <record id="group_eps_request_form_delete" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Request Form Delete</field>
+        </record>
+        <record id="access_eps_request_form_delete" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form"/>
+            <field name="name">eps_request_form delete</field>
+            <field name="group_id" ref="group_eps_request_form_delete"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Delete Approval -->
+        <record id="access_eps_request_form_approval_delete" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_approval"/>
+            <field name="name">eps_request_form_approval delete</field>
+            <field name="group_id" ref="group_eps_request_form_delete"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Delete Line -->
+        <record id="access_eps_request_form_line_delete" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_line"/>
+            <field name="name">eps_request_form_line delete</field>
+            <field name="group_id" ref="group_eps_request_form_delete"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        <record id="access_eps_request_form_line_wizard_delete" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_line_wizard"/>
+            <field name="name">eps_request_form_line_wizard delete</field>
+            <field name="group_id" ref="group_eps_request_form_delete"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Delete Type -->
+        <record id="access_eps_request_form_type_delete" model="ir.model.access">
+            <field name="model_id" ref="model_eps_request_form_type"/>
+            <field name="name">eps_request_form_type delete</field>
+            <field name="group_id" ref="group_eps_request_form_delete"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        
+        <!-- Delete Configuration -->
+        <record id="group_eps_request_form_configuration_delete" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Request Form Configuration Delete</field>
+        </record>
+        <record id="access_eps_request_form_configuration_delete" model="ir.model.access">
+            <field name="model_id" ref="model_eps_master_jrf_arf"/>
+            <field name="name">eps_request_form_configuration delete</field>
+            <field name="group_id" ref="group_eps_request_form_configuration_delete"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Laporan -->
+        <record id="group_eps_request_form_report_read" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Request Form Laporan Read</field>
+        </record>
+
+
+        
+
+        <record id="eps_menu.group_sys_admin" model="res.groups">
+			<field name="implied_ids" eval="[
+                                            (4,ref('group_eps_request_form_read')),
+                                            (4,ref('group_eps_request_form_configuration_read')),
+                                            (4,ref('group_eps_request_form_update')),
+                                            (4,ref('group_eps_request_form_configuration_update')),
+                                            (4,ref('group_eps_request_form_delete')),
+                                            (4,ref('group_eps_request_form_configuration_delete')),
+                                            (4,ref('group_eps_request_form_report_read')),
+											]"/> 
+		</record> 
+    </data>
+</odoo>
