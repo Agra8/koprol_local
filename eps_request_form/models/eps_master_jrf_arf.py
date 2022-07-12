@@ -97,7 +97,7 @@ class TypeRequest(models.Model):
                 name = '%s' % (name)
             else:
                 name = '%s' % (name)
-            res.append((record.id, name, code))
+            res.append((record.id, name))
         return res
 
     @api.model
