@@ -93,11 +93,10 @@ class TypeRequest(models.Model):
         res = []
         for record in self:
             name = record.name
-            code = record.code_request
             if not record.name:
-                name = '%s - %s' % (code,name)
+                name = '%s' % (name)
             else:
-                name = '%s - %s' % (code,name)
+                name = '%s' % (name)
             res.append((record.id, name, code))
         return res
 
@@ -105,6 +104,6 @@ class TypeRequest(models.Model):
     def name_search(self, name='', args=None, operator='ilike', limit=100):
         args = args or []
         if name:
-            args = ['|',('name', operator, name),('code_request',operator,code_request)] + args
+            args = ['|',('name', operator, name)] + args
         categories = self.search(args, limit=limit)
         return categories.name_get()
