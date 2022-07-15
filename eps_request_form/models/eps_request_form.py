@@ -406,6 +406,7 @@ class RequestFormLine(models.Model):
             if vals.get('employee_id') != self.employee_id:
                 employee_obj = self.env['hr.employee'].suspend_security().browse(
                     vals.get('employee_id'))
+                employee_obj.message_subscribe(employee_obj.partner_id.ids)
                 self._message_log(body=_('<b>PIC Changed!</b> From %s to %s') %
                                   (self.employee_id.name, employee_obj.name))
         if vals.get('state', False):

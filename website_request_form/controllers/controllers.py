@@ -227,7 +227,6 @@ class WebsiteForm(Home):
                 ('id', '=', id_record)
             ], limit=1)
             if attachment:
-
                 try:
                     attachment.sudo().write({
                         'filename': file_.filename,
