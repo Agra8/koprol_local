@@ -101,14 +101,19 @@ function tbl(selector, eventType, childSelector) {
 
 function changeByCompany() {
 	otherSelector = 'select[id="branch"]';
+	otherSelectorDepartment = 'select[id="department"]';
 	var index = document.querySelectorAll('.w3-row').length;
 	console.log(otherSelector);
 	request = document.getElementById('branchdropdown').children;
+	requestDepartment = document.getElementById('departmentdropdown').children;
 	request_tipe = document.getElementById('requestform_id').children;
 	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
 	requestForm = document.querySelector(otherSelector);
+	requestFormDepartment = document.querySelector(otherSelectorDepartment);
 	requestForm.innerHTML = '';
+	requestFormDepartment.innerHTML = '';
 	requestFormOption = ``;
+	requestFormOptionDepartment = ``;
 
 	for (let i = 0; i < index; i++) {
 		selectorTipeFormId = document.querySelectorAll('.w3-row')[i].childNodes[5].childNodes[1].id;
@@ -154,6 +159,22 @@ function changeByCompany() {
 			opt.value = temp[1];
 			opt.innerHTML = el.innerText;
 			requestForm.appendChild(opt);
+		}
+	});
+	if (this.value != '') {
+		var opt = document.createElement('option');
+		opt.value = 'NULL';
+		opt.innerHTML = '(Silahkan Pilih)';
+		requestFormDepartment.appendChild(opt);
+	}
+
+	[].forEach.call(requestDepartment, function(el) {
+		var temp = el.value.split('-');
+		if (temp[0] == company_id) {
+			var opt = document.createElement('option');
+			opt.value = temp[1];
+			opt.innerHTML = el.innerText;
+			requestFormDepartment.appendChild(opt);
 		}
 	});
 

@@ -183,13 +183,8 @@
                                 <span class="s_website_form_mark"> *</span>
                               </label>
                               <div class="col-sm">
-                                <select class="form-control s_website_form_input select_field" name="department_id" id="toog3woqk5n" style="" required="true">
+                                <select class="form-control s_website_form_input select_field" name="department_id" id="department" style="" required="true">
                                   <option value="">(Silahkan Pilih)</option>
-                                  <t t-foreach="department" t-as="department">
-                                    <option t-attf-value="#{department.id}">
-                                      <t t-esc="department.name" />
-                                    </option>
-                                  </t>
                                 </select>
                               </div>
                             </div>
@@ -342,6 +337,14 @@
                 <t t-foreach="branch" t-as="branch">
                   <option t-attf-value="#{branch.company_id.id}-#{branch.id}">
                     <t t-esc="branch.name" />
+                  </option>
+                </t>
+              </select>
+              <select class="form-control s_website_form_input select_field" name="Department" id="departmentdropdown" style="" required="true">
+                <option value="">(Silahkan Pilih)</option>
+                <t t-foreach="department" t-as="department">
+                  <option t-attf-value="#{department.company_id.id}-#{department.id}">
+                    <t t-esc="department.name" />
                   </option>
                 </t>
               </select>
