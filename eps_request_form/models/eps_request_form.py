@@ -342,11 +342,11 @@ class RequestFormLine(models.Model):
     request_form_id = fields.Many2one(
         comodel_name='eps.request.form', string='Request Form')
     company_id = fields.Many2one(comodel_name='res.company', string='Company',
-                                 related='request_form_id.company_id', store=False)
+                                 related='request_form_id.company_id', store=True)
     branch_id = fields.Many2one(comodel_name='res.branch', string='Branch',
-                                related='request_form_id.branch_id', store=False)
+                                related='request_form_id.branch_id', store=True)
     divisi_id = fields.Many2one(comodel_name='eps.divisi', string='Divisi',
-                                related='request_form_id.divisi_id', store=False)
+                                related='request_form_id.divisi_id', store=True)
     department_id = fields.Many2one(
         comodel_name='hr.department', string='Department', related='request_form_id.department_id', store=False)
     request_id = fields.Many2one(

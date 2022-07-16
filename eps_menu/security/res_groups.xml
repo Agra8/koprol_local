@@ -35,8 +35,16 @@
 			<field name="name">EPS Partner</field>
 		</record>
 
-
         
+        <record id="group_helpdesk_admin" model="res.groups">
+            <field name="category_id" ref="eps_role"/>
+            <field name="name">Helpdesk IT Admin</field> 
+        </record> 
+        
+        <record id="group_helpdesk_user" model="res.groups">
+            <field name="category_id" ref="eps_role"/>
+            <field name="name">Helpdesk IT User</field> 
+        </record> 
         
         
         

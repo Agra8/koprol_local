@@ -71,5 +71,13 @@
             (4,ref('group_eps_teams_master_delete')),
                 ]" />
         </record>
+
+        <record id="eps_menu.group_helpdesk_admin" model="res.groups">
+            <field name="implied_ids" eval="[
+            (4,ref('group_eps_teams_master_read')),
+            (4,ref('group_eps_teams_master_update')),
+            (4,ref('group_eps_teams_master_delete')),
+                ]" />
+        </record>
     </data>
 </odoo>
