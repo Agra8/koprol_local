@@ -154,7 +154,7 @@ class RequestForm(models.Model):
 
     def action_done(self):
         self.write({
-            'state': 'closed',
+            'state': 'done',
             'done_uid': self.env.user.id,
             'done_date': self._get_default_date()
         })
