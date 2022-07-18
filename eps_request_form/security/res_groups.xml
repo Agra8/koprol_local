@@ -198,5 +198,29 @@
                                             (4,ref('group_eps_request_form_report_read')),
 											]"/> 
 		</record> 
+
+        <record id="eps_menu.group_helpdesk_admin" model="res.groups">
+			<field name="implied_ids" eval="[
+                                            (4,ref('group_eps_request_form_read')),
+                                            (4,ref('group_eps_request_form_configuration_read')),
+                                            (4,ref('group_eps_request_form_update')),
+                                            (4,ref('group_eps_request_form_configuration_update')),
+                                            (4,ref('group_eps_request_form_delete')),
+                                            (4,ref('group_eps_request_form_configuration_delete')),
+                                            (4,ref('group_eps_request_form_report_read')),
+											]"/> 
+		</record> 
+
+        <record id="eps_menu.group_helpdesk_user" model="res.groups">
+			<field name="implied_ids" eval="[
+                                            (4,ref('group_eps_request_form_read')),
+                                            (4,ref('group_eps_request_form_configuration_read')),
+                                            (4,ref('group_eps_request_form_update')),
+                                            (4,ref('group_eps_request_form_configuration_update')),
+                                            (4,ref('group_eps_request_form_delete')),
+                                            (4,ref('group_eps_request_form_configuration_delete')),
+                                            (4,ref('group_eps_request_form_report_read')),
+											]"/> 
+		</record> 
     </data>
 </odoo>
