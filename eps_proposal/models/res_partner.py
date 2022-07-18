@@ -112,12 +112,16 @@ class Partner(models.Model):
 
     def action_request_approval(self):
         koprol_setting = self.env['eps.koprol.setting'].sudo().search([])
+        value = 6
+        if self.action_api=='U':
+            value = 5
+
         if not koprol_setting:
             raise ValidationError('Konfigurasi registrasi vendor belum lengkap, silahkan setting terlebih dahulu')
         self.env['eps.matrix.approval.line'].with_context(company_id=koprol_setting.default_company_vendor_approval_id.id,
             branch_id=koprol_setting.default_branch_vendor_approval_id.id,
             divisi_id=koprol_setting.default_divisi_vendor_approval_id.id,
-            ).request_by_value(self, 5)
+            ).request_by_value(self, value)
         self.write({'state':'waiting_for_approval', 'approval_state':'rf'})
 
     def action_approve(self):

@@ -101,7 +101,7 @@
 							<page string="Product Lines" attrs="{'invisible': [('type','=','category')]}">
 								<field name="proposal_product_line_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}" context="{'branch_id': branch_id}">
                                     <tree editable='top' edit='false'>
-                                    	<field name="branch_id" options="{'no_create': True,'no_open': True}"/>
+                                    	<field name="branch_id" options="{'no_create': True,'no_open': True}" domain="[('company_id','=',company_id)]"/>
                                         <field name="product_id" options="{'no_create': True,'no_open': True}"/>
                                         <field name="quantity"/>
                                         <field name="supplier_id" readonly="1" force_save="1"/>
@@ -143,11 +143,12 @@
 							</page>
 						</notebook>
 					</sheet>
-					<div class="oe_chatter">
-						<field name="message_follower_ids"/>
-						<field name="message_ids"/>
+					<div>
+						<field name="message_follower_ids" widget="mail_followers"/>
+    					<field name="message_ids" widget="mail_thread"/>
 					</div>
 					<footer>
+
 					</footer>
 				</form>
 			</field>

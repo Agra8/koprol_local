@@ -69,7 +69,7 @@ class Quotation(models.Model):
     @api.constrains('supplier_id')
     def _check_supplier(self):
         for record in self:
-            if not record.supplier_id.vendor_registration_doc:
+            if not record.supplier_id.vendor_registration_doc and not record.supplier_id.ecommerce:
                 check_record = self.env['eps.initiatives.line'].search([('supplier_id','=',record.supplier_id.id),
                                                                         ('initiatives_id','!=',record.initiatives_id.id),
                                                                         ('initiatives_id.state','=','done')
