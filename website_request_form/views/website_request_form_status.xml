@@ -111,7 +111,7 @@
                                                         <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
                                                     </p>
                                                 </t>
-                                                <t t-elif="request_form.state == 'closed'">
+                                                <t t-elif="request_form.state == 'done'">
                                                     <p class="o_default_snippet_text">Request anda sudah dinyatakan selesai, bila tidak ada tindak lanjut dalam request. Mohon hubungi Helpdesk IT.</p>
                                                     <p class="o_default_snippet_text">
                                                         Dengan nomor request:
@@ -213,7 +213,7 @@
                                             <t t-if="request_form.state == 'rfa'">
                                                 <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
                                             </t>
-                                            <t t-elif="request_form.state == 'approved' or request_form.state == 'open' or request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected' ">
+                                            <t t-elif="request_form.state == 'approved' or request_form.state == 'open' or request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected' ">
                                                 <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom" />
                                             </t>
                                             <t t-else="">
@@ -225,7 +225,7 @@
                                         <t t-if="request_form.state == 'rfa'">
                                             <h5 class="o_default_snippet_text highlight-text">Waiting for Approval</h5>
                                         </t>
-                                        <t t-elif="request_form.state == 'approved' or request_form.state == 'open' or request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                        <t t-elif="request_form.state == 'approved' or request_form.state == 'open' or request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
                                             <h5 class="o_default_snippet_text passed-text">Waiting for Approval</h5>
                                         </t>
                                         <t t-else="">
@@ -239,7 +239,7 @@
                                             <t t-if="request_form.state == 'approved'">
                                                 <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
                                             </t>
-                                            <t t-elif="request_form.state == 'open' or request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected' ">
+                                            <t t-elif="request_form.state == 'open' or request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected' ">
                                                 <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom" />
                                             </t>
 
@@ -253,7 +253,7 @@
                                             <h5 class="o_default_snippet_text highlight-text">Approved</h5>
                                         </t>
 
-                                        <t t-elif="request_form.state == 'open' or request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                        <t t-elif="request_form.state == 'open' or request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
                                             <h5 class="o_default_snippet_text passed-text">Approved</h5>
                                         </t>
                                         <t t-else="">
@@ -268,7 +268,7 @@
                                                 <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
                                             </t>
 
-                                            <t t-elif="request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                            <t t-elif="request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
                                                 <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom" />
                                             </t>
                                             <t t-else="">
@@ -281,7 +281,7 @@
                                             <h5 class="o_default_snippet_text highlight-text">In Process</h5>
                                         </t>
 
-                                        <t t-elif="request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                        <t t-elif="request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
                                             <h5 class="o_default_snippet_text passed-text">In Process</h5>
                                         </t>
                                         <t t-else="">
@@ -292,7 +292,7 @@
                                 <div class="col s_process_step pt24 pb24 o_colored_level">
                                     <div class="s_process_step_icon">
                                         <span>
-                                            <t t-if="request_form.state == 'closed'  or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                            <t t-if="request_form.state == 'done'  or request_form.state == 'cancel' or request_form.state == 'rejected'">
                                                 <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
                                             </t>
                                             <t t-else="">
@@ -301,7 +301,7 @@
                                         </span>
                                     </div>
                                     <div class="s_process_step_content text-center">
-                                        <t t-if="request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                        <t t-if="request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
                                             <h5 class="o_default_snippet_text highlight-text">Done</h5>
                                         </t>
                                         <t t-else="">
