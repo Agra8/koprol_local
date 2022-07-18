@@ -214,6 +214,7 @@ class Initiatives(models.Model):
                     per_vendor[key]['department_id']=rec.department_id.id
                     per_vendor[key]['initiatives_id']=rec.id
                     per_vendor[key]['partner_id']=line.supplier_id.id
+                    per_vendor[key]['state']='to approve'
 
 
                 per_vendor[key]['order_line'].append([0,0,{

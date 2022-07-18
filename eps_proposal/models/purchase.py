@@ -33,6 +33,14 @@ class Purchase(models.Model):
         ('done','Done')],string="API Status",default='draft')
     tops_po_number = fields.Char("TOPS PO Number")
     tops_pr_number = fields.Char("TOPS PR Number")
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('sent', 'RFQ Sent'),
+        ('to approve', 'To Approve'),
+        ('purchase', 'Purchase Order'),
+        ('done', 'Locked'),
+        ('cancel', 'Cancelled')
+    ], string='Status', readonly=True, index=True, copy=False, default='draft', tracking=True)
 
     @api.model
     def create(self,vals):
