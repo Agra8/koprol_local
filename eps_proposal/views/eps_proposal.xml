@@ -143,7 +143,7 @@
 							</page>
 						</notebook>
 					</sheet>
-					<div>
+					<div class="oe_chatter">
 						<field name="message_follower_ids" widget="mail_followers"/>
     					<field name="message_ids" widget="mail_thread"/>
 					</div>
@@ -183,5 +183,53 @@
 		</record>
 
 		<menuitem id="eps_proposal_menuitem" name="Proposal" sequence="1" parent="eps_menu.eps_proposal_top_menu" action="eps_proposal_action"/>  
+
+		<record model="ir.ui.view" id="eps_proposal_line_tree_view">
+			<field name="name">eps.proposal.line.tree</field>
+			<field name="model">eps.proposal.line</field>
+			<field name="arch" type="xml">
+				<tree string="Proposal Detail" create="0" edit="0" delete="0">
+                    <field name='proposal_id'/>
+                    <field name='company_id'/>
+                    <field name='department_id'/>
+                    <field name='nama_proposal'/>
+                    <field name='categ_id'/>
+                    <field name='price'/>
+                    <field name='reserved_amount'/>
+                    <field name="initiatives_ids"><tree><field name="state"/></tree></field>
+
+				</tree>
+			</field>
+		</record>
+
+		<record id="eps_proposal_line_search_view" model="ir.ui.view">
+            <field name="name">eps.proposal.line.search</field>
+            <field name="model">eps.proposal.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Detail Proposal">
+                    <field name="proposal_id"/>
+                    <field name="company_id"/>
+                    <field name="branch_id"/>
+                    <field name="department_id"/>
+                    <field name="categ_id"/>
+					<!-- <filter string="Draft" name="state_draft" domain="[('state','=','draft')]" />
+					<filter string="Waiting for Approval" name="state_wfa" domain="[('state','=','waiting_for_approval')]" />
+					<filter string="Approved" name="state_approved" domain="[('state','=','approved')]" /> -->
+                    <group expand="0" string="Group By">
+                        <filter string="Company" name="company_group" icon="terp-personal" domain="[]" context="{'group_by':'company_id'}"/>
+                        <filter string="Branch" name="branch_group" icon="terp-folder-orange" domain="[]" context="{'group_by':'branch_id'}"/>
+                    </group> 
+                </search>
+            </field>
+        </record>
+
+		<record model="ir.actions.act_window" id="eps_proposal_line_action">
+			<field name="name">Proposal Detail</field>
+			<field name="res_model">eps.proposal.line</field>
+			<field name="view_mode">tree</field>
+			<field name="context"></field>
+		</record>
+
+		<menuitem id="eps_proposal_line_menuitem" name="Proposal Detail" sequence="2" parent="eps_menu.eps_proposal_top_menu" action="eps_proposal_line_action"/>  
 	</data>
 </odoo> 

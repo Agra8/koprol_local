@@ -404,6 +404,7 @@ class ProposalLine(models.Model):
         for rec in self:
             rec.reserved_amount = sum(x.amount_total for x in rec.initiatives_ids.filtered(lambda y: y.state=='done'))
 
+
     proposal_id = fields.Many2one('eps.proposal', string='Proposal', ondelete='cascade')
     categ_id = fields.Many2one('eps.category', string='Proposal Category', required=True)
     price = fields.Float(string='Unit Price')
@@ -413,6 +414,10 @@ class ProposalLine(models.Model):
     file_penawaran_show = fields.Binary(string="File Penawaran", compute='_compute_file_penawaran' ,help="")
     reserved_amount = fields.Float(compute=_compute_reserved_amount, store=True, string='Reserved Amount')
     initiatives_ids = fields.One2many('eps.initiatives','proposal_line_id', string='Detail Initiatives')
+    company_id = fields.Many2one('res.company', related='proposal_id.company_id', string='Company', store=True, readonly=True)
+    department_id = fields.Many2one('hr.department', related='proposal_id.department_id', string='Department', store=True, readonly=True)
+    branch_id = fields.Many2one('res.branch', related='proposal_id.branch_id', string='Branch', store=True, readonly=True)
+    nama_proposal = fields.Char(related='proposal_id.nama_proposal', string='Nama Proposal', store=True, readonly=True)
 
     @api.constrains('price')
     def _check_price(self):
