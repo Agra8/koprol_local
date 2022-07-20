@@ -40,19 +40,19 @@
                             </h1>
                         </div>
                         <group>
-                            <field name="company_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed'])]}" options="{'no_create': True,'no_open': True}"/>
-                            <field name="branch_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed'])]}" options="{'no_create': True,'no_open': True}"/>
-                            <field name="department_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed'])]}" options="{'no_create': True,'no_open': True}"/>
+                            <field name="company_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}" options="{'no_create': True,'no_open': True}"/>
+                            <field name="branch_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}" options="{'no_create': True,'no_open': True}"/>
+                            <field name="department_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}" options="{'no_create': True,'no_open': True}"/>
                             
                         </group>
                         <group>
-                            <field name="name_pegawai" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed'])]}"/>
-                            <field name="nik" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed'])]}"/>
-                            <field name="job_title" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','closed'])]}" options="{'no_open':True,'no_create':True}"/>
+                            <field name="name_pegawai" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}"/>
+                            <field name="nik" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}"/>
+                            <field name="job_title" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}" options="{'no_open':True,'no_create':True}"/>
                         </group>
                         <div>
                             <br />
-                            <button name="action_request" attrs="{'invisible':[('state','in',['rfa','approved','rejected','open','closed'])]}" string="Form Request" style="margin-bottom:3px" class="oe_stat_button oe_edit_only alert alert-info" icon="fa-file-text-o" type="object" context="{'default_active_id': active_id}"/>
+                            <button name="action_request" attrs="{'invisible':[('state','in',['rfa','approved','rejected','open','done'])]}" string="Form Request" style="margin-bottom:3px" class="oe_stat_button oe_edit_only alert alert-info" icon="fa-file-text-o" type="object" context="{'default_active_id': active_id}"/>
                         </div>
                         <notebook>
                             <page string="Request">
