@@ -38,13 +38,13 @@ function addRow(value) {
                                       <button type="button" class="btn custom-btn-primary rounded-circle buttonx custom-btn-close" style="font-size: 0.75rem;" onclick="deleteRow(this.parentElement.parentElement)">X</button>
                                       <div class="w3-col m1 w3-center w3-container m4 l3">
                                         <select id="requestform_id_${index +
-											1}" name="request_line_ids" class="form-control s_website_form_input input-types"  placeholder="" required="true">
+											1}" name="request_line_ids" class="form-control select_field s_website_form_input input-types"  placeholder="" required="true">
                                            <option value="">Pilih Tipe Request</option>
                                         </select>
                                       </div>
                                       <div class="w3-col m1 w3-center w3-container m4 l6 custom-row">
                                         <select id="request_id_${index +
-											1}"  name="request_sistem_ids" class="form-control s_website_form_input" placeholder="" required="true">
+											1}"  name="request_sistem_ids" class="form-control select_field s_website_form_input" placeholder="" required="true">
                                           <option value="">(Silahkan Pilih)</option>
                                           <t t-foreach="tipe_sistem" t-as="tipe_sistem">
                                               <option t-attf-value="#{tipe_sistem.id}">
