@@ -9,6 +9,7 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Sistem Master">
+                    <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="company_id"/>
                 </tree>
