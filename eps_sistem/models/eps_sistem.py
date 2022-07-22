@@ -24,6 +24,7 @@ class EpsTeamsMaster(models.Model):
 
     # 8: fields
     name = fields.Char(string='Name')
+    sequence = fields.Integer(default=10,help="Gives the sequence order when displaying a list of records.")
     
     # Audit Trail
 
