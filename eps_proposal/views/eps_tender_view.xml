@@ -197,6 +197,6 @@
 			<field name="view_mode">tree,form</field>
 		</record>
 
-		<menuitem id="eps_tender_menuitem" name="Tender" sequence="4" parent="eps_menu.eps_proposal_top_menu" action="eps_tender_action"/>  
+		<menuitem id="eps_tender_menuitem" name="Tender" sequence="5" parent="eps_menu.eps_proposal_top_menu" action="eps_tender_action"/>  
 	</data>
 </odoo> 

@@ -49,6 +49,10 @@ class ProductProduct(models.Model):
         ('EDIT','EDIT')
         ], string='Action API')
 
+    state = fields.Selection(selection=[('draft','Draft'),('waiting_for_approval','Waiting for Approval'),('approved','Approved')], default='draft',  string='State',  help='', tracking=True)
+    approval_state = fields.Selection([('b','Belum Request'),('rf','Request For Approval'),('a','Approved'),('r','Reject')],'Approval State', readonly=True)
+    approval_ids = fields.One2many('eps.approval.transaction', 'transaction_id', string='Approval', domain=[('model_id','=','product.template')], copy=False)
+
    
     def get_tops_product_id(self):
         query = """
@@ -58,6 +62,27 @@ class ProductProduct(models.Model):
         max = self._cr.fetchall()
         sequence= max[0][0]+1
         return sequence
+
+    def action_request_approval(self):
+        koprol_setting = self.env['eps.koprol.setting'].sudo().search([])
+        value = 6
+        if self.action_api=='U':
+            value = 5
+
+        if not koprol_setting:
+            raise ValidationError('Konfigurasi registrasi product belum lengkap, silahkan setting terlebih dahulu')
+        self.env['eps.matrix.approval.line'].with_context(company_id=koprol_setting.default_company_product_approval_id.id,
+            branch_id=koprol_setting.default_branch_product_approval_id.id,
+            divisi_id=koprol_setting.default_divisi_product_approval_id.id,
+            ).request_by_value(self, value)
+        self.write({'state':'waiting_for_approval', 'approval_state':'rf'})
+
+    def action_approve(self):
+        approval_sts = self.env['eps.matrix.approval.line'].approve(self)
+        if approval_sts == 1 :
+            self.write({'approval_state':'a', 'state':'approved'})
+        elif approval_sts == 0 :
+            raise ValidationError(_('User tidak termasuk group Approval'))
     
     
     @api.model

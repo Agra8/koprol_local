@@ -26,6 +26,11 @@
             <field name="arch" type="xml">
                 <xpath expr="//header" position="inside">
                     <button name="push_to_tops" type="object" string="Push to TOPS" groups="eps_menu.group_sys_admin"/>
+                    <button name="action_request_approval" class="oe_highlight" string="RFA" type="object" attrs="{'invisible':[('state','!=','draft')]}"/>
+                    <button name="action_approve" class="oe_highlight" attrs="{'invisible':[('state','!=','waiting_for_approval')]}" string="Approve" type="object"/>
+                    <button string="Reject" name="%(eps_approval.eps_reject_approval_wizard_action)d" type="action" attrs="{'invisible':[('state','!=','waiting_for_approval')]}" context="{'model_name':'product.template','update_value':{'approval_state':'r','state':'draft'}}" />
+                    <button name="%(eps_approval.eps_cancel_approval_wizard_action)d" attrs="{'invisible':[('state','!=','waiting_for_approval')]}" string="Cancel Approval" type="action" context="{'model_name':'product.template','update_value':{'approval_state':'b','state':'draft'}}"/>
+                    <field name="state" widget="statusbar"/>
                 </xpath>
                 <field name="categ_id" position="after">
                     <field name="tops_product_id" groups="eps_menu.group_sys_admin"/>
