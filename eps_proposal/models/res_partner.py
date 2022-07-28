@@ -87,7 +87,8 @@ class Partner(models.Model):
     def create(self,vals):
         if not vals.get('action_api',False):
             vals['action_api'] = 'I'
-        vals['code'] = self.sudo().get_sequence()
+        if not vals.get('code',False):
+            vals['code'] = self.sudo().get_sequence()
         ids = super(Partner,self).create(vals)
         return ids
 
