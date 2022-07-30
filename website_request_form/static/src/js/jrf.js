@@ -84,6 +84,7 @@ function addRow(value) {
 		changeAddRequest();
 		tbl('#request_tbl', 'keyup', "input[name='requestform_id']");
 		numberRow();
+		$('.select_field').select2();
 	}
 }
 
