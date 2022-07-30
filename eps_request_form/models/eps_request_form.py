@@ -708,6 +708,17 @@ class RequestFormLine(models.Model):
                 'readonly_by_pass': 1
             }
         }
+    
+    @api.multi
+    def _notify_get_reply_to(self, default=None, records=None, company=None, doc_names=None):
+        """ Override to set alias of tickets to their team if any. """
+        aliases = self.mapped('teams_id')._notify_get_reply_to(default=default, records=None, company=company, doc_names=None)
+        res = {request.id: aliases.get(request.teams_id.id) for request in self}
+        leftover = self.filtered(lambda rec: not rec.team_id)
+        if leftover:
+            res.update(super(RequestFormLine, leftover)._notify_get_reply_to(default=default, records=None, company=company, doc_names=doc_names))
+        return res
+
 
 
 class RequestFormLineWizard(models.TransientModel):
