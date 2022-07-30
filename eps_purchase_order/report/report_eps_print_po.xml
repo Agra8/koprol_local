@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_print_po_pdf" model="report.paperformat">
+            <field name="name">PO Print Paperformat</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="report_print_po_pdf" model="ir.actions.report">
+            <field name="name">Print Purchase Order</field>
+            <field name="model">purchase.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="paperformat_id" ref="eps_purchase_order.paperformat_print_po_pdf" />
+            <field name="report_name">eps_purchase_order.print_po_pdf</field>
+            <field name="report_file">eps_purchase_order.print_po_pdf</field>
+            <field name="print_report_name">'Purchase Order - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_purchase_order"/>
+        </record>
+
+        <template id="external_layout_print_po">
+            <div class="header" style="font-family: 'Helvetica'; font-size:12px;">
+                <table>
+                    <tr>
+                        <td width="500pt">
+                            <img style="width:210px;" t-if="user.company_id.logo" t-att-src="image_data_uri(user.company_id.logo)" alt="Logo"/>
+                        </td>
+                        <td width="400pt">
+                            <h3 align="right"><b>PURCHASE ORDER</b></h3>
+                            <br/>
+                            <table width="100%">
+                                <tr>
+                                    <td width="30%">Po No.</td>
+                                    <td>:</td>
+                                    <td><t t-esc="sp_obj.name" /></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">Po Date</td>
+                                    <td>:</td>
+                                    <td><t t-esc="sp_obj.create_date" /></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">Status</td>
+                                    <td>:</td>
+                                    <td><t t-esc="sp_obj.state" /></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">Page</td>
+                                    <td>:</td>
+                                    <td><span class="page"/> / <span class="topage"/></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </template>
+
+        <template id="print_po_pdf">
+            <t t-call="web.html_container">
+                <style type="text/css">
+                    th {
+                        background-color:#062961;
+                        color:white;
+                    }
+                    table {
+                        font-family:'Helvetica'; 
+                        font-size:13px;
+                    }
+                    th, td {
+                        padding: 5px;
+                    }
+                </style>
+                <t t-forech="docs" t-as="doc">
+                    <t t-call="eps_purchase_order.external_layout_print_po" />
+                    <div class="page" style="">
+                        <table>
+                            <tr>
+                                <td width="400pt" style="padding: 0px;">
+                                    &#160;
+                                </td>
+                                <td width="90pt" style="padding: 0px;">
+                                    &#160;
+                                </td>
+                                <td width="400pt" style="padding: 0px;">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="30%" style="padding: 0px;">Proposal No.</td>
+                                            <td style="padding: 0px;">:</td>
+                                            <td style="padding: 0px;"><t t-esc="sp_obj.name" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px;">Helpdesk No.</td>
+                                            <td style="padding: 0px;">:</td>
+                                            <td style="padding: 0px;"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th align="left">VENDOR</th>
+                                <td>&#160;</td>
+                                <th align="left">ALAMAT PENGIRIMAN</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Kepada Yth.<br/>
+                                    <t t-esc="sp_obj.partner_id.name" /><br/>
+                                    <t t-esc="sp_obj.partner_id.street" /><br/>
+                                    <t t-esc="sp_obj.partner_id.city" />, <t t-esc="sp_obj.partner_id.state_id.name" /><br/>
+                                    <t t-esc="sp_obj.partner_id.zip" /><br/>
+                                    <t t-esc="sp_obj.partner_id.phone" />
+                                </td>
+                                <td>&#160;</td>
+                                <td>
+                                    <t t-esc="sp_obj.branch_id.name" /><br/>
+                                    <t t-esc="sp_obj.branch_id.street" /><br/>
+                                    <t t-esc="sp_obj.branch_id.kabupaten_id.name" />
+                                    <t t-esc="sp_obj.branch_id.kode_pos" />
+                                    <br/><br/>
+                                    <t t-esc="sp_obj.date_order" /><br/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/><br/>
+                        
+                        <table style="border: 1px solid black; border-collapse: collapse;" width="100%">
+                            <tr>
+                                <th style="border: 1px solid black; border-collapse: collapse;">No.</th>
+                                <th style="border: 1px solid black; border-collapse: collapse;">Item Code</th>
+                                <th style="border: 1px solid black; border-collapse: collapse;">Nama Item</th>
+                                <th style="border: 1px solid black; border-collapse: collapse;">Jumlah</th>
+                                <th style="border: 1px solid black; border-collapse: collapse;">Satuan</th>
+                                <th style="border: 1px solid black; border-collapse: collapse;">Harga (Rp.)</th>
+                                <th style="border: 1px solid black; border-collapse: collapse;">Jasa (Rp.)</th>
+                                <th style="border: 1px solid black; border-collapse: collapse;">Harga Total (Rp.)</th>
+                            </tr>
+                            <t t-set="no" t-value="0"/>
+                            <t t-foreach="sp_obj.order_line" t-as="line">
+                                <tr>
+                                    <td style="border: 1px solid black; border-collapse: collapse;">
+                                        <t t-set="no" t-value="no + 1"/>
+                                        <span t-esc="no"/>
+                                    </td>
+                                    <td style="border: 1px solid black; border-collapse: collapse;">
+                                        <t t-esc="line.product_id.default_code" />
+                                    </td>
+                                    <td style="border: 1px solid black; border-collapse: collapse;">
+                                        <t t-esc="line.product_id.name" />
+                                    </td>
+                                    <td style="border: 1px solid black; border-collapse: collapse;">
+                                        <t t-esc="line.product_qty" />
+                                    </td>
+                                    <td style="border: 1px solid black; border-collapse: collapse;">
+                                        Unit
+                                    </td>
+                                    <td style="border: 1px solid black; border-collapse: collapse;" align="right">
+                                        <t t-esc="'{0:,.2f}'.format(line.price_subtotal)" />
+                                    </td>
+                                    <td style="border: 1px solid black; border-collapse: collapse;" align="right">
+                                        0
+                                    </td>
+                                    <td style="border: 1px solid black; border-collapse: collapse;" align="right">
+                                        <t t-esc="'{0:,.2f}'.format(line.price_subtotal)" />
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr>
+                                <td colspan="5">
+                                    Catatan:
+                                </td>
+                                <td style="border: 1px solid black; border-collapse: collapse;" colspan="2">
+                                    Sub Total
+                                </td>
+                                <td style="border: 1px solid black; border-collapse: collapse;" align="right">
+                                    <t t-esc="'{0:,.2f}'.format(sp_obj.amount_untaxed)" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <span />
+                                </td>
+                                <td style="border: 1px solid black; border-collapse: collapse;" colspan="2">
+                                    Discount
+                                </td>
+                                <td style="border: 1px solid black; border-collapse: collapse;" align="right">
+                                    0
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <span />
+                                </td>
+                                <td style="border: 1px solid black; border-collapse: collapse;" colspan="2">
+                                    PPN (11%)
+                                </td>
+                                <td style="border: 1px solid black; border-collapse: collapse;" align="right">
+                                    <t t-esc="'{0:,.2f}'.format(sp_obj.amount_tax)" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <span />
+                                </td>
+                                <td style="border: 1px solid black; border-collapse: collapse;" colspan="2">
+                                    Biaya Lain-lain
+                                </td>
+                                <td style="border: 1px solid black; border-collapse: collapse;" align="right">
+                                    0
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <span />
+                                </td>
+                                <th style="border: 1px solid black; border-collapse: collapse;" colspan="2">
+                                    Total
+                                </th>
+                                <th style="border: 1px solid black; border-collapse: collapse;" align="right">
+                                    <t t-esc="'{0:,.2f}'.format(sp_obj.amount_total)" />
+                                </th>
+                            </tr>
+                        </table>
+                        <br/> <br/>
+                        <table style="border: 1px solid black; border-collapse: collapse;" width="100%">
+                            <tr>
+                                <th colspan="2" style="border: 1px solid black; border-collapse: collapse;">Term of Payment</th>
+                                <th width="40%" style="border: 1px solid black; border-collapse: collapse;">Invoice</th>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; border-collapse: collapse;">Type</td>
+                                <td style="border: 1px solid black; border-collapse: collapse;">: <t t-esc="sp_obj.payment_term_id.name" /></td>
+                                <td rowspan="2" align="center" style="border: 1px solid black; border-collapse: collapse;">
+                                    <b>PT. TUNAS RIDEAN TBK</b> <br/>
+                                    Jl. Pecenongan No.62 Kebon Kelapa Gambir<br/>
+                                    Jakarta Pusat<br/>
+                                    NPWP : 01.310.233.0-054.000
+                                </td>
+                            </tr>
+                            <tr height="100px">
+                                <td style="border: 1px solid black; border-collapse: collapse;" valign="top">Cash In Advance</td>
+                                <td style="border: 1px solid black; border-collapse: collapse;" valign="top">: <t t-esc="sp_obj.payment_term_id.note" /></td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table style="border: 1px solid black; border-collapse: collapse;" width="100%">
+                            <tr>
+                                <td width="50%" style="border: 1px solid black; border-collapse: collapse;">Buyer</td>
+                                <td style="border: 1px solid black; border-collapse: collapse;">Purchase Authorization</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; border-collapse: collapse;">
+                                    <br/><br/><br/><br/>
+                                    <t t-esc="sp_obj.user_id.name" />
+                                </td>
+                                <td style="border: 1px solid black; border-collapse: collapse;">
+                                    <br/><br/><br/><br/>
+                                    GA MANAGER
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table style="border: 1px solid black; border-collapse: collapse;" width="100%">
+                            <tr>
+                                <td valign="top" width="50%" style="border: 1px solid black; border-collapse: collapse;">Konfirmasi tanggal Pengiriman:*</td>
+                                <td style="border: 1px solid black; border-collapse: collapse;">
+                                    Menyetujui seluruh syarat dan ketentuan Purchase Order (PO) Tunas Grup :<br/>
+                                    <br/>    
+                                    <br/>
+                                    <br/>            
+                                    (Tanggal, Nama, Tandatangan, Stempel Perusahaan)<br/>
+                                    Note: ini hanya sah ditandatangani oleh Business Owner / level Direktur.
+                                </td>
+                            </tr>
+                        </table>
+                        <p style="page-break-before:always;"> </p>
+                        <b><u>SYARAT DAN KETENTUAN (S&amp;K)</u></b> <br/>
+                        <b>PESANAN PEMBELIAN ATAU PURCHASE ORDER (PO)</b>
+                        <table width="100%">
+                        <t t-set="count_o" t-value="0"/>
+                        <t t-foreach="snk" t-as="o">
+                            <tr>
+                                <td valign="top" colspan="4"><t t-esc="alp_up[count_o]"/>. <t t-esc="o.isi" /></td>
+                                <t t-set="count_o" t-value="count_o + 1"/>
+                            </tr>
+                            <t t-set="count_p" t-value="0"/>
+                            <t t-if="len(o.child_ids) > 0">
+                                <t t-foreach="o.child_ids" t-as="p">
+                                    <tr>
+                                        <td width="20pt"><span/></td>
+                                        <td valign="top" width="20pt"><span t-esc="count_p+1"/>. </td>
+                                        <td colspan="3"><t t-esc="p.isi" /></td>
+                                        <t t-set="count_p" t-value="count_p + 1"/>
+                                    </tr>
+                                    <t t-set="count_q" t-value="0"/>
+                                    <t t-if="len(p.child_ids) > 0">
+                                        <t t-foreach="p.child_ids" t-as="q">
+                                            <tr>
+                                                <td width="20pt"><span/></td>
+                                                <td width="20pt"><span/></td>
+                                                <td valign="top" width="20pt"><t t-esc="alp_low[count_q]"/>. </td>
+                                                <td colspan="3"><t t-esc="q.isi" /></td>
+                                                <t t-set="count_q" t-value="count_q + 1"/>
+                                            </tr>
+                                            <t t-if="len(q.child_ids) > 0">
+                                                <t t-foreach="q.child_ids" t-as="r">
+                                                    <tr>
+                                                        <td width="20pt"><span/></td>
+                                                        <td width="20pt"><span/></td>
+                                                        <td width="20pt"><span/></td>
+                                                        <td colspan="2"><li><t t-esc="r.isi" /></li></td>
+                                                    </tr>
+                                                    <t t-if="len(r.child_ids) > 0">
+                                                        <t t-foreach="r.child_ids" t-as="s">
+                                                            <tr>
+                                                                <td width="20pt"><span/></td>
+                                                                <td width="20pt"><span/></td>
+                                                                <td width="20pt"><span/></td>
+                                                                <td valign="top" width="20pt"><span/>- </td>
+                                                                <td><t t-esc="s.isi" /></td>
+                                                            </tr>
+                                                        </t>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </t>
+                            </t>
+                        </t>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

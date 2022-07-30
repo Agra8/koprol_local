@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+		<!-- Role B2b Portal -->
+		<record id="eps_b2b_portal_role" model="ir.module.category">
+		<field name="name">EPS B2B Portal Role</field>
+		</record>  
+
+		<!-- Akses All Client -->
+		<record id="group_eps_b2b_portal_client_allow_read" model="res.groups">
+			<field name="category_id" ref="eps_b2b_portal.eps_b2b_portal_role"/>
+			<field name="name">B2b Portal Client Allow Read</field>
+		</record>
+
+		<!-- Log API  -->
+		<record id="group_eps_b2b_log_api_read" model="res.groups">
+			<field name="category_id" ref="eps_menu.eps_role"/>
+			<field name="name">B2b Log API Read</field>
+			<field name="menu_access" eval="[(4, ref('eps_b2b_log_api_menuitem'))]"/>
+		</record>
+
+		<record id="access_eps_b2b_log_api_read" model="ir.model.access">
+			<field name="model_id" ref="model_eps_api_log"/>
+			<field name="name">eps_b2b_log_api read</field>
+			<field name="group_id" ref="group_eps_b2b_log_api_read"/>
+			<field name="perm_read">1</field>
+		</record>
+			
+		<record id="group_eps_b2b_log_api_update" model="res.groups">
+			<field name="category_id" ref="eps_menu.eps_role"/>
+			<field name="name">B2b Log API Update</field>
+			<field name="menu_access" eval="[(4, ref('eps_b2b_log_api_menuitem'))]"/>
+			<field name="implied_ids" eval="[(4, ref('group_eps_b2b_log_api_read'))]" />
+		</record>
+
+		<record id="access_eps_b2b_log_api_update" model="ir.model.access">
+			<field name="model_id" ref="model_eps_api_log"/>
+			<field name="name">eps_b2b_log_api update</field>
+			<field name="group_id" ref="group_eps_b2b_log_api_update"/>
+			<field name="perm_write">1</field>
+		</record>
+
+		<record id="group_eps_b2b_log_api_delete" model="res.groups">
+			<field name="category_id" ref="eps_menu.eps_role"/>
+			<field name="name">B2b Log API Delete</field>
+			<field name="menu_access" eval="[(4, ref('eps_b2b_log_api_menuitem'))]"/>
+			<field name="implied_ids" eval="[(4, ref('group_eps_b2b_log_api_read'))]" />
+		</record>
+
+		<record id="access_eps_b2b_log_api_delete" model="ir.model.access">
+			<field name="model_id" ref="model_eps_api_log"/>
+			<field name="name">eps_b2b_log_api delete</field>
+			<field name="group_id" ref="group_eps_b2b_log_api_delete"/>
+			<field name="perm_unlink">1</field>
+		</record> 
+
+
+		<!-- B2B Portal Client  -->
+		<record id="group_b2b_portal_client_read" model="res.groups">
+			<field name="category_id" ref="eps_menu.eps_role"/>
+			<field name="name">B2B Portal Client Read</field>
+			<field name="menu_access" eval="[(4, ref('eps_b2b_portal_client_menuitem'))]"/>
+		</record>
+
+		<record id="access_b2b_portal_client_read" model="ir.model.access">
+			<field name="model_id" ref="model_eps_b2b_portal_client"/>
+			<field name="name">b2b_portal_client read</field>
+			<field name="group_id" ref="group_b2b_portal_client_read"/>
+			<field name="perm_read">1</field>
+		</record>
+			
+		<record id="group_b2b_portal_client_update" model="res.groups">
+			<field name="category_id" ref="eps_menu.eps_role"/>
+			<field name="name">B2B Portal Client Update</field>
+			<field name="menu_access" eval="[(4, ref('eps_b2b_portal_client_menuitem'))]"/>
+			<field name="implied_ids" eval="[(4, ref('group_b2b_portal_client_read'))]" />
+		</record>
+
+		<record id="access_b2b_portal_client_update" model="ir.model.access">
+			<field name="model_id" ref="model_eps_b2b_portal_client"/>
+			<field name="name">b2b_portal_client update</field>
+			<field name="group_id" ref="group_b2b_portal_client_update"/>
+			<field name="perm_write">1</field>
+			<field name="perm_create">1</field>
+		</record>
+
+		<record id="group_b2b_portal_client_delete" model="res.groups">
+			<field name="category_id" ref="eps_menu.eps_role"/>
+			<field name="name">B2B Portal Client Delete</field>
+			<field name="menu_access" eval="[(4, ref('eps_b2b_portal_client_menuitem'))]"/>
+			<field name="implied_ids" eval="[(4, ref('group_b2b_portal_client_read'))]" />
+		</record>
+
+		<record id="access_b2b_portal_client_delete" model="ir.model.access">
+			<field name="model_id" ref="model_eps_b2b_portal_client"/>
+			<field name="name">b2b_portal_client delete</field>
+			<field name="group_id" ref="group_b2b_portal_client_delete"/>
+			<field name="perm_unlink">1</field>
+		</record>       
+
+
+
+		<!-- B2B API Configuration  -->
+		<record id="group_b2b_api_configuration_read" model="res.groups">
+			<field name="category_id" ref="eps_menu.eps_role"/>
+			<field name="name">B2B API Configuration Read</field>
+			<field name="menu_access" eval="[(4, ref('eps_b2b_api_configuration_menuitem'))]"/>
+		</record>
+
+		<record id="access_b2b_api_configuration_read" model="ir.model.access">
+			<field name="model_id" ref="model_eps_b2b_api_configuration"/>
+			<field name="name">b2b_api_configuration read</field>
+			<field name="group_id" ref="group_b2b_api_configuration_read"/>
+			<field name="perm_read">1</field>
+		</record>
+			
+		<record id="group_b2b_api_configuration_update" model="res.groups">
+			<field name="category_id" ref="eps_menu.eps_role"/>
+			<field name="name">B2B API Configuration Update</field>
+			<field name="menu_access" eval="[(4, ref('eps_b2b_api_configuration_menuitem'))]"/>
+			<field name="implied_ids" eval="[(4, ref('group_b2b_api_configuration_read'))]" />
+		</record>
+
+		<record id="access_b2b_api_configuration_update" model="ir.model.access">
+			<field name="model_id" ref="model_eps_b2b_api_configuration"/>
+			<field name="name">b2b_api_configuration update</field>
+			<field name="group_id" ref="group_b2b_api_configuration_update"/>
+			<field name="perm_write">1</field>
+		</record>
+
+		<record id="group_b2b_api_configuration_delete" model="res.groups">
+			<field name="category_id" ref="eps_menu.eps_role"/>
+			<field name="name">B2B API Configuration Delete</field>
+			<field name="menu_access" eval="[(4, ref('eps_b2b_api_configuration_menuitem'))]"/>
+			<field name="implied_ids" eval="[(4, ref('group_b2b_api_configuration_read'))]" />
+		</record>
+
+		<record id="access_b2b_api_configuration_delete" model="ir.model.access">
+			<field name="model_id" ref="model_eps_b2b_api_configuration"/>
+			<field name="name">b2b_api_configuration delete</field>
+			<field name="group_id" ref="group_b2b_api_configuration_delete"/>
+			<field name="perm_unlink">1</field>
+		</record>       
+
+		<record id="eps_menu.group_sys_admin" model="res.groups">
+            <field name="implied_ids" eval="[
+				(4,ref('group_eps_b2b_log_api_read')),
+				(4,ref('group_eps_b2b_log_api_update')),
+				(4,ref('group_eps_b2b_log_api_delete')),
+				(4,ref('group_b2b_portal_client_read')),
+				(4,ref('group_b2b_portal_client_update')),
+				(4,ref('group_b2b_portal_client_delete')),
+
+				(4,ref('group_b2b_api_configuration_read')),
+				(4,ref('group_b2b_api_configuration_update')),
+				(4,ref('group_b2b_api_configuration_delete')),
+
+            ]" />
+        </record>
+
+
+	</data>
+</odoo>

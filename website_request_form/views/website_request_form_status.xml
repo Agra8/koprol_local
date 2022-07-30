@@ -7,220 +7,418 @@
                     <div class="oe_structure">
                         <section class="s_text_image pt32 pb32 o_colored_level" data-snippet="s_image_text" data-name="Image - Text" style="">
                             <div class="container">
-                              <div class="row align-items-center" style="margin: auto;">
-                                <div class="col-lg-6 pt16 pb16 o_colored_level">
-                                    <lord-icon  trigger="loop" scale="500" src="/website_request_form/static/src/images/hello_team.json"></lord-icon>
-                                    <!-- <img src="/website_request_form/static/src/images/check.svg" class="img img-fluid mx-auto" alt="" loading="lazy" data-original-title="" title="" aria-describedby="tooltip425770" data-original-id="112387" data-original-src="/website_request_form/static/src/images/check-2.svg" data-mimetype="image/svg+xml" data-resize-width="690"/> -->
+                                <div class="row align-items-center" style="margin: auto;">
+                                    <div class="col-lg-6 pt16 pb16 o_colored_level">
+                                        <lord-icon trigger="loop" scale="500" src="/website_request_form/static/src/images/hello_team.json"></lord-icon>
+                                        <!-- <img src="/website_request_form/static/src/images/check.svg" class="img img-fluid mx-auto" alt="" loading="lazy" data-original-title="" title="" aria-describedby="tooltip425770" data-original-id="112387" data-original-src="/website_request_form/static/src/images/check-2.svg" data-mimetype="image/svg+xml" data-resize-width="690"/> -->
+                                    </div>
+                                    <div class="col-lg-6 pt16 pb16 o_colored_level" style="padding-left: 130px">
+                                        <t t-if="request_form">
+                                            <h2 class="o_default_snippet_text">
+                                                Hi
+                                                <b>
+                                                    <t t-if="search == 'RF'">
+                                                        <t t-esc="request_form.name_pegawai" />
+                                                        ,
+                                                    </t>
+                                                    <t t-elif="search == 'RFL'">
+                                                        <t t-esc="request_form.request_form_id.name_pegawai" />
+                                                        ,
+                                                    </t>
+                                                </b>
+                                            </h2>
+                                            <t t-if="search == 'RFL'">
+                                                <t t-if="request_form.state == 'draft'">
+                                                    <p class="o_default_snippet_text">
+                                                        Request
+                                                        <t t-esc="request_form.request_id.name" />
+                                                        dengan deskripsi
+                                                        <t t-esc="request_form.keterangan" />
+                                                        sedang diperiksa oleh tim kami
+                                                    </p>
+                                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                                <t t-elif="request_form.state == 'approved'">
+                                                    <p class="o_default_snippet_text">Selamat ! Request anda sudah di approved dan akan segera dikerjakan oleh TIM</p>
+                                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                                <t t-elif="request_form.state == 'open'">
+                                                    <p class="o_default_snippet_text">Request anda sedang dalam pengerjaan oleh TIM</p>
+                                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                                <t t-elif="request_form.state == 'done'">
+                                                    <p class="o_default_snippet_text">Request anda sudah dinyatakan selesai, bila tidak ada tindak lanjut dalam request. Mohon hubungi Helpdesk IT.</p>
+                                                    <p class="o_default_snippet_text">
+                                                        Dengan nomor request:
+                                                        <b>
+                                                            <t t-esc="input" />
+                                                        </b>
+                                                    </p>
+                                                    <p class="o_default_snippet_text">Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                                <t t-elif="request_form.state == 'rejected'">
+                                                    <p class="o_default_snippet_text">Request anda di reject, silahkan hubungi Helpdesk IT.</p>
+                                                    <p class="o_default_snippet_text">
+                                                        Dengan nomor request:
+                                                        <b>
+                                                            <t t-esc="input" />
+                                                        </b>
+                                                    </p>
+                                                    <p class="o_default_snippet_text">Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                            </t>
+                                            <t t-elif="search == 'RF'">
+                                                <t t-if="request_form.state == 'draft'">
+                                                    <p class="o_default_snippet_text">Request anda sedang diperiksa, oleh tim kami</p>
+                                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                                <t t-elif="request_form.state == 'rfa'">
+                                                    <p class="o_default_snippet_text">Request anda sedang menunggu approval</p>
+                                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                                <t t-elif="request_form.state == 'approved'">
+                                                    <p class="o_default_snippet_text">Selamat ! Request anda sudah di approved dan akan segera dikerjakan oleh TIM</p>
+                                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                                <t t-elif="request_form.state == 'open'">
+                                                    <p class="o_default_snippet_text">Request anda sedang dalam pengerjaan oleh TIM</p>
+                                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                                <t t-elif="request_form.state == 'done'">
+                                                    <p class="o_default_snippet_text">Request anda sudah dinyatakan selesai, bila tidak ada tindak lanjut dalam request. Mohon hubungi Helpdesk IT.</p>
+                                                    <p class="o_default_snippet_text">
+                                                        Dengan nomor request:
+                                                        <b>
+                                                            <t t-esc="input" />
+                                                        </b>
+                                                    </p>
+                                                    <p class="o_default_snippet_text">Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                                <t t-elif="request_form.state == 'cancel'">
+                                                    <p class="o_default_snippet_text">Request anda sudah di cancel.</p>
+                                                    <p class="o_default_snippet_text">
+                                                        Dengan nomor request:
+                                                        <b>
+                                                            <t t-esc="input" />
+                                                        </b>
+                                                    </p>
+                                                    <p class="o_default_snippet_text">Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                                <t t-elif="request_form.state == 'rejected'">
+                                                    <p class="o_default_snippet_text">Request anda di reject, silahkan hubungi Helpdesk IT.</p>
+                                                    <p class="o_default_snippet_text">
+                                                        Dengan nomor request:
+                                                        <b>
+                                                            <t t-esc="input" />
+                                                        </b>
+                                                    </p>
+                                                    <p class="o_default_snippet_text">Salam Satu &#128151;</p>
+                                                    <p>
+                                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
+                                                    </p>
+                                                </t>
+                                            </t>
+                                        </t>
+                                        <t t-else="">
+                                            <p class="o_default_snippet_text">
+                                                <t t-esc="message" />
+                                            </p>
+                                            <p class="o_default_snippet_text">
+                                                <b>
+                                                    <t t-esc="input" />
+                                                </b>
+                                            </p>
+                                        </t>
+                                    </div>
                                 </div>
-                                <div class="col-lg-6 pt16 pb16 o_colored_level" style="padding-left: 130px">
-                                  <t t-if="request_form">
-                                  <h2 class="o_default_snippet_text">Hi <b>
-                                    <t t-esc="request_form.name_pegawai"/>,
-                                    </b></h2>
-                                  <t t-if="request_form.state == 'draft'">
-                                    <p class="o_default_snippet_text">Request anda sedang diperiksa, oleh tim kami</p> 
-                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
-                                    <p>
-                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
-                                    </p>
-                                  </t>
-                                  <t t-elif="request_form.state == 'rfa'">
-                                    <p class="o_default_snippet_text">Request anda sedang menunggu approval</p>
-                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
-                                    <p>
-                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
-                                    </p>
-                                  </t>
-                                  <t t-elif="request_form.state == 'approved'">
-                                    <p class="o_default_snippet_text">Selamat ! Request anda sudah di approved dan akan segera dikerjakan oleh TIM</p>
-                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
-                                    <p>
-                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
-                                    </p>
-                                  </t>
-                                  <t t-elif="request_form.state == 'open'">
-                                    <p class="o_default_snippet_text">Request anda sedang dalam pengerjaan oleh TIM</p>
-                                    <p class="o_default_snippet_text">Mohon ditunggu. Salam Satu &#128151;</p>
-                                    <p>
-                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
-                                    </p>
-                                  </t>
-                                  <t t-elif="request_form.state == 'closed'">
-                                    <p class="o_default_snippet_text">Request anda sudah dinyatakan selesai, bila tidak ada tindak lanjut dalam request. Mohon hubungi Helpdesk IT.</p>
-                                    <p class="o_default_snippet_text">Dengan nomor request: <b><t t-esc="input"/></b></p>
-                                    <p class="o_default_snippet_text">Salam Satu &#128151;</p>
-                                    <p>
-                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
-                                    </p>
-                                  </t>
-                                  <t t-elif="request_form.state == 'cancel'">
-                                    <p class="o_default_snippet_text">Request anda sudah di cancel.</p>
-                                    <p class="o_default_snippet_text">Dengan nomor request: <b><t t-esc="input"/></b></p>
-                                    <p class="o_default_snippet_text">Salam Satu &#128151;</p>
-                                    <p>
-                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
-                                    </p>
-                                  </t>
-                                  <t t-elif="request_form.state == 'rejected'">
-                                    <p class="o_default_snippet_text">Request anda di reject, silahkan hubungi Helpdesk IT.</p>
-                                    <p class="o_default_snippet_text">Dengan nomor request: <b><t t-esc="input"/></b></p>
-                                    <p class="o_default_snippet_text">Salam Satu &#128151;</p>
-                                    <p>
-                                        <a href="/" class="btn btn-primary mb-2 o_default_snippet_text">Discover more</a>
-                                    </p>
-                                  </t>
-                                </t>
-                                <t t-else="">
-                                    <p class="o_default_snippet_text"><t t-esc="message"/></p>
-                                    <p class="o_default_snippet_text"><b><t t-esc="input"/></b></p>
-                                  </t>
-                                </div>
-                              </div>
                             </div>
-                          </section>
-                          <t t-call="website_request_form.stage_request"/>
+                        </section>
+                        <t t-call="website_request_form.stage_request" />
                     </div>
                 </div>
             </t>
-        </template> 
+        </template>
 
         <template id="stage_request">
             <div class="col-lg-12 text-center" style="background-image: url(&quot;/website_request_form/static/src/images/wave-gray.svg&quot;); background-size:cover;">
                 <h3>Tahap status request anda saat ini adalah </h3>
-                <section class="s_process_steps pt24 pb24 o_colored_level" data-snippet="s_process_steps" data-name="Steps" >
+                <section class="s_process_steps pt24 pb24 o_colored_level" data-snippet="s_process_steps" data-name="Steps">
                     <div class="container">
-                        <div class="row" style="margin: auto;">
-                            <div class="col s_process_step pt24 pb24 o_colored_level">
-                                <div class="s_process_step_icon">
-                                    <span>
+                        <t t-if="search == 'RF'">
+                            <div class="row" style="margin: auto;">
+                                <div class="col s_process_step pt24 pb24 o_colored_level">
+                                    <div class="s_process_step_icon">
+                                        <span>
+                                            <t t-if="request_form.state == 'draft'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
+                                            </t>
+
+                                            <t t-elif="request_form.state != 'draft'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom" />
+                                            </t>
+                                            <t t-else="">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3" />
+                                            </t>
+                                        </span>
+                                    </div>
+                                    <div class="s_process_step_content text-center">
                                         <t t-if="request_form.state == 'draft'">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom"/>
+                                            <h5 class="o_default_snippet_text highlight-text">Pengecekan Request</h5>
                                         </t>
-                            
+
                                         <t t-elif="request_form.state != 'draft'">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom"/>
+                                            <h5 class="o_default_snippet_text passed-text">Pengecekan Request</h5>
                                         </t>
                                         <t t-else="">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3"/>
+                                            <h5 class="o_default_snippet_text gray-text">Pengecekan Request</h5>
                                         </t>
-                                    </span>
+                                    </div>
                                 </div>
-                                <div class="s_process_step_content text-center">
-                                    <t t-if="request_form.state == 'draft'">
-                                        <h5 class="o_default_snippet_text highlight-text">Pengecekan Request</h5>
-                                    </t>
-                        
-                                    <t t-elif="request_form.state != 'draft'">
-                                        <h5 class="o_default_snippet_text passed-text">Pengecekan Request</h5>
-                                    </t>
-                                    <t t-else="">
-                                        <h5 class="o_default_snippet_text gray-text">Pengecekan Request</h5>
-                                    </t>
-                                </div>
-                            </div>
-                            <div class="col s_process_step pt24 pb24 o_colored_level">
-                                <div class="s_process_step_icon">
-                                    <span>
+                                <div class="col s_process_step pt24 pb24 o_colored_level">
+                                    <div class="s_process_step_icon">
+                                        <span>
+                                            <t t-if="request_form.state == 'rfa'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
+                                            </t>
+                                            <t t-elif="request_form.state == 'approved' or request_form.state == 'open' or request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected' ">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom" />
+                                            </t>
+                                            <t t-else="">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3" />
+                                            </t>
+                                        </span>
+                                    </div>
+                                    <div class="s_process_step_content text-center">
                                         <t t-if="request_form.state == 'rfa'">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom"/>
+                                            <h5 class="o_default_snippet_text highlight-text">Waiting for Approval</h5>
                                         </t>
-                                        <t t-elif="request_form.state == 'approved' or request_form.state == 'open' or request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected' ">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom"/>
+                                        <t t-elif="request_form.state == 'approved' or request_form.state == 'open' or request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                            <h5 class="o_default_snippet_text passed-text">Waiting for Approval</h5>
                                         </t>
                                         <t t-else="">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3"/>
+                                            <h5 class="o_default_snippet_text gray-text">Waiting for Approval</h5>
                                         </t>
-                                    </span>
+                                    </div>
                                 </div>
-                                <div class="s_process_step_content text-center">
-                                    <t t-if="request_form.state == 'rfa'">
-                                        <h5 class="o_default_snippet_text highlight-text">Waiting for Approval</h5>
-                                    </t>
-                                    <t t-elif="request_form.state == 'approved' or request_form.state == 'open' or request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected'">
-                                        <h5 class="o_default_snippet_text passed-text">Waiting for Approval</h5>
-                                    </t>
-                                    <t t-else="">
-                                        <h5 class="o_default_snippet_text gray-text">Waiting for Approval</h5>
-                                    </t>
-                                </div>
-                            </div>
-                            <div class="col s_process_step pt24 pb24 o_colored_level">
-                                <div class="s_process_step_icon">
-                                    <span>
+                                <div class="col s_process_step pt24 pb24 o_colored_level">
+                                    <div class="s_process_step_icon">
+                                        <span>
+                                            <t t-if="request_form.state == 'approved'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
+                                            </t>
+                                            <t t-elif="request_form.state == 'open' or request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected' ">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom" />
+                                            </t>
+
+                                            <t t-else="">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3" />
+                                            </t>
+                                        </span>
+                                    </div>
+                                    <div class="s_process_step_content text-center">
                                         <t t-if="request_form.state == 'approved'">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom"/>
+                                            <h5 class="o_default_snippet_text highlight-text">Approved</h5>
                                         </t>
-                                        <t t-elif="request_form.state == 'open' or request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected' ">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom"/>
-                                        </t>
-                               
-                                        <t t-else="">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3"/>
-                                        </t>
-                                    </span>
-                                </div>
-                                <div class="s_process_step_content text-center">
-                                    <t t-if="request_form.state == 'approved'">
-                                        <h5 class="o_default_snippet_text highlight-text">Approved</h5>
-                                    </t>
 
-                                    <t t-elif="request_form.state == 'open' or request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected'">
-                                        <h5 class="o_default_snippet_text passed-text">Approved</h5>
-                                    </t>
-                                    <t t-else="">
-                                        <h5 class="o_default_snippet_text gray-text">Approved</h5>
-                                    </t>
+                                        <t t-elif="request_form.state == 'open' or request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                            <h5 class="o_default_snippet_text passed-text">Approved</h5>
+                                        </t>
+                                        <t t-else="">
+                                            <h5 class="o_default_snippet_text gray-text">Approved</h5>
+                                        </t>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col s_process_step pt24 pb24 o_colored_level">
-                                <div class="s_process_step_icon">
-                                    <span>
+                                <div class="col s_process_step pt24 pb24 o_colored_level">
+                                    <div class="s_process_step_icon">
+                                        <span>
+                                            <t t-if="request_form.state == 'open'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
+                                            </t>
+
+                                            <t t-elif="request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom" />
+                                            </t>
+                                            <t t-else="">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3" />
+                                            </t>
+                                        </span>
+                                    </div>
+                                    <div class="s_process_step_content text-center">
                                         <t t-if="request_form.state == 'open'">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom"/>
+                                            <h5 class="o_default_snippet_text highlight-text">In Process</h5>
                                         </t>
 
-                                        <t t-elif="request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected'">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom"/>
+                                        <t t-elif="request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                            <h5 class="o_default_snippet_text passed-text">In Process</h5>
                                         </t>
                                         <t t-else="">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3"/>
+                                            <h5 class="o_default_snippet_text gray-text">In Process</h5>
                                         </t>
-                                    </span>
+                                    </div>
                                 </div>
-                                <div class="s_process_step_content text-center">
-                                    <t t-if="request_form.state == 'open'">
-                                        <h5 class="o_default_snippet_text highlight-text">In Process</h5>
-                                    </t>
+                                <div class="col s_process_step pt24 pb24 o_colored_level">
+                                    <div class="s_process_step_icon">
+                                        <span>
+                                            <t t-if="request_form.state == 'done'  or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
+                                            </t>
+                                            <t t-else="">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3" />
+                                            </t>
+                                        </span>
+                                    </div>
+                                    <div class="s_process_step_content text-center">
+                                        <t t-if="request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                            <h5 class="o_default_snippet_text highlight-text">Done</h5>
+                                        </t>
+                                        <t t-else="">
+                                            <h5 class="o_default_snippet_text gray-text">Done</h5>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="search == 'RFL'">
+                            <div class="row" style="margin: auto;">
+                                <div class="col s_process_step pt24 pb24 o_colored_level">
+                                    <div class="s_process_step_icon">
+                                        <span>
+                                            <t t-if="request_form.state == 'draft'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
+                                            </t>
 
-                                    <t t-elif="request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected'">
-                                        <h5 class="o_default_snippet_text passed-text">In Process</h5>
-                                    </t>
-                                    <t t-else="">
-                                        <h5 class="o_default_snippet_text gray-text">In Process</h5>
-                                    </t>
-                                </div>
-                            </div>
-                            <div class="col s_process_step pt24 pb24 o_colored_level">
-                                <div class="s_process_step_icon">
-                                    <span>
-                                        <t t-if="request_form.state == 'closed'  or request_form.state == 'cancel' or request_form.state == 'rejected'">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom"/>
+                                            <t t-elif="request_form.state != 'draft'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom" />
+                                            </t>
+                                            <t t-else="">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3" />
+                                            </t>
+                                        </span>
+                                    </div>
+                                    <div class="s_process_step_content text-center">
+                                        <t t-if="request_form.state == 'draft'">
+                                            <h5 class="o_default_snippet_text highlight-text">Pengecekan Request</h5>
+                                        </t>
+
+                                        <t t-elif="request_form.state != 'draft'">
+                                            <h5 class="o_default_snippet_text passed-text">Pengecekan Request</h5>
                                         </t>
                                         <t t-else="">
-                                            <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3"/>
+                                            <h5 class="o_default_snippet_text gray-text">Pengecekan Request</h5>
                                         </t>
-                                    </span>
+                                    </div>
                                 </div>
-                                <div class="s_process_step_content text-center">
-                                    <t t-if="request_form.state == 'closed' or request_form.state == 'cancel' or request_form.state == 'rejected'">
-                                        <h5 class="o_default_snippet_text highlight-text">Done</h5>
-                                    </t>
-                                    <t t-else="">
-                                        <h5 class="o_default_snippet_text gray-text">Done</h5>
-                                    </t>
+                                <div class="col s_process_step pt24 pb24 o_colored_level">
+                                    <div class="s_process_step_icon">
+                                        <span>
+                                            <t t-if="request_form.state == 'approved'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
+                                            </t>
+                                            <t t-elif="request_form.state == 'open' or request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected' ">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom" />
+                                            </t>
+
+                                            <t t-else="">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3" />
+                                            </t>
+                                        </span>
+                                    </div>
+                                    <div class="s_process_step_content text-center">
+                                        <t t-if="request_form.state == 'approved'">
+                                            <h5 class="o_default_snippet_text highlight-text">Approved</h5>
+                                        </t>
+
+                                        <t t-elif="request_form.state == 'open' or request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                            <h5 class="o_default_snippet_text passed-text">Approved</h5>
+                                        </t>
+                                        <t t-else="">
+                                            <h5 class="o_default_snippet_text gray-text">Approved</h5>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="col s_process_step pt24 pb24 o_colored_level">
+                                    <div class="s_process_step_icon">
+                                        <span>
+                                            <t t-if="request_form.state == 'open'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
+                                            </t>
+
+                                            <t t-elif="request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-passed-custom" />
+                                            </t>
+                                            <t t-else="">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3" />
+                                            </t>
+                                        </span>
+                                    </div>
+                                    <div class="s_process_step_content text-center">
+                                        <t t-if="request_form.state == 'open'">
+                                            <h5 class="o_default_snippet_text highlight-text">In Process</h5>
+                                        </t>
+
+                                        <t t-elif="request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                            <h5 class="o_default_snippet_text passed-text">In Process</h5>
+                                        </t>
+                                        <t t-else="">
+                                            <h5 class="o_default_snippet_text gray-text">In Process</h5>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="col s_process_step pt24 pb24 o_colored_level">
+                                    <div class="s_process_step_icon">
+                                        <span>
+                                            <t t-if="request_form.state == 'done'  or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-active-custom" />
+                                            </t>
+                                            <t t-else="">
+                                                <i class="fa fa-circle-o mx-auto rounded-circle bg-o-color-3" />
+                                            </t>
+                                        </span>
+                                    </div>
+                                    <div class="s_process_step_content text-center">
+                                        <t t-if="request_form.state == 'done' or request_form.state == 'cancel' or request_form.state == 'rejected'">
+                                            <h5 class="o_default_snippet_text highlight-text">Done</h5>
+                                        </t>
+                                        <t t-else="">
+                                            <h5 class="o_default_snippet_text gray-text">Done</h5>
+                                        </t>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </t>
                     </div>
                 </section>
             </div>

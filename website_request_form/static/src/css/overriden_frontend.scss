@@ -84,10 +84,34 @@
     border-radius: 6.25rem !important;
 }
 
+.custom_width {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
 lord-icon {
 	width: 500px;
 	height: 500px;
   }
+
+.btn-info {
+    color: #00a2ff !important;
+    background-color: #FFFFFF !important;
+  }
+
+.btn-info:hover {
+    color: #FFFFFF !important;
+    background-color: #00a2ff !important;
+}
+
+.custom-row {
+    padding-left: 5px;
+    padding-top: 0px;
+}
+
+.custom-btn-close {
+    float: right;
+}
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
@@ -96,6 +120,24 @@ lord-icon {
         width: 300px;
         height: 300px;
       }
+
+      .custom_width {
+        margin-left: -15px !important;
+    }
+
+    .custom-row {
+        padding-left: 0px;
+        padding-top: 20px;
+    }
+
+    .w3-container {
+        padding: 1em 0px !important;
+    }
+
+    .custom-btn-close {
+        float: left;
+    }
+    
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -105,6 +147,11 @@ lord-icon {
         width: 400px;
         height: 400px;
       }
+
+      .custom_width {
+        margin-left: -15px !important;
+    }
+
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
@@ -114,6 +161,7 @@ lord-icon {
         width: 500px;
         height: 500px;
       }
+
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
@@ -123,6 +171,7 @@ lord-icon {
         width: 500px;
         height: 500px;
       }
+
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
@@ -132,4 +181,5 @@ lord-icon {
         width: 500px;
         height: 500px;
       }
+
 }

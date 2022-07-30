@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_eps_config_files_read,access.eps.config.files.read,model_eps_config_files,group_eps_config_files_read,1,0,0,0
+access_eps_config_files_update,access.eps.config.files.update,model_eps_config_files,group_eps_config_files_update,0,1,1,0
+access_eps_config_files_delete,access.eps.config.files.delete,model_eps_config_files,group_eps_config_files_delete,0,0,0,1

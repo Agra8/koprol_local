@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- Form -->
+        <record id="res_company_form" model="ir.ui.view">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                     <br/>
+                     <label for="code" class="oe_edit_only"/> 
+                     <h1><field name="code" required="1"/></h1>
+                     <br/>
+                     <label for="business_id" class="oe_edit_only"/> 
+                     <h1><field name="business_id" required="1"/></h1>
+                </field>  
+                <field name="partner_id" position="after">
+                    <field name="tops_id"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

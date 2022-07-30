@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+        <record id="view_eps_proposal_category_property_form" model="ir.ui.view">
+            <field name="name">product.category.eps.proposal.form</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <group name="first" position="after">
+                    <group name="proposal" >
+                        <group string="Proposal Config" groups="eps_menu.group_sys_admin">
+                            <field name="proposal_categ_id"/>
+                            <field name="asset_category_id"/>
+                            <field name="tops_parent_id"/>
+                            <field name="is_asset_building"/>
+                        </group>
+                    </group>
+                </group>
+            </field>
+        </record>
+
+        <record id="view_eps_proposal_product_form" model="ir.ui.view">
+            <field name="name">product.template.eps.proposal.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="push_to_tops" type="object" string="Push to TOPS" groups="eps_menu.group_sys_admin"/>
+                    <button name="action_request_approval" class="oe_highlight" string="RFA" type="object" attrs="{'invisible':[('state','!=','draft')]}"/>
+                    <button name="action_approve" class="oe_highlight" attrs="{'invisible':[('state','!=','waiting_for_approval')]}" string="Approve" type="object"/>
+                    <button string="Reject" name="%(eps_approval.eps_reject_approval_wizard_action)d" type="action" attrs="{'invisible':[('state','!=','waiting_for_approval')]}" context="{'model_name':'product.template','update_value':{'approval_state':'r','state':'draft'}}" />
+                    <button name="%(eps_approval.eps_cancel_approval_wizard_action)d" attrs="{'invisible':[('state','!=','waiting_for_approval')]}" string="Cancel Approval" type="action" context="{'model_name':'product.template','update_value':{'approval_state':'b','state':'draft'}}"/>
+                    <field name="state" widget="statusbar"/>
+                </xpath>
+                <field name="categ_id" position="after">
+                    <field name="tops_product_id" groups="eps_menu.group_sys_admin"/>
+                    <field name="status_api" groups="eps_menu.group_sys_admin"/>
+                    <field name="action_api" groups="eps_menu.group_sys_admin"/>
+                </field>
+                <field name="categ_id" position="attributes">
+                    <attribute name="domain">[('parent_id','!=',False)]</attribute>
+                </field>
+                <field name="company_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

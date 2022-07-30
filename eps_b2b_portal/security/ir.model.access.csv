@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_eps_api_log,eps_api_log,model_eps_api_log,,1,0,0,0
+access_eps_b2b_portal_client,eps_b2b_portal_client,model_eps_b2b_portal_client,,1,0,0,0
+access_eps_b2b_api_configuration,_eps_b2b_api_configuration,model_eps_b2b_api_configuration,,1,0,0,0

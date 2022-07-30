@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="1">     
+   
+<!-- Area -->
+        <record id="area_default_all" model="res.area">
+            <field name="name">ALL-COMPANIES</field>
+            <field name="description">ALL COMPANIES</field>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+        </record> 
+
+    </data>
+</odoo>

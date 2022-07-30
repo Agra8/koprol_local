@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+        <record id="view_eps_proposal_purchase_form" model="ir.ui.view">
+            <field name="name">purchaseorder.eps.proposal.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="state" position="replace">
+                    <field name="state" widget="statusbar" statusbar_visible="draft,to_approve,purchase" readonly="1"/>
+                </field>
+                <field name="company_id" position="replace">
+                </field>
+                <field name="partner_id" position="before">
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True,'no_open': True}"/>
+                    <field name="branch_id" options="{'no_create': True,'no_open': True}"/>
+                    <field name="divisi_id" options="{'no_create': True,'no_open': True}"/>
+                    <field name="department_id" options="{'no_create': True,'no_open': True}"/>
+                </field>
+                <field name="partner_ref" position="after">
+                    <field name="status_api" groups="eps_menu.group_sys_admin"/>
+                    <field name="tops_po_number" readonly="1"/>
+                    <field name="tops_pr_number" readonly="1"/>
+                </field>
+
+                <xpath expr="//header" position="inside">
+                    <button name="push_to_tops" type="object" string="Push to TOPS" groups="eps_menu.group_sys_admin"/>
+                </xpath>
+                <xpath expr="//page[@name='products']/field[@name='order_line']/tree/field[@name='product_id']" position="before">
+                    <field name="branch_id" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

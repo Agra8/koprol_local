@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+	    <record model="ir.actions.act_window" id="eps_bank_action">
+            <field name="name">Bank</field>
+            <field name="res_model">res.bank</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="eps_bank_menuitem" name="Bank" sequence="3" parent="account.account_banks_menu" action="eps_bank_action"/>
+    </data>
+</odoo>

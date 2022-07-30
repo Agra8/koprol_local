@@ -1,0 +1,1366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="branch_hho" model="res.branch">
+            <field name="name">Head Office</field>
+            <field name="code">HHO</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0091" model="res.branch">
+            <field name="name">Amin Motor</field>
+            <field name="code">B0091</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dls" model="res.branch">
+            <field name="name">PT TDM (Sidomulyo)</field>
+            <field name="code">DLS</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0132" model="res.branch">
+            <field name="name">Gaja Mada Motor</field>
+            <field name="code">B0132</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0057" model="res.branch">
+            <field name="name">PT DAM (Way Halim)</field>
+            <field name="code">A0057</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0022" model="res.branch">
+            <field name="name">HEPS Istana Motor</field>
+            <field name="code">B0022</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+
+        <record id="branch_a0016" model="res.branch">
+            <field name="name">PT Prima Jaya Motor</field>
+            <field name="code">A0016</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_2693" model="res.branch">
+            <field name="name">PT Tunas Motor Pratama</field>
+            <field name="code">2693</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddd" model="res.branch">
+            <field name="name">PT TDM (Depok)</field>
+            <field name="code">DDD</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddg" model="res.branch">
+            <field name="name">PT TDM (Godean)</field>
+            <field name="code">DDG</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddi" model="res.branch">
+            <field name="name">PT TDM (Bima)</field>
+            <field name="code">DDI</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddl" model="res.branch">
+            <field name="name">PT TDM (Lombok)</field>
+            <field name="code">DDL</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0098" model="res.branch">
+            <field name="name">Up. Smk N 2</field>
+            <field name="code">B0098</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0045" model="res.branch">
+            <field name="name">CV Akur Motor</field>
+            <field name="code">A0045</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0042" model="res.branch">
+            <field name="name">CV Akur Motor 2</field>
+            <field name="code">A0042</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0092" model="res.branch">
+            <field name="name">PT Trio Kencana Abadi</field>
+            <field name="code">A0092</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0081" model="res.branch">
+            <field name="name">PT Sejahtera Harmoni Motor</field>
+            <field name="code">A0081</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dli" model="res.branch">
+            <field name="name">PT TDM (Tanjung Bintang)</field>
+            <field name="code">DLI</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0063" model="res.branch">
+            <field name="name">CV Istana Motor 2</field>
+            <field name="code">A0063</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dmp" model="res.branch">
+            <field name="name">PT TDM (Pramuka)</field>
+            <field name="code">DMP</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0151" model="res.branch">
+            <field name="name">PT Astra International Tbk (Yukum Jaya)</field>
+            <field name="code">A0151</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0046" model="res.branch">
+            <field name="name">Jaya Sakti Motor H23</field>
+            <field name="code">B0046</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0031" model="res.branch">
+            <field name="name">Kembar Putra</field>
+            <field name="code">B0031</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0059" model="res.branch">
+            <field name="name">PT Bintang Karisma Jaya</field>
+            <field name="code">A0059</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlk" model="res.branch">
+            <field name="name">PT TDM (Krui)</field>
+            <field name="code">DLK</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0046" model="res.branch">
+            <field name="name">Jaya Sakti Motor</field>
+            <field name="code">A0046</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0101" model="res.branch">
+            <field name="name">Dian Jaya</field>
+            <field name="code">B0101</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0001" model="res.branch">
+            <field name="name">Beno Mitra</field>
+            <field name="code">B0001</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlo" model="res.branch">
+            <field name="name">PT TDM (Kota Gajah)</field>
+            <field name="code">DLO</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlp" model="res.branch">
+            <field name="name">PT TDM (Pahoman)</field>
+            <field name="code">DLP</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlz" model="res.branch">
+            <field name="name">PT TDM (Pematang Pasir)</field>
+            <field name="code">DLZ</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddm" model="res.branch">
+            <field name="name">PT TDM (Mojosari)</field>
+            <field name="code">DDM</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0116" model="res.branch">
+            <field name="name">Primajaya Motor 3</field>
+            <field name="code">B0116</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddp" model="res.branch">
+            <field name="name">PT TDM (Padalarang)</field>
+            <field name="code">DDP</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0014" model="res.branch">
+            <field name="name">Surya Sari Motor</field>
+            <field name="code">B0014</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dds" model="res.branch">
+            <field name="name">PT TDM (Saharjo)</field>
+            <field name="code">DDS</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dst" model="res.branch">
+            <field name="name">PT TDM (Tegal Binangun)</field>
+            <field name="code">DST</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dly" model="res.branch">
+            <field name="name">PT TDM (Teluk Betung)</field>
+            <field name="code">DLY</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0080" model="res.branch">
+            <field name="name">Surya Kencana Motor 2</field>
+            <field name="code">B0080</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dda" model="res.branch">
+            <field name="name">PT TDM (Caman)</field>
+            <field name="code">DDA</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlt" model="res.branch">
+            <field name="name">PT TDM (Tulang Bawang)</field>
+            <field name="code">DLT</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlr" model="res.branch">
+            <field name="name">PT TDM (Raden Intan)</field>
+            <field name="code">DLR</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0086" model="res.branch">
+            <field name="name">Raja Motor 2</field>
+            <field name="code">B0086</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0083" model="res.branch">
+            <field name="name">PT DAM (Menggala)</field>
+            <field name="code">A0083</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0126" model="res.branch">
+            <field name="name">PT NSS (Kedaton)</field>
+            <field name="code">A0126</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddt" model="res.branch">
+            <field name="name">PT TDM (Tabanan)</field>
+            <field name="code">DDT</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dsr" model="res.branch">
+            <field name="name">PT TDM (Riau)</field>
+            <field name="code">DSR</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dxb" model="res.branch">
+            <field name="name">PT TDM (Balikpapan)</field>
+            <field name="code">DXB</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dxg" model="res.branch">
+            <field name="name">PT TDM (Tanah Grogot)</field>
+            <field name="code">DXG</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dla" model="res.branch">
+            <field name="name">PT TDM (Antasari)</field>
+            <field name="code">DLA</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0105" model="res.branch">
+            <field name="name">Jaya Motor 2</field>
+            <field name="code">A0105</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0043" model="res.branch">
+            <field name="name">PT Lampung Motor 3</field>
+            <field name="code">A0043</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0021" model="res.branch">
+            <field name="name">CV Surya Kencana Motor</field>
+            <field name="code">A0021</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dwg" model="res.branch">
+            <field name="name">PT TDM (Pangkep)</field>
+            <field name="code">DWG</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0053" model="res.branch">
+            <field name="name">Andri Motor</field>
+            <field name="code">B0053</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0074" model="res.branch">
+            <field name="name">Nabila Pratama Motor</field>
+            <field name="code">B0074</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dxk" model="res.branch">
+            <field name="name">PT TDM (Ketapang)</field>
+            <field name="code">DXK</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dde" model="res.branch">
+            <field name="name">PT TDM (Temanggung)</field>
+            <field name="code">DDE</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dub" model="res.branch">
+            <field name="name">PT TDM (Kodya Bengkulu)</field>
+            <field name="code">DUB</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dxn" model="res.branch">
+            <field name="name">PT TDM (Nanga Pinoh)</field>
+            <field name="code">DXN</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dxs" model="res.branch">
+            <field name="name">PT TDM (Samarinda)</field>
+            <field name="code">DXS</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddr" model="res.branch">
+            <field name="name">PT TDM (Cikarang)</field>
+            <field name="code">DDR</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dbk" model="res.branch">
+            <field name="name">PT TDM (Kelapa)</field>
+            <field name="code">DBK</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0144" model="res.branch">
+            <field name="name">CV Punggur Cikande Motor</field>
+            <field name="code">A0144</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0067" model="res.branch">
+            <field name="name">Abimanyu Motor</field>
+            <field name="code">B0067</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0050" model="res.branch">
+            <field name="name">Raffi Motor</field>
+            <field name="code">B0050</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dld" model="res.branch">
+            <field name="name">PT TDM (Tulang Bawang Barat)</field>
+            <field name="code">DLD</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_mml" model="res.branch">
+            <field name="name">PT Tunas Dwipa Matra (Main Dealer)</field>
+            <field name="code">MML</field>
+            <field name="is_md" eval="True"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddc" model="res.branch">
+            <field name="name">PT TDM (Cimareme)</field>
+            <field name="code">DDC</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddb" model="res.branch">
+            <field name="name">PT TDM (Bekasi)</field>
+            <field name="code">DDB</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0158" model="res.branch">
+            <field name="name">PT Metaguna Innova (Moto Care)</field>
+            <field name="code">A0158</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0065" model="res.branch">
+            <field name="name">Lampung Motor 4</field>
+            <field name="code">B0065</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddj" model="res.branch">
+            <field name="name">PT TDM (Jombang)</field>
+            <field name="code">DDJ</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddu" model="res.branch">
+            <field name="name">PT TDM (Sukabumi)</field>
+            <field name="code">DDU</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_ddk" model="res.branch">
+            <field name="name">PT TDM (Jampang Kulon)</field>
+            <field name="code">DDK</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_djb" model="res.branch">
+            <field name="name">PT TDM (Bangko)</field>
+            <field name="code">DJB</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_djj" model="res.branch">
+            <field name="name">PT TDM (Jambi)</field>
+            <field name="code">DJJ</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_djs" model="res.branch">
+            <field name="name">PT TDM (Muara Sabak)</field>
+            <field name="code">DJS</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dll" model="res.branch">
+            <field name="name">PT TDM (Natar Batupuru)</field>
+            <field name="code">DLL</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dmr" model="res.branch">
+            <field name="name">PT TDM (Rumbia)</field>
+            <field name="code">DMR</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlb" model="res.branch">
+            <field name="name">PT TDM (Bakahuni)</field>
+            <field name="code">DLB</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlh" model="res.branch">
+            <field name="name">PT TDM (Seputih Mataram)</field>
+            <field name="code">DLH</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dmm" model="res.branch">
+            <field name="name">PT TDM (Metro)</field>
+            <field name="code">DMM</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+    
+        <record id="branch_dxt" model="res.branch">
+            <field name="name">PT TDM (Tenggarong)</field>
+            <field name="code">DXT</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0112" model="res.branch">
+            <field name="name">Haedar Motor</field>
+            <field name="code">B0112</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0048" model="res.branch">
+            <field name="name">Lampung Motor 2</field>
+            <field name="code">B0048</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dju" model="res.branch">
+            <field name="name">PT TDM (Muarabungo)</field>
+            <field name="code">DJU</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_duk" model="res.branch">
+            <field name="name">PT TDM (Kepahyang)</field>
+            <field name="code">DUK</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dum" model="res.branch">
+            <field name="name">PT TDM (Manna)</field>
+            <field name="code">DUM</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0069" model="res.branch">
+            <field name="name">Salim Motor</field>
+            <field name="code">B0069</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlw" model="res.branch">
+            <field name="name">PT TDM (Way Kanan)</field>
+            <field name="code">DLW</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0087" model="res.branch">
+            <field name="name">Astrido Mitra</field>
+            <field name="code">B0087</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0109" model="res.branch">
+            <field name="name">Damara Motor</field>
+            <field name="code">B0109</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlf" model="res.branch">
+            <field name="name">PT TDM (Trimurjo)</field>
+            <field name="code">DLF</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0106" model="res.branch">
+            <field name="name">Juara Motor</field>
+            <field name="code">B0106</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0140" model="res.branch">
+            <field name="name">Raja Motor 4</field>
+            <field name="code">B0140</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0111" model="res.branch">
+            <field name="name">CV Raja Perkasa Mandiri</field>
+            <field name="code">A0111</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0051" model="res.branch">
+            <field name="name">Mirai Motor</field>
+            <field name="code">B0051</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0138" model="res.branch">
+            <field name="name">Raja Motor</field>
+            <field name="code">B0138</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0070" model="res.branch">
+            <field name="name">PT Uber Anugerah Motor</field>
+            <field name="code">A0070</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0052" model="res.branch">
+            <field name="name">Virya Motor</field>
+            <field name="code">B0052</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0139" model="res.branch">
+            <field name="name">Raja Motor 3</field>
+            <field name="code">B0139</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0125" model="res.branch">
+            <field name="name">Astrido Motor</field>
+            <field name="code">B0125</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0029" model="res.branch">
+            <field name="name">Permata Motor</field>
+            <field name="code">B0029</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dsm" model="res.branch">
+            <field name="name">PT TDM (Martapura)</field>
+            <field name="code">DSM</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dsp" model="res.branch">
+            <field name="name">PT TDM (Palembang)</field>
+            <field name="code">DSP</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dsk" model="res.branch">
+            <field name="name">PT TDM (Kayu Agung)</field>
+            <field name="code">DSK</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dsb" model="res.branch">
+            <field name="name">PT TDM (Pangkalan Balai)</field>
+            <field name="code">DSB</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dws" model="res.branch">
+            <field name="name">PT TDM (Sengkang)</field>
+            <field name="code">DWS</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dwp" model="res.branch">
+            <field name="name">PT TDM (Pinrang)</field>
+            <field name="code">DWP</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dwr" model="res.branch">
+            <field name="name">PT TDM (Pare-pare)</field>
+            <field name="code">DWR</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dup" model="res.branch">
+            <field name="name">PT TDM (Putri Hijau)</field>
+            <field name="code">DUP</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dwk" model="res.branch">
+            <field name="name">PT TDM (Kendari)</field>
+            <field name="code">DWK</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dwm" model="res.branch">
+            <field name="name">PT TDM (Tomoni)</field>
+            <field name="code">DWM</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dwn" model="res.branch">
+            <field name="name">PT TDM (Gorontalo)</field>
+            <field name="code">DWN</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dwo" model="res.branch">
+            <field name="name">PT TDM (Palopo)</field>
+            <field name="code">DWO</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dwt" model="res.branch">
+            <field name="name">PT TDM (Tuminting)</field>
+            <field name="code">DWT</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlv" model="res.branch">
+            <field name="name">PT TDM (Purbolinggo)</field>
+            <field name="code">DLV</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0121" model="res.branch">
+            <field name="name">Budi Motor</field>
+            <field name="code">B0121</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0054" model="res.branch">
+            <field name="name">Semarang Jaya 1</field>
+            <field name="code">B0054</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dsg" model="res.branch">
+            <field name="name">PT TDM (Gelumbang)</field>
+            <field name="code">DSG</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_djm" model="res.branch">
+            <field name="name">PT TDM (Merlung)</field>
+            <field name="code">DJM</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0117" model="res.branch">
+            <field name="name">Anugerah Html Makmur</field>
+            <field name="code">B0117</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0064" model="res.branch">
+            <field name="name">Putra Mandiri</field>
+            <field name="code">B0064</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0072" model="res.branch">
+            <field name="name">PT Lampung Motor 2</field>
+            <field name="code">A0072</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlu" model="res.branch">
+            <field name="name">PT TDM (Kota Bumi)</field>
+            <field name="code">DLU</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0015" model="res.branch">
+            <field name="name">Sabar Motor</field>
+            <field name="code">B0015</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0010" model="res.branch">
+            <field name="name">Duma Motor</field>
+            <field name="code">B0010</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0124" model="res.branch">
+            <field name="name">Agung Utama Motor</field>
+            <field name="code">B0124</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0160" model="res.branch">
+            <field name="name">CV Bhinneka Bagus</field>
+            <field name="code">A0160</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0077" model="res.branch">
+            <field name="name">Aneka Motor</field>
+            <field name="code">B0077</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0004" model="res.branch">
+            <field name="name">Bhinneka Motor</field>
+            <field name="code">B0004</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <!-- <record id="branch_a0013_asp" model="res.branch">
+            <field name="name">PT Lampung Motor</field>
+            <field name="code">A0013-A</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record> -->
+    
+        <record id="branch_a0035" model="res.branch">
+            <field name="name">Jaya Motor</field>
+            <field name="code">A0035</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlm" model="res.branch">
+            <field name="name">PT TDM (Simpang Pematang)</field>
+            <field name="code">DLM</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0129" model="res.branch">
+            <field name="name">PT Muncul Jaya Abadi</field>
+            <field name="code">A0129</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0146" model="res.branch">
+            <field name="name">PT Bina Eka Sahada Trading</field>
+            <field name="code">A0146</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlj" model="res.branch">
+            <field name="name">PT TDM (Way Jepara)</field>
+            <field name="code">DLJ</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0107" model="res.branch">
+            <field name="name">Luhos Motor</field>
+            <field name="code">B0107</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0079" model="res.branch">
+            <field name="name">Darwis's Motor</field>
+            <field name="code">B0079</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dmn" model="res.branch">
+            <field name="name">PT TDM (Natar)</field>
+            <field name="code">DMN</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0060" model="res.branch">
+            <field name="name">Bintang Motor</field>
+            <field name="code">B0060</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0137" model="res.branch">
+            <field name="name">Mega Jaya Motor</field>
+            <field name="code">B0137</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0020" model="res.branch">
+            <field name="name">Rona Motor</field>
+            <field name="code">A0020</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dle" model="res.branch">
+            <field name="name">PT TDM (Sekampung)</field>
+            <field name="code">DLE</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0162" model="res.branch">
+            <field name="name">PT Astra International Tbk(Imam Bonjol)</field>
+            <field name="code">A0162</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0075" model="res.branch">
+            <field name="name">Salim Jaya Motor 2</field>
+            <field name="code">A0075</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0156" model="res.branch">
+            <field name="name">PT Bangun Centra Abadi</field>
+            <field name="code">A0156</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlq" model="res.branch">
+            <field name="name">PT TDM (Tirtayasa)</field>
+            <field name="code">DLQ</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlg" model="res.branch">
+            <field name="name">PT TDM (Gading Rejo)</field>
+            <field name="code">DLG</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dmk" model="res.branch">
+            <field name="name">PT TDM (Katibung)</field>
+            <field name="code">DMK</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0161" model="res.branch">
+            <field name="name">PT Patria Anugrah Sentosa</field>
+            <field name="code">A0161</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0011" model="res.branch">
+            <field name="name">Salim Jaya Motor</field>
+            <field name="code">A0011</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dlx" model="res.branch">
+            <field name="name">PT TDM (Kalianda)</field>
+            <field name="code">DLX</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_semarang_jaya_2" model="res.branch">
+            <field name="name">Semarang Jaya 2</field>
+            <field name="code">SEMARANG JAYA 2</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0143" model="res.branch">
+            <field name="name">PT Bintang Kharisma Jaya 2 2</field>
+            <field name="code">A0143</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0096" model="res.branch">
+            <field name="name">PT Astra International Tbk</field>
+            <field name="code">A0096</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0088" model="res.branch">
+            <field name="name">Gracella Motor</field>
+            <field name="code">B0088</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0125" model="res.branch">
+            <field name="name">PT NSS (Pringsewu)</field>
+            <field name="code">A0125</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0039" model="res.branch">
+            <field name="name">Metro Motor</field>
+            <field name="code">A0039</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0155" model="res.branch">
+            <field name="name">CV Mitra Sehati Jaya</field>
+            <field name="code">A0155</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0104" model="res.branch">
+            <field name="name">PT Bintang Mulia Jaya</field>
+            <field name="code">A0104</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dln" model="res.branch">
+            <field name="name">PT TDM (Kota Agung)</field>
+            <field name="code">DLN</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0022" model="res.branch">
+            <field name="name">CV Istana Motor</field>
+            <field name="code">A0022</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0003" model="res.branch">
+            <field name="name">Akur Motor 3</field>
+            <field name="code">B0003</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+
+        
+        <record id="branch_a0010" model="res.branch">
+            <field name="name">PT DAM (PANGKALPINANG)</field>
+            <field name="code">A0010</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dbp" model="res.branch">
+            <field name="name">PT TDM (PAYUNG)</field>
+            <field name="code">DBP</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0024" model="res.branch">
+            <field name="name">ADIKA MOTOR</field>
+            <field name="code">B0024</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dbg" model="res.branch">
+            <field name="name">PT TDM (SIMPANG KATIS)</field>
+            <field name="code">DBG</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_17538" model="res.branch">
+            <field name="name">PT TDM (TEMPILANG)</field>
+            <field name="code">17538</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_mma" model="res.branch">
+            <field name="name">ASP MD</field>
+            <field name="code">MMA</field>
+            <field name="is_md" eval="True"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <!-- <record id="branch_a0011_asp" model="res.branch">
+            <field name="name">PT DAM (KOBA)</field>
+            <field name="code">A0011-A</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record> -->
+    
+        <record id="branch_b0025" model="res.branch">
+            <field name="name">MULTI MOTOR</field>
+            <field name="code">B0025</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0028" model="res.branch">
+            <field name="name">REJEKI MOTOR</field>
+            <field name="code">B0028</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dbt" model="res.branch">
+            <field name="name">PT TDM (TOBOALI)</field>
+            <field name="code">DBT</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dbb" model="res.branch">
+            <field name="name">PT TDM (PANGKALPINANG)</field>
+            <field name="code">DBB</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <!-- <record id="branch_a0016_asp" model="res.branch">
+            <field name="name">PT NSS (TANJUNG PANDAN)</field>
+            <field name="code">A0016-A</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record> -->
+    
+        <record id="branch_a0013" model="res.branch">
+            <field name="name">PT NSS (PANGKALPINANG)</field>
+            <field name="code">A0013</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_b0018" model="res.branch">
+            <field name="name">PARIS MOTOR</field>
+            <field name="code">B0018</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <!-- <record id="branch_b0029_asp" model="res.branch">
+            <field name="name">SAHABAT MOTOR</field>
+            <field name="code">B0029-A</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record> -->
+    
+        <record id="branch_dby" model="res.branch">
+            <field name="name">PT TDM (BELINYU)</field>
+            <field name="code">DBY</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0025" model="res.branch">
+            <field name="name">PT DAM (SUNGAI LIAT)</field>
+            <field name="code">A0025</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_abm" model="res.branch">
+            <field name="name">PT ASP (MENTOK)</field>
+            <field name="code">ABM</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0015" model="res.branch">
+            <field name="name">PT NSS (MANGGAR)</field>
+            <field name="code">A0015</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_abt" model="res.branch">
+            <field name="name">PT ASP (TOBOALI)</field>
+            <field name="code">ABT</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_abb" model="res.branch">
+            <field name="name">PT ASP (PANGKALPINANG)</field>
+            <field name="code">ABB</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0012" model="res.branch">
+            <field name="name">PT DAM (BELITUNG)</field>
+            <field name="code">A0012</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dbm" model="res.branch">
+            <field name="name">PT TDM (MANGGAR)</field>
+            <field name="code">DBM</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dbl" model="res.branch">
+            <field name="name">PT TDM (BELITUNG)</field>
+            <field name="code">DBL</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dbs" model="res.branch">
+            <field name="name">PT TDM (SUNGAI LIAT)</field>
+            <field name="code">DBS</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_dbj" model="res.branch">
+            <field name="name">PT TDM (JEBUS)</field>
+            <field name="code">DBJ</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0014" model="res.branch">
+            <field name="name">PT NSS (SUNGAI LIAT)</field>
+            <field name="code">A0014</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_a0024" model="res.branch">
+            <field name="name">PT PATRIA ANUGRAH SENTOSA</field>
+            <field name="code">A0024</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+        <record id="branch_abl" model="res.branch">
+            <field name="name">PT ASP (BELITUNG)</field>
+            <field name="code">ABL</field>
+            <field name="is_md" eval="False"/>
+            <field name="profit_centre">000</field>
+        </record>
+    
+    </data>
+</odoo>

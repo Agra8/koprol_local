@@ -1,0 +1,1441 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+        <data noupdate="1">
+
+        <record id="area_hho" model="res.area">
+            <field name="description">Head Office</field>
+            <field name="name">HHO</field>
+            <field eval="[(6, 0, [ref('branch_hho')])]" name="branch_ids"/>
+        </record>
+
+        <record id="area_b0091" model="res.area">
+            <field name="description">Amin Motor</field>
+            <field name="name">B0091</field>
+            <field eval="[(6, 0, [ref('branch_b0091')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dls" model="res.area">
+            <field name="description">PT TDM (Sidomulyo)</field>
+            <field name="name">DLS</field>
+                <field eval="[(6, 0, [ref('branch_dls')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0132" model="res.area">
+            <field name="description">Gaja Mada Motor</field>
+            <field name="name">B0132</field>
+            <field eval="[(6, 0, [ref('branch_b0132')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0057" model="res.area">
+            <field name="description">PT DAM (Way Halim)</field>
+            <field name="name">A0057</field>
+            <field eval="[(6, 0, [ref('branch_a0057')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0022" model="res.area">
+            <field name="description">HEPS Istana Motor</field>
+            <field name="name">B0022</field>
+            <field eval="[(6, 0, [ref('branch_b0022')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0016" model="res.area">
+            <field name="description">PT Prima Jaya Motor</field>
+            <field name="name">A0016</field>
+            <field eval="[(6, 0, [ref('branch_a0016')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_2693" model="res.area">
+            <field name="description">PT Tunas Motor Pratama</field>
+            <field name="name">2693</field>
+            <field eval="[(6, 0, [ref('branch_2693')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddd" model="res.area">
+            <field name="description">PT TDM (Depok)</field>
+            <field name="name">DDD</field>
+            <field eval="[(6, 0, [ref('branch_ddd')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddg" model="res.area">
+            <field name="description">PT TDM (Godean)</field>
+            <field name="name">DDG</field>
+            <field eval="[(6, 0, [ref('branch_ddg')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddi" model="res.area">
+            <field name="description">PT TDM (Bima)</field>
+            <field name="name">DDI</field>
+            <field eval="[(6, 0, [ref('branch_ddi')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddl" model="res.area">
+            <field name="description">PT TDM (Lombok)</field>
+            <field name="name">DDL</field>
+            <field eval="[(6, 0, [ref('branch_ddl')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0098" model="res.area">
+            <field name="description">Up. Smk N 2</field>
+            <field name="name">B0098</field>
+            <field eval="[(6, 0, [ref('branch_b0098')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0045" model="res.area">
+            <field name="description">CV Akur Motor</field>
+            <field name="name">A0045</field>
+            <field eval="[(6, 0, [ref('branch_a0045')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0042" model="res.area">
+            <field name="description">CV Akur Motor 2</field>
+            <field name="name">A0042</field>
+            <field eval="[(6, 0, [ref('branch_a0042')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0092" model="res.area">
+            <field name="description">PT Trio Kencana Abadi</field>
+            <field name="name">A0092</field>
+            <field eval="[(6, 0, [ref('branch_a0092')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0081" model="res.area">
+            <field name="description">PT Sejahtera Harmoni Motor</field>
+            <field name="name">A0081</field>
+            <field eval="[(6, 0, [ref('branch_a0081')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dli" model="res.area">
+            <field name="description">PT TDM (Tanjung Bintang)</field>
+            <field name="name">DLI</field>
+            <field eval="[(6, 0, [ref('branch_dli')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0063" model="res.area">
+            <field name="description">CV Istana Motor 2</field>
+            <field name="name">A0063</field>
+            <field eval="[(6, 0, [ref('branch_a0063')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dmp" model="res.area">
+            <field name="description">PT TDM (Pramuka)</field>
+            <field name="name">DMP</field>
+            <field eval="[(6, 0, [ref('branch_dmp')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0151" model="res.area">
+            <field name="description">PT Astra International Tbk (Yukum Jaya)</field>
+            <field name="name">A0151</field>
+            <field eval="[(6, 0, [ref('branch_a0151')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0046" model="res.area">
+            <field name="description">Jaya Sakti Motor</field>
+            <field name="name">B0046</field>
+            <field eval="[(6, 0, [ref('branch_b0046')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0031" model="res.area">
+            <field name="description">Kembar Putra</field>
+            <field name="name">B0031</field>
+            <field eval="[(6, 0, [ref('branch_b0031')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0059" model="res.area">
+            <field name="description">PT Bintang Karisma Jaya</field>
+            <field name="name">A0059</field>
+            <field eval="[(6, 0, [ref('branch_a0059')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlk" model="res.area">
+            <field name="description">PT TDM (Krui)</field>
+            <field name="name">DLK</field>
+            <field eval="[(6, 0, [ref('branch_dlk')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0046" model="res.area">
+            <field name="description">Jaya Sakti Motor</field>
+            <field name="name">A0046</field>
+            <field eval="[(6, 0, [ref('branch_a0046')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0101" model="res.area">
+            <field name="description">Dian Jaya</field>
+            <field name="name">B0101</field>
+            <field eval="[(6, 0, [ref('branch_b0101')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0001" model="res.area">
+            <field name="description">Beno Mitra</field>
+            <field name="name">B0001</field>
+            <field eval="[(6, 0, [ref('branch_b0001')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlo" model="res.area">
+            <field name="description">PT TDM (Kota Gajah)</field>
+            <field name="name">DLO</field>
+            <field eval="[(6, 0, [ref('branch_dlo')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlp" model="res.area">
+            <field name="description">PT TDM (Pahoman)</field>
+            <field name="name">DLP</field>
+            <field eval="[(6, 0, [ref('branch_dlp')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlz" model="res.area">
+            <field name="description">PT TDM (Pematang Pasir)</field>
+            <field name="name">DLZ</field>
+            <field eval="[(6, 0, [ref('branch_dlz')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddm" model="res.area">
+            <field name="description">PT TDM (Mojosari)</field>
+            <field name="name">DDM</field>
+            <field eval="[(6, 0, [ref('branch_ddm')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0116" model="res.area">
+            <field name="description">Primajaya Motor 3</field>
+            <field name="name">B0116</field>
+            <field eval="[(6, 0, [ref('branch_b0116')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddp" model="res.area">
+            <field name="description">PT TDM (Padalarang)</field>
+            <field name="name">DDP</field>
+            <field eval="[(6, 0, [ref('branch_ddp')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0014" model="res.area">
+            <field name="description">Surya Sari Motor</field>
+            <field name="name">B0014</field>
+            <field eval="[(6, 0, [ref('branch_b0014')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dds" model="res.area">
+            <field name="description">PT TDM (Saharjo)</field>
+            <field name="name">DDS</field>
+            <field eval="[(6, 0, [ref('branch_dds')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dst" model="res.area">
+            <field name="description">PT TDM (Tegal Binangun)</field>
+            <field name="name">DST</field>
+            <field eval="[(6, 0, [ref('branch_dst')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dly" model="res.area">
+            <field name="description">PT TDM (Teluk Betung)</field>
+            <field name="name">DLY</field>
+            <field eval="[(6, 0, [ref('branch_dly')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0080" model="res.area">
+            <field name="description">Surya Kencana Motor 2</field>
+            <field name="name">B0080</field>
+            <field eval="[(6, 0, [ref('branch_b0080')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dda" model="res.area">
+            <field name="description">PT TDM (Caman)</field>
+            <field name="name">DDA</field>
+            <field eval="[(6, 0, [ref('branch_dda')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlt" model="res.area">
+            <field name="description">PT TDM (Tulang Bawang)</field>
+            <field name="name">DLT</field>
+            <field eval="[(6, 0, [ref('branch_dlt')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlr" model="res.area">
+            <field name="description">PT TDM (Raden Intan)</field>
+            <field name="name">DLR</field>
+            <field eval="[(6, 0, [ref('branch_dlr')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0086" model="res.area">
+            <field name="description">Raja Motor 2</field>
+            <field name="name">B0086</field>
+            <field eval="[(6, 0, [ref('branch_b0086')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0083" model="res.area">
+            <field name="description">PT DAM (Menggala)</field>
+            <field name="name">A0083</field>
+            <field eval="[(6, 0, [ref('branch_a0083')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0126" model="res.area">
+            <field name="description">PT NSS (Kedaton)</field>
+            <field name="name">A0126</field>
+            <field eval="[(6, 0, [ref('branch_a0126')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddt" model="res.area">
+            <field name="description">PT TDM (Tabanan)</field>
+            <field name="name">DDT</field>
+            <field eval="[(6, 0, [ref('branch_ddt')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dsr" model="res.area">
+            <field name="description">PT TDM (Riau)</field>
+            <field name="name">DSR</field>
+            <field eval="[(6, 0, [ref('branch_dsr')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dxb" model="res.area">
+            <field name="description">PT TDM (Balikpapan)</field>
+            <field name="name">DXB</field>
+            <field eval="[(6, 0, [ref('branch_dxb')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dxg" model="res.area">
+            <field name="description">PT TDM (Tanah Grogot)</field>
+            <field name="name">DXG</field>
+        <field eval="[(6, 0, [ref('branch_dxg')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dla" model="res.area">
+            <field name="description">PT TDM (Antasari)</field>
+            <field name="name">DLA</field>
+        <field eval="[(6, 0, [ref('branch_dla')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0105" model="res.area">
+            <field name="description">Jaya Motor 2</field>
+            <field name="name">A0105</field>
+            <field eval="[(6, 0, [ref('branch_a0105')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0043" model="res.area">
+            <field name="description">PT Lampung Motor 3</field>
+            <field name="name">A0043</field>
+            <field eval="[(6, 0, [ref('branch_a0043')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0021" model="res.area">
+            <field name="description">CV Surya Kencana Motor</field>
+            <field name="name">A0021</field>
+            <field eval="[(6, 0, [ref('branch_a0021')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dwg" model="res.area">
+            <field name="description">PT TDM (Pangkep)</field>
+            <field name="name">DWG</field>
+        <field eval="[(6, 0, [ref('branch_dwg')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0053" model="res.area">
+            <field name="description">Andri Motor</field>
+            <field name="name">B0053</field>
+            <field eval="[(6, 0, [ref('branch_b0053')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0074" model="res.area">
+            <field name="description">Nabila Pratama Motor</field>
+            <field name="name">B0074</field>
+            <field eval="[(6, 0, [ref('branch_b0074')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dxk" model="res.area">
+            <field name="description">PT TDM (Ketapang)</field>
+            <field name="name">DXK</field>
+        <field eval="[(6, 0, [ref('branch_dxk')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dde" model="res.area">
+            <field name="description">PT TDM (Temanggung)</field>
+            <field name="name">DDE</field>
+        <field eval="[(6, 0, [ref('branch_dde')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dub" model="res.area">
+            <field name="description">PT TDM (Kodya Bengkulu)</field>
+            <field name="name">DUB</field>
+        <field eval="[(6, 0, [ref('branch_dub')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dxn" model="res.area">
+            <field name="description">PT TDM (Nanga Pinoh)</field>
+            <field name="name">DXN</field>
+        <field eval="[(6, 0, [ref('branch_dxn')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dxs" model="res.area">
+            <field name="description">PT TDM (Samarinda)</field>
+            <field name="name">DXS</field>
+        <field eval="[(6, 0, [ref('branch_dxs')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbg" model="res.area">
+            <field name="description">PT TDM (Simpang Katis)</field>
+            <field name="name">DBG</field>
+            <field eval="[(6, 0, [ref('branch_dbg')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddr" model="res.area">
+            <field name="description">PT TDM (Cikarang)</field>
+            <field name="name">DDR</field>
+            <field eval="[(6, 0, [ref('branch_ddr')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbk" model="res.area">
+            <field name="description">PT TDM (Kelapa)</field>
+            <field name="name">DBK</field>
+        <field eval="[(6, 0, [ref('branch_dbk')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbm" model="res.area">
+            <field name="description">PT TDM (Manggar)</field>
+            <field name="name">DBM</field>
+            <field eval="[(6, 0, [ref('branch_dbm')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0144" model="res.area">
+            <field name="description">CV Punggur Cikande Motor</field>
+            <field name="name">A0144</field>
+            <field eval="[(6, 0, [ref('branch_a0144')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0067" model="res.area">
+            <field name="description">Abimanyu Motor</field>
+            <field name="name">B0067</field>
+            <field eval="[(6, 0, [ref('branch_b0067')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0050" model="res.area">
+            <field name="description">Raffi Motor</field>
+            <field name="name">B0050</field>
+            <field eval="[(6, 0, [ref('branch_b0050')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbs" model="res.area">
+            <field name="description">PT TDM (Sungai Liat)</field>
+            <field name="name">DBS</field>
+            <field eval="[(6, 0, [ref('branch_dbs')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dld" model="res.area">
+            <field name="description">PT TDM (Tulang Bawang Barat)</field>
+            <field name="name">DLD</field>
+            <field eval="[(6, 0, [ref('branch_dld')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_mml" model="res.area">
+            <field name="description">PT Tunas Dwipa Matra (Main Dealer)</field>
+            <field name="name">MML</field>
+            <field eval="[(6, 0, [ref('branch_mml')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dby" model="res.area">
+            <field name="description">PT TDM (Belinyu)</field>
+            <field name="name">DBY</field>
+            <field eval="[(6, 0, [ref('branch_dby')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddc" model="res.area">
+            <field name="description">PT TDM (Cimareme)</field>
+            <field name="name">DDC</field>
+            <field eval="[(6, 0, [ref('branch_ddc')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddb" model="res.area">
+            <field name="description">PT TDM (Bekasi)</field>
+            <field name="name">DDB</field>
+            <field eval="[(6, 0, [ref('branch_ddb')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0158" model="res.area">
+            <field name="description">PT Metaguna Innova (Moto Care)</field>
+            <field name="name">A0158</field>
+            <field eval="[(6, 0, [ref('branch_a0158')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0065" model="res.area">
+            <field name="description">Lampung Motor 4</field>
+            <field name="name">B0065</field>
+            <field eval="[(6, 0, [ref('branch_b0065')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbj" model="res.area">
+            <field name="description">PT TDM (Parit Tiga Jebus)</field>
+            <field name="name">DBJ</field>
+        <field eval="[(6, 0, [ref('branch_dbj')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddj" model="res.area">
+            <field name="description">PT TDM (Jombang)</field>
+            <field name="name">DDJ</field>
+        <field eval="[(6, 0, [ref('branch_ddj')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddu" model="res.area">
+            <field name="description">PT TDM (Sukabumi)</field>
+            <field name="name">DDU</field>
+        <field eval="[(6, 0, [ref('branch_ddu')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_ddk" model="res.area">
+            <field name="description">PT TDM (Jampang Kulon)</field>
+            <field name="name">DDK</field>
+        <field eval="[(6, 0, [ref('branch_ddk')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_djb" model="res.area">
+            <field name="description">PT TDM (Bangko)</field>
+            <field name="name">DJB</field>
+        <field eval="[(6, 0, [ref('branch_djb')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_djj" model="res.area">
+            <field name="description">PT TDM (Jambi)</field>
+            <field name="name">DJJ</field>
+        <field eval="[(6, 0, [ref('branch_djj')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_djs" model="res.area">
+            <field name="description">PT TDM (Muara Sabak)</field>
+            <field name="name">DJS</field>
+        <field eval="[(6, 0, [ref('branch_djs')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dll" model="res.area">
+            <field name="description">PT TDM (Natar Batupuru)</field>
+            <field name="name">DLL</field>
+        <field eval="[(6, 0, [ref('branch_dll')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dmr" model="res.area">
+            <field name="description">PT TDM (Rumbia)</field>
+            <field name="name">DMR</field>
+        <field eval="[(6, 0, [ref('branch_dmr')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlb" model="res.area">
+            <field name="description">PT TDM (Bakahuni)</field>
+            <field name="name">DLB</field>
+        <field eval="[(6, 0, [ref('branch_dlb')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlh" model="res.area">
+            <field name="description">PT TDM (Seputih Mataram)</field>
+            <field name="name">DLH</field>
+        <field eval="[(6, 0, [ref('branch_dlh')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dmm" model="res.area">
+            <field name="description">PT TDM (Metro)</field>
+            <field name="name">DMM</field>
+        <field eval="[(6, 0, [ref('branch_dmm')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbl" model="res.area">
+            <field name="description">PT TDM (Belitung)</field>
+            <field name="name">DBL</field>
+        <field eval="[(6, 0, [ref('branch_dbl')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbb" model="res.area">
+            <field name="description">PT TDM (Bangka)</field>
+            <field name="name">DBB</field>
+        <field eval="[(6, 0, [ref('branch_dbb')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbp" model="res.area">
+            <field name="description">PT TDM (Payung)</field>
+            <field name="name">DBP</field>
+        <field eval="[(6, 0, [ref('branch_dbp')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbt" model="res.area">
+            <field name="description">PT TDM (Toboali)</field>
+            <field name="name">DBT</field>
+        <field eval="[(6, 0, [ref('branch_dbt')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dxt" model="res.area">
+            <field name="description">PT TDM (Tenggarong)</field>
+            <field name="name">DXT</field>
+        <field eval="[(6, 0, [ref('branch_dxt')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0112" model="res.area">
+            <field name="description">Haedar Motor</field>
+            <field name="name">B0112</field>
+            <field eval="[(6, 0, [ref('branch_b0112')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0048" model="res.area">
+            <field name="description">Lampung Motor 2</field>
+            <field name="name">B0048</field>
+            <field eval="[(6, 0, [ref('branch_b0048')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dju" model="res.area">
+            <field name="description">PT TDM (Muarabungo)</field>
+            <field name="name">DJU</field>
+        <field eval="[(6, 0, [ref('branch_dju')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_duk" model="res.area">
+            <field name="description">PT TDM (Kepahyang)</field>
+            <field name="name">DUK</field>
+        <field eval="[(6, 0, [ref('branch_duk')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dum" model="res.area">
+            <field name="description">PT TDM (Manna)</field>
+            <field name="name">DUM</field>
+        <field eval="[(6, 0, [ref('branch_dum')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0069" model="res.area">
+            <field name="description">Salim Motor</field>
+            <field name="name">B0069</field>
+            <field eval="[(6, 0, [ref('branch_b0069')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlw" model="res.area">
+            <field name="description">PT TDM (Way Kanan)</field>
+            <field name="name">DLW</field>
+        <field eval="[(6, 0, [ref('branch_dlw')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0087" model="res.area">
+            <field name="description">Astrido Mitra</field>
+            <field name="name">B0087</field>
+            <field eval="[(6, 0, [ref('branch_b0087')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0109" model="res.area">
+            <field name="description">Damara Motor</field>
+            <field name="name">B0109</field>
+            <field eval="[(6, 0, [ref('branch_b0109')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlf" model="res.area">
+            <field name="description">PT TDM (Trimurjo)</field>
+            <field name="name">DLF</field>
+        <field eval="[(6, 0, [ref('branch_dlf')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0106" model="res.area">
+            <field name="description">Juara Motor</field>
+            <field name="name">B0106</field>
+            <field eval="[(6, 0, [ref('branch_b0106')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0140" model="res.area">
+            <field name="description">Raja Motor 4</field>
+            <field name="name">B0140</field>
+            <field eval="[(6, 0, [ref('branch_b0140')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0111" model="res.area">
+            <field name="description">CV Raja Perkasa Mandiri</field>
+            <field name="name">A0111</field>
+            <field eval="[(6, 0, [ref('branch_a0111')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0051" model="res.area">
+            <field name="description">Mirai Motor</field>
+            <field name="name">B0051</field>
+            <field eval="[(6, 0, [ref('branch_b0051')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0138" model="res.area">
+            <field name="description">Raja Motor</field>
+            <field name="name">B0138</field>
+            <field eval="[(6, 0, [ref('branch_b0138')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0070" model="res.area">
+            <field name="description">PT Uber Anugerah Motor</field>
+            <field name="name">A0070</field>
+            <field eval="[(6, 0, [ref('branch_a0070')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0052" model="res.area">
+            <field name="description">Virya Motor</field>
+            <field name="name">B0052</field>
+            <field eval="[(6, 0, [ref('branch_b0052')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0139" model="res.area">
+            <field name="description">Raja Motor 3</field>
+            <field name="name">B0139</field>
+            <field eval="[(6, 0, [ref('branch_b0139')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0125" model="res.area">
+            <field name="description">Astrido Motor</field>
+            <field name="name">B0125</field>
+            <field eval="[(6, 0, [ref('branch_b0125')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0029" model="res.area">
+            <field name="description">Permata Motor</field>
+            <field name="name">B0029</field>
+            <field eval="[(6, 0, [ref('branch_b0029')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dsm" model="res.area">
+            <field name="description">PT TDM (Martapura)</field>
+            <field name="name">DSM</field>
+            <field eval="[(6, 0, [ref('branch_dsm')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dsp" model="res.area">
+            <field name="description">PT TDM (Palembang)</field>
+            <field name="name">DSP</field>
+            <field eval="[(6, 0, [ref('branch_dsp')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dsk" model="res.area">
+            <field name="description">PT TDM (Kayu Agung)</field>
+            <field name="name">DSK</field>
+            <field eval="[(6, 0, [ref('branch_dsk')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dsb" model="res.area">
+            <field name="description">PT TDM (Pangkalan Balai)</field>
+            <field name="name">DSB</field>
+            <field eval="[(6, 0, [ref('branch_dsb')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dws" model="res.area">
+            <field name="description">PT TDM (Sengkang)</field>
+            <field name="name">DWS</field>
+            <field eval="[(6, 0, [ref('branch_dws')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dwp" model="res.area">
+            <field name="description">PT TDM (Pinrang)</field>
+            <field name="name">DWP</field>
+            <field eval="[(6, 0, [ref('branch_dwp')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dwr" model="res.area">
+            <field name="description">PT TDM (Pare-pare)</field>
+            <field name="name">DWR</field>
+            <field eval="[(6, 0, [ref('branch_dwr')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dup" model="res.area">
+            <field name="description">PT TDM (Putri Hijau)</field>
+            <field name="name">DUP</field>
+            <field eval="[(6, 0, [ref('branch_dup')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dwk" model="res.area">
+            <field name="description">PT TDM (Kendari)</field>
+            <field name="name">DWK</field>
+            <field eval="[(6, 0, [ref('branch_dwk')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dwm" model="res.area">
+            <field name="description">PT TDM (Tomoni)</field>
+            <field name="name">DWM</field>
+            <field eval="[(6, 0, [ref('branch_dwm')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dwn" model="res.area">
+            <field name="description">PT TDM (Gorontalo)</field>
+            <field name="name">DWN</field>
+            <field eval="[(6, 0, [ref('branch_dwn')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dwo" model="res.area">
+            <field name="description">PT TDM (Palopo)</field>
+            <field name="name">DWO</field>
+            <field eval="[(6, 0, [ref('branch_dwo')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dwt" model="res.area">
+            <field name="description">PT TDM (Tuminting)</field>
+            <field name="name">DWT</field>
+            <field eval="[(6, 0, [ref('branch_dwt')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlv" model="res.area">
+            <field name="description">PT TDM (Purbolinggo)</field>
+            <field name="name">DLV</field>
+            <field eval="[(6, 0, [ref('branch_dlv')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0121" model="res.area">
+            <field name="description">Budi Motor</field>
+            <field name="name">B0121</field>
+            <field eval="[(6, 0, [ref('branch_b0121')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0054" model="res.area">
+            <field name="description">Semarang Jaya 1</field>
+            <field name="name">B0054</field>
+            <field eval="[(6, 0, [ref('branch_b0054')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dsg" model="res.area">
+            <field name="description">PT TDM (Gelumbang)</field>
+            <field name="name">DSG</field>
+            <field eval="[(6, 0, [ref('branch_dsg')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_djm" model="res.area">
+            <field name="description">PT TDM (Merlung)</field>
+            <field name="name">DJM</field>
+            <field eval="[(6, 0, [ref('branch_djm')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0117" model="res.area">
+            <field name="description">Anugerah Html Makmur</field>
+            <field name="name">B0117</field>
+            <field eval="[(6, 0, [ref('branch_b0117')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0064" model="res.area">
+            <field name="description">Putra Mandiri</field>
+            <field name="name">B0064</field>
+            <field eval="[(6, 0, [ref('branch_b0064')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0072" model="res.area">
+            <field name="description">PT Lampung Motor 2</field>
+            <field name="name">A0072</field>
+            <field eval="[(6, 0, [ref('branch_a0072')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlu" model="res.area">
+            <field name="description">PT TDM (Kota Bumi)</field>
+            <field name="name">DLU</field>
+            <field eval="[(6, 0, [ref('branch_dlu')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0015" model="res.area">
+            <field name="description">Sabar Motor</field>
+            <field name="name">B0015</field>
+            <field eval="[(6, 0, [ref('branch_b0015')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0010" model="res.area">
+            <field name="description">Duma Motor</field>
+            <field name="name">B0010</field>
+            <field eval="[(6, 0, [ref('branch_b0010')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0124" model="res.area">
+            <field name="description">Agung Utama Motor</field>
+            <field name="name">B0124</field>
+            <field eval="[(6, 0, [ref('branch_b0124')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0160" model="res.area">
+            <field name="description">CV Bhinneka Bagus</field>
+            <field name="name">A0160</field>
+            <field eval="[(6, 0, [ref('branch_a0160')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0077" model="res.area">
+            <field name="description">Aneka Motor</field>
+            <field name="name">B0077</field>
+            <field eval="[(6, 0, [ref('branch_b0077')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0004" model="res.area">
+            <field name="description">Bhinneka Motor</field>
+            <field name="name">B0004</field>
+            <field eval="[(6, 0, [ref('branch_b0004')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0013" model="res.area">
+            <field name="description">PT Lampung Motor</field>
+            <field name="name">A0013</field>
+            <field eval="[(6, 0, [ref('branch_a0013')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0035" model="res.area">
+            <field name="description">Jaya Motor</field>
+            <field name="name">A0035</field>
+            <field eval="[(6, 0, [ref('branch_a0035')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlm" model="res.area">
+            <field name="description">PT TDM (Simpang Pematang)</field>
+            <field name="name">DLM</field>
+            <field eval="[(6, 0, [ref('branch_dlm')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0129" model="res.area">
+            <field name="description">PT Muncul Jaya Abadi</field>
+            <field name="name">A0129</field>
+            <field eval="[(6, 0, [ref('branch_a0129')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0146" model="res.area">
+            <field name="description">PT Bina Eka Sahada Trading</field>
+            <field name="name">A0146</field>
+            <field eval="[(6, 0, [ref('branch_a0146')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlj" model="res.area">
+            <field name="description">PT TDM (Way Jepara)</field>
+            <field name="name">DLJ</field>
+            <field eval="[(6, 0, [ref('branch_dlj')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0107" model="res.area">
+            <field name="description">Luhos Motor</field>
+            <field name="name">B0107</field>
+            <field eval="[(6, 0, [ref('branch_b0107')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0079" model="res.area">
+            <field name="description">Darwis's Motor</field>
+            <field name="name">B0079</field>
+            <field eval="[(6, 0, [ref('branch_b0079')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dmn" model="res.area">
+            <field name="description">PT TDM (Natar)</field>
+            <field name="name">DMN</field>
+            <field eval="[(6, 0, [ref('branch_dmn')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0060" model="res.area">
+            <field name="description">Bintang Motor</field>
+            <field name="name">B0060</field>
+            <field eval="[(6, 0, [ref('branch_b0060')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0137" model="res.area">
+            <field name="description">Mega Jaya Motor</field>
+            <field name="name">B0137</field>
+            <field eval="[(6, 0, [ref('branch_b0137')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0020" model="res.area">
+            <field name="description">Rona Motor</field>
+            <field name="name">A0020</field>
+            <field eval="[(6, 0, [ref('branch_a0020')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dle" model="res.area">
+            <field name="description">PT TDM (Sekampung)</field>
+            <field name="name">DLE</field>
+            <field eval="[(6, 0, [ref('branch_dle')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0162" model="res.area">
+            <field name="description">PT Astra International Tbk(Imam Bonjol)</field>
+            <field name="name">A0162</field>
+            <field eval="[(6, 0, [ref('branch_a0162')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0075" model="res.area">
+            <field name="description">Salim Jaya Motor 2</field>
+            <field name="name">A0075</field>
+            <field eval="[(6, 0, [ref('branch_a0075')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0156" model="res.area">
+            <field name="description">PT Bangun Centra Abadi</field>
+            <field name="name">A0156</field>
+            <field eval="[(6, 0, [ref('branch_a0156')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlq" model="res.area">
+            <field name="description">PT TDM (Tirtayasa)</field>
+            <field name="name">DLQ</field>
+            <field eval="[(6, 0, [ref('branch_dlq')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlg" model="res.area">
+            <field name="description">PT TDM (Gading Rejo)</field>
+            <field name="name">DLG</field>
+        <field eval="[(6, 0, [ref('branch_dlg')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dmk" model="res.area">
+            <field name="description">PT TDM (Katibung)</field>
+            <field name="name">DMK</field>
+            <field eval="[(6, 0, [ref('branch_dmk')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0161" model="res.area">
+            <field name="description">PT Patria Anugrah Sentosa</field>
+            <field name="name">A0161</field>
+            <field eval="[(6, 0, [ref('branch_a0161')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0011" model="res.area">
+            <field name="description">Salim Jaya Motor</field>
+            <field name="name">A0011</field>
+            <field eval="[(6, 0, [ref('branch_a0011')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dlx" model="res.area">
+            <field name="description">PT TDM (Kalianda)</field>
+            <field name="name">DLX</field>
+            <field eval="[(6, 0, [ref('branch_dlx')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_semarang_jaya_2" model="res.area">
+            <field name="description">Semarang Jaya 2</field>
+            <field name="name">SEMARANG JAYA 2</field>
+            <field eval="[(6, 0, [ref('branch_semarang_jaya_2')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0143" model="res.area">
+            <field name="description">PT Bintang Kharisma Jaya 2 2</field>
+            <field name="name">A0143</field>
+            <field eval="[(6, 0, [ref('branch_a0143')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0096" model="res.area">
+            <field name="description">PT Astra International Tbk</field>
+            <field name="name">A0096</field>
+            <field eval="[(6, 0, [ref('branch_a0096')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0088" model="res.area">
+            <field name="description">Gracella Motor</field>
+            <field name="name">B0088</field>
+            <field eval="[(6, 0, [ref('branch_b0088')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0125" model="res.area">
+            <field name="description">PT NSS (Pringsewu)</field>
+            <field name="name">A0125</field>
+            <field eval="[(6, 0, [ref('branch_a0125')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0039" model="res.area">
+            <field name="description">Metro Motor</field>
+            <field name="name">A0039</field>
+            <field eval="[(6, 0, [ref('branch_a0039')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0155" model="res.area">
+            <field name="description">CV Mitra Sehati Jaya</field>
+            <field name="name">A0155</field>
+            <field eval="[(6, 0, [ref('branch_a0155')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0104" model="res.area">
+            <field name="description">PT Bintang Mulia Jaya</field>
+            <field name="name">A0104</field>
+            <field eval="[(6, 0, [ref('branch_a0104')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dln" model="res.area">
+            <field name="description">PT TDM (Kota Agung)</field>
+            <field name="name">DLN</field>
+            <field eval="[(6, 0, [ref('branch_dln')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0022" model="res.area">
+            <field name="description">CV Istana Motor</field>
+            <field name="name">A0022</field>
+            <field eval="[(6, 0, [ref('branch_a0022')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0003" model="res.area">
+            <field name="description">Akur Motor 3</field>
+            <field name="name">B0003</field>
+            <field eval="[(6, 0, [ref('branch_b0003')])]" name="branch_ids"/>
+        </record>
+
+        <record id="area_a0010" model="res.area">
+            <field name="description">PT DAM (PANGKALPINANG)</field>
+            <field name="name">A0010</field>
+            <field eval="[(6, 0, [ref('branch_a0010')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbp" model="res.area">
+            <field name="description">PT TDM (PAYUNG)</field>
+            <field name="name">DBP</field>
+        <field eval="[(6, 0, [ref('branch_dbp')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0024" model="res.area">
+            <field name="description">ADIKA MOTOR</field>
+            <field name="name">B0024</field>
+            <field eval="[(6, 0, [ref('branch_b0024')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbg" model="res.area">
+            <field name="description">PT TDM (SIMPANG KATIS)</field>
+            <field name="name">DBG</field>
+        <field eval="[(6, 0, [ref('branch_dbg')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_17538" model="res.area">
+            <field name="description">PT TDM (TEMPILANG)</field>
+            <field name="name">17538</field>
+            <field eval="[(6, 0, [ref('branch_17538')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_mma" model="res.area">
+            <field name="description">ASP MD</field>
+            <field name="name">MMA</field>
+        <field eval="[(6, 0, [ref('branch_mma')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0011" model="res.area">
+            <field name="description">PT DAM (KOBA)</field>
+            <field name="name">A0011</field>
+            <field eval="[(6, 0, [ref('branch_a0011')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0025" model="res.area">
+            <field name="description">MULTI MOTOR</field>
+            <field name="name">B0025</field>
+            <field eval="[(6, 0, [ref('branch_b0025')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0028" model="res.area">
+            <field name="description">REJEKI MOTOR</field>
+            <field name="name">B0028</field>
+            <field eval="[(6, 0, [ref('branch_b0028')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbt" model="res.area">
+            <field name="description">PT TDM (TOBOALI)</field>
+            <field name="name">DBT</field>
+        <field eval="[(6, 0, [ref('branch_dbt')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbb" model="res.area">
+            <field name="description">PT TDM (PANGKALPINANG)</field>
+            <field name="name">DBB</field>
+        <field eval="[(6, 0, [ref('branch_dbb')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0016" model="res.area">
+            <field name="description">PT NSS (TANJUNG PANDAN)</field>
+            <field name="name">A0016</field>
+            <field eval="[(6, 0, [ref('branch_a0016')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbk" model="res.area">
+            <field name="description">PT TDM (KELAPA)</field>
+            <field name="name">DBK</field>
+        <field eval="[(6, 0, [ref('branch_dbk')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0013" model="res.area">
+            <field name="description">PT NSS (PANGKALPINANG)</field>
+            <field name="name">A0013</field>
+            <field eval="[(6, 0, [ref('branch_a0013')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0018" model="res.area">
+            <field name="description">PARIS MOTOR</field>
+            <field name="name">B0018</field>
+            <field eval="[(6, 0, [ref('branch_b0018')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_b0029" model="res.area">
+            <field name="description">SAHABAT MOTOR</field>
+            <field name="name">B0029</field>
+            <field eval="[(6, 0, [ref('branch_b0029')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dby" model="res.area">
+            <field name="description">PT TDM (BELINYU)</field>
+            <field name="name">DBY</field>
+        <field eval="[(6, 0, [ref('branch_dby')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0025" model="res.area">
+            <field name="description">PT DAM (SUNGAI LIAT)</field>
+            <field name="name">A0025</field>
+            <field eval="[(6, 0, [ref('branch_a0025')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_abm" model="res.area">
+            <field name="description">PT ASP (MENTOK)</field>
+            <field name="name">ABM</field>
+        <field eval="[(6, 0, [ref('branch_abm')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0015" model="res.area">
+            <field name="description">PT NSS (MANGGAR)</field>
+            <field name="name">A0015</field>
+            <field eval="[(6, 0, [ref('branch_a0015')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_abt" model="res.area">
+            <field name="description">PT ASP (TOBOALI)</field>
+            <field name="name">ABT</field>
+        <field eval="[(6, 0, [ref('branch_abt')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_abb" model="res.area">
+            <field name="description">PT ASP (PANGKALPINANG)</field>
+            <field name="name">ABB</field>
+        <field eval="[(6, 0, [ref('branch_abb')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0012" model="res.area">
+            <field name="description">PT DAM (BELITUNG)</field>
+            <field name="name">A0012</field>
+            <field eval="[(6, 0, [ref('branch_a0012')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbm" model="res.area">
+            <field name="description">PT TDM (MANGGAR)</field>
+            <field name="name">DBM</field>
+        <field eval="[(6, 0, [ref('branch_dbm')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbl" model="res.area">
+            <field name="description">PT TDM (BELITUNG)</field>
+            <field name="name">DBL</field>
+        <field eval="[(6, 0, [ref('branch_dbl')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbs" model="res.area">
+            <field name="description">PT TDM (SUNGAI LIAT)</field>
+            <field name="name">DBS</field>
+        <field eval="[(6, 0, [ref('branch_dbs')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_dbj" model="res.area">
+            <field name="description">PT TDM (JEBUS)</field>
+            <field name="name">DBJ</field>
+        <field eval="[(6, 0, [ref('branch_dbj')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0014" model="res.area">
+            <field name="description">PT NSS (SUNGAI LIAT)</field>
+            <field name="name">A0014</field>
+            <field eval="[(6, 0, [ref('branch_a0014')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_a0024" model="res.area">
+            <field name="description">PT PATRIA ANUGRAH SENTOSA</field>
+            <field name="name">A0024</field>
+            <field eval="[(6, 0, [ref('branch_a0024')])]" name="branch_ids"/>
+        </record>
+    
+        <record id="area_abl" model="res.area">
+            <field name="description">PT ASP (BELITUNG)</field>
+            <field name="name">ABL</field>
+        <field eval="[(6, 0, [ref('branch_abl')])]" name="branch_ids"/>
+        </record>
+
+        <record id="area_all_branch" model="res.area">
+            <field name="description">ALL</field>
+            <field name="name">ALL</field>
+        <field eval="[
+                (6, 0, [
+                ref('area_hho'),
+                ref('branch_b0091'),
+                ref('branch_dls'),
+                ref('branch_b0132'),
+                ref('branch_a0057'),
+                ref('branch_b0022'),
+                ref('branch_a0016'),
+                ref('branch_2693'),
+                ref('branch_ddd'),
+                ref('branch_ddg'),
+                ref('branch_ddi'),
+                ref('branch_ddl'),
+                ref('branch_b0098'),
+                ref('branch_a0045'),
+                ref('branch_a0042'),
+                ref('branch_a0092'),
+                ref('branch_a0081'),
+                ref('branch_dli'),
+                ref('branch_a0063'),
+                ref('branch_dmp'),
+                ref('branch_a0151'),
+                ref('branch_b0046'),
+                ref('branch_b0031'),
+                ref('branch_a0059'),
+                ref('branch_dlk'),
+                ref('branch_a0046'),
+                ref('branch_b0101'),
+                ref('branch_b0001'),
+                ref('branch_dlo'),
+                ref('branch_dlp'),
+                ref('branch_dlz'),
+                ref('branch_ddm'),
+                ref('branch_b0116'),
+                ref('branch_ddp'),
+                ref('branch_b0014'),
+                ref('branch_dds'),
+                ref('branch_dst'),
+                ref('branch_dly'),
+                ref('branch_b0080'),
+                ref('branch_dda'),
+                ref('branch_dlt'),
+                ref('branch_dlr'),
+                ref('branch_b0086'),
+                ref('branch_a0083'),
+                ref('branch_a0126'),
+                ref('branch_ddt'),
+                ref('branch_dsr'),
+                ref('branch_dxb'),
+                ref('branch_dxg'),
+                ref('branch_dla'),
+                ref('branch_a0105'),
+                ref('branch_a0043'),
+                ref('branch_a0021'),
+                ref('branch_dwg'),
+                ref('branch_b0053'),
+                ref('branch_b0074'),
+                ref('branch_dxk'),
+                ref('branch_dde'),
+                ref('branch_dub'),
+                ref('branch_dxn'),
+                ref('branch_dxs'),
+                ref('branch_dbg'),
+                ref('branch_ddr'),
+                ref('branch_dbk'),
+                ref('branch_dbm'),
+                ref('branch_a0144'),
+                ref('branch_b0067'),
+                ref('branch_b0050'),
+                ref('branch_dbs'),
+                ref('branch_dld'),
+                ref('branch_mml'),
+                ref('branch_dby'),
+                ref('branch_ddc'),
+                ref('branch_ddb'),
+                ref('branch_a0158'),
+                ref('branch_b0065'),
+                ref('branch_dbj'),
+                ref('branch_ddj'),
+                ref('branch_ddu'),
+                ref('branch_ddk'),
+                ref('branch_djb'),
+                ref('branch_djj'),
+                ref('branch_djs'),
+                ref('branch_dll'),
+                ref('branch_dmr'),
+                ref('branch_dlb'),
+                ref('branch_dlh'),
+                ref('branch_dmm'),
+                ref('branch_dbl'),
+                ref('branch_dbb'),
+                ref('branch_dbp'),
+                ref('branch_dbt'),
+                ref('branch_dxt'),
+                ref('branch_b0112'),
+                ref('branch_b0048'),
+                ref('branch_dju'),
+                ref('branch_duk'),
+                ref('branch_dum'),
+                ref('branch_b0069'),
+                ref('branch_dlw'),
+                ref('branch_b0087'),
+                ref('branch_b0109'),
+                ref('branch_dlf'),
+                ref('branch_b0106'),
+                ref('branch_b0140'),
+                ref('branch_a0111'),
+                ref('branch_b0051'),
+                ref('branch_b0138'),
+                ref('branch_a0070'),
+                ref('branch_b0052'),
+                ref('branch_b0139'),
+                ref('branch_b0125'),
+                ref('branch_b0029'),
+                ref('branch_dsm'),
+                ref('branch_dsp'),
+                ref('branch_dsk'),
+                ref('branch_dsb'),
+                ref('branch_dws'),
+                ref('branch_dwp'),
+                ref('branch_dwr'),
+                ref('branch_dup'),
+                ref('branch_dwk'),
+                ref('branch_dwm'),
+                ref('branch_dwn'),
+                ref('branch_dwo'),
+                ref('branch_dwt'),
+                ref('branch_dlv'),
+                ref('branch_b0121'),
+                ref('branch_b0054'),
+                ref('branch_dsg'),
+                ref('branch_djm'),
+                ref('branch_b0117'),
+                ref('branch_b0064'),
+                ref('branch_a0072'),
+                ref('branch_dlu'),
+                ref('branch_b0015'),
+                ref('branch_b0010'),
+                ref('branch_b0124'),
+                ref('branch_a0160'),
+                ref('branch_b0077'),
+                ref('branch_b0004'),
+                ref('branch_a0013'),
+                ref('branch_a0035'),
+                ref('branch_dlm'),
+                ref('branch_a0129'),
+                ref('branch_a0146'),
+                ref('branch_dlj'),
+                ref('branch_b0107'),
+                ref('branch_b0079'),
+                ref('branch_dmn'),
+                ref('branch_b0060'),
+                ref('branch_b0137'),
+                ref('branch_a0020'),
+                ref('branch_dle'),
+                ref('branch_a0162'),
+                ref('branch_a0075'),
+                ref('branch_a0156'),
+                ref('branch_dlq'),
+                ref('branch_dlg'),
+                ref('branch_dmk'),
+                ref('branch_a0161'),
+                ref('branch_a0011'),
+                ref('branch_dlx'),
+                ref('branch_semarang_jaya_2'),
+                ref('branch_a0143'),
+                ref('branch_a0096'),
+                ref('branch_b0088'),
+                ref('branch_a0125'),
+                ref('branch_a0039'),
+                ref('branch_a0155'),
+                ref('branch_a0104'),
+                ref('branch_dln'),
+                ref('branch_a0022'),
+                ref('branch_b0003'),
+                ref('area_a0010'),
+                ref('area_dbp'),
+                ref('area_b0024'),
+                ref('area_dbg'),
+                ref('area_17538'),
+                ref('area_mma'),
+                ref('area_a0011'),
+                ref('area_b0025'),
+                ref('area_b0028'),
+                ref('area_dbt'),
+                ref('area_dbb'),
+                ref('area_a0016'),
+                ref('area_dbk'),
+                ref('area_a0013'),
+                ref('area_b0018'),
+                ref('area_b0029'),
+                ref('area_dby'),
+                ref('area_a0025'),
+                ref('area_abm'),
+                ref('area_a0015'),
+                ref('area_abt'),
+                ref('area_abb'),
+                ref('area_a0012'),
+                ref('area_dbm'),
+                ref('area_dbl'),
+                ref('area_dbs'),
+                ref('area_dbj'),
+                ref('area_a0014'),
+                ref('area_a0024'),
+                ref('area_abl'),
+            ])]" name="branch_ids"/>
+        </record>
+    </data>
+</odoo>

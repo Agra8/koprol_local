@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="1"> 		
+        <record id="eps_role" model="ir.module.category">
+            <field name="name">EPS Role</field>
+        </record>  
+        
+        <record id="eps_technical_settings" model="ir.module.category">
+            <field name="name">EPS Technical Settings</field>
+        </record>  
+        
+        <record id="group_sys_admin_settings" model="res.groups">
+            <field name="category_id" ref="eps_technical_settings"/>
+            <field name="name">System Administrators</field> 
+        </record> 
+        
+        <record id="group_sys_admin" model="res.groups">
+            <field name="category_id" ref="eps_role"/>
+            <field name="name">System Administrators</field> 
+        </record> 
+
+        <record id="module_category_eps" model="ir.module.category">
+			<field name="name">EPS Dealer</field>
+		</record>
+
+        <record id="module_category_eps_md" model="ir.module.category">
+			<field name="name">EPS MD</field>
+		</record>
+
+        <record id="module_category_eps_ho" model="ir.module.category">
+			<field name="name">EPS HO</field>
+		</record>
+
+        <record id="module_category_eps_partner" model="ir.module.category">
+			<field name="name">EPS Partner</field>
+		</record>
+
+        
+        <record id="group_helpdesk_admin" model="res.groups">
+            <field name="category_id" ref="eps_role"/>
+            <field name="name">Helpdesk IT Admin</field> 
+        </record> 
+        
+        <record id="group_helpdesk_user" model="res.groups">
+            <field name="category_id" ref="eps_role"/>
+            <field name="name">Helpdesk IT User</field> 
+        </record> 
+        
+        
+        
+	</data>
+</odoo>

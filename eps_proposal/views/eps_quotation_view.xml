@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+		<record model="ir.ui.view" id="eps_quotation_tree_view">
+			<field name="name">eps.quotation.tree</field>
+			<field name="model">eps.quotation</field>
+			<field name="arch" type="xml">
+				<tree string="Quotation">
+                    <field name='name'/>
+                    <field name='supplier_id'/>
+                    <field name='ref'/>
+                    <field name='revision'/>
+                    <field name='validity_date'/>
+                    <field name='amount_total'/>
+                    <field name='state'/>
+				</tree>
+			</field>
+		</record>
+			
+		<record model="ir.ui.view" id="eps_quotation_form_view">
+			<field name="name">eps.quotation.form</field>
+			<field name="model">eps.quotation</field>
+			<field name="arch" type="xml">
+				<form string="Quotation">
+                    <header>
+                    	<button name="action_set_won" class="oe_highlight" attrs="{'invisible': ['|',('state','!=','proposed'),('initiatives_state','!=','approved')]}" string="Set to Win" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                        <field name="initiatives_state" invisible="1"/>
+                    </header>
+					<sheet>
+                        <h2>
+                            <field name='name' readonly="1"/>
+                        </h2>
+						<group col="4" colspan="4">
+                            <field name='date' readonly="1"/>
+                            <field name='initiatives_id' readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="branch_id" readonly="1"/>
+                            <field name="divisi_id" readonly="1"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name='ref' attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}"/>
+                            <field name='supplier_id' options="{'no_create': True,'no_open': True}" attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}"/>
+                            <field name='validity_date' attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}"/>
+                            <field name='quotation_amount' attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')]}" required="1"/>
+                            <label for="file_document_show" string="File Document"/>
+                            <div>
+                                <field name="filename_document" invisible="1"/>
+                                <field name="file_document_show" filename="filename_document" />
+                                <field name="file_document" filename="filename_document" attrs="{'readonly': ['|',('initiatives_state','!=','draft'),('state','!=','valid')],'required':[('state','=','valid')]}"/>
+                            </div>
+						</group>
+						<notebook>
+                            <page string="Quotation Lines" attrs="{'invisible': [('state','not in',('proposed','won'))]}">
+								<field name="quotation_line_ids" nolabel="1" attrs="{'readonly': ['|',('initiatives_state','!=','approved'),('state','!=','proposed')]}">
+                                    <tree editable='top' edit='false'>
+                                        <field name="product_id" options="{'no_create': True,'no_open': True}" domain="[('state','=','approved')]"/>
+                                        <field name="product_type" required="1"/>
+                                        <field name="name"/>
+                                        <field name="categ_id" options="{'no_create': True,'no_open': True}" domain="[('parent_id','!=',False)]"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit"/>
+                                        <field
+	                                        name="tax_id"
+	                                        widget="many2many_tags"
+	                                        options="{'no_create': True}"
+	                                        domain="[('type_tax_use','=','purchase'),('company_id','=',parent.company_id)]"
+	                                        optional="show"
+	                                    />
+	                                    <field name="discount" string="Disc.%" optional="show" widget="product_discount"/>
+	                                    <field name="price_subtotal" widget="monetary"/>
+	                                    <field name="price_total" widget="monetary" groups="account.group_show_line_subtotals_tax_included"/>
+	                                    <field name="price_tax" invisible="1"/>
+                                    </tree>
+                                </field>
+                                <group name="note_group" col="6" class="mt-2 mt-md-0">
+	                                <group colspan="4">
+	                                </group>
+	                                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+	                                    <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+	                                    <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+	                                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+	                                        <label for="amount_total" />
+	                                    </div>
+	                                    <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+	                                </group>
+	                                <div class="oe_clear"/>
+	                            </group>
+							</page>
+							<page string="Audit Trail">
+								<group>
+									<group>
+                                        <field name="create_uid" readonly="1"></field>
+										<field name="create_date" readonly="1"></field>
+										<field name="write_uid" readonly="1"></field>
+										<field name="write_date" readonly="1"></field>
+									</group>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids"/>
+						<field name="message_ids"/>
+					</div>
+				</form>
+			</field>
+		</record> 
+
+		<record id="eps_quotation_search_view" model="ir.ui.view">
+            <field name="name">eps.quotation.search</field>
+            <field name="model">eps.quotation</field>
+            <field name="arch" type="xml">
+                <search string="Search quotation">
+                    <field name="name"/>
+                    <field name="supplier_id"/>
+                    <field name='initiatives_id'/>
+                    <field name='company_id'/>
+                    <field name='branch_id'/>
+                    <field name='divisi_id'/>
+                    <field name='department_id'/>
+                    <field name="state"/>
+					<filter string="Valid" name="state_valid" domain="[('state','=','valid')]" />
+					<filter string="Invalid" name="state_invalid" domain="[('state','=','invalid')]" />
+					<filter string="Proposed" name="state_proposed" domain="[('state','=','proposed')]" />
+					<filter string="Won" name="state_won" domain="[('state','=','won')]" />
+                    <group expand="0" string="Group By">
+                        <filter string="Supplier" name="supplier_group" icon="terp-personal" domain="[]" context="{'group_by':'supplier_id'}"/>
+                        <filter string="Status" name="state_group" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+                    </group> 
+                </search>
+            </field>
+        </record>
+
+		<record model="ir.actions.act_window" id="eps_quotation_action">
+			<field name="name">Quotation</field>
+			<field name="res_model">eps.quotation</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="eps_quotation_menuitem" name="Quotation" sequence="4" parent="eps_menu.eps_proposal_top_menu" action="eps_quotation_action"/>  
+	</data>
+</odoo> 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="ir_cron_send_notification_email" model="ir.cron">
+            <field name="name">Send Notification - Email</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">2</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="model_id" ref="eps_notification_center.model_eps_notification_center"/>
+            <field name="code">model.send_notification_by_cron(15)</field>
+        </record>
+    </data>
+</odoo>

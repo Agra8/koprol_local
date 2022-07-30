@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Tree view -->
+        <record id="eps_request_form_view_tree" model="ir.ui.view">
+            <field name="name">eps.request.form.tree</field>
+            <field name="model">eps.request.form</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Request Form" default_order="create_date desc">
+                    <field name="company_id"/>
+                    <field name="name"/>
+                    <field name="create_date" string="Date"/>
+                    <field name="name_pegawai"/>
+                    <field name="state"/>
+                    <!-- <field name="total_approval" widget="progressbar"/> -->
+                </tree>
+            </field>
+        </record>
+
+        <!-- form view -->
+        <record id="eps_request_form_view_form" model="ir.ui.view">
+            <field name="name">eps.request.form.form</field>
+            <field name="model">eps.request.form</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Request Form">
+                    <header>
+                        <button name="action_rfa" string="RFA" states="draft" class="oe_highlight" type="object"/>
+                        <button name="action_open" string="Open" states="approved" class="oe_highlight" type="object"/>
+                        <button name="action_done" string="Done" states="draft,approved,open" class="oe_stat_button" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,rfa,open,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" force_save="1" /> <br/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="company_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}" options="{'no_create': True,'no_open': True}"/>
+                            <field name="branch_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}" options="{'no_create': True,'no_open': True}"/>
+                            <field name="department_id" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}" options="{'no_create': True,'no_open': True}"/>
+                            
+                        </group>
+                        <group>
+                            <field name="name_pegawai" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}"/>
+                            <field name="nik" required="1" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}"/>
+                            <field name="job_title" attrs="{'readonly':[('state','in',['rfa','approved','rejected','open','done'])]}" options="{'no_open':True,'no_create':True}"/>
+                        </group>
+                        <div>
+                            <br />
+                            <button name="action_request" attrs="{'invisible':[('state','in',['rfa','approved','rejected','open','done'])]}" string="Form Request" style="margin-bottom:3px" class="oe_stat_button oe_edit_only alert alert-info" icon="fa-file-text-o" type="object" context="{'default_active_id': active_id}"/>
+                        </div>
+                        <notebook>
+                            <page string="Request">
+                                <field name="request_line_ids">
+                                <tree create="0" delete="0"> 
+                                    <field name="request_id" string="Request" readonly="1"/>
+                                    <field name="keterangan" readonly="1"/>
+                                    <field name="date" readonly="1"/>
+                                    <field name="value_approval" invisible="1"/>
+                                    <field name="employee_id" invisible="1"/>
+                                    <field name="state"/>
+                                    <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','approved','rejected','open','done', 'cancel']), ('value_approval', '=', '0')]}"/>
+                                    <button name="action_reject" string="Reject" class="oe_higlight" type="object"  attrs="{'invisible': ['|',('state', 'in', ['draft','approved','rejected','open','done', 'cancel']), ('value_approval', '=', '0')]}"/>
+                                    <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','approved','rejected','open','done']), ('employee_id', '!=', False)]}"/>
+                                    
+                                </tree>
+                                </field>
+                            </page>
+                            <page string="Audit Trail" >
+                                <group>
+                                    <group>
+                                        <field name="create_uid" readonly="1"/>
+                                        <field name="create_date" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="write_uid" readonly="1"/>
+                                        <field name="write_date" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Search view -->
+        <record id="eps_request_form_search" model="ir.ui.view">
+            <field name="name">eps.request.form.search</field>
+            <field name="model">eps.request.form</field>
+            <field name="arch" type="xml">
+                <search string="Request Form">
+                    <field name="company_id" select="True"/>
+                    <field name="branch_id" select="True"/>
+                    <field name="name_pegawai" string="Nama Pegawai"/>
+                    <filter name="state_open" string="Open" domain="[('state', '=', 'open')]"/>
+                    <filter name="state_draft" string="Request Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="state_rfa" string="Belum di Approve" domain="[('state', '=', 'rfa')]"/>
+                    <group string="Group By">
+                        <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                        <filter name="group_branch" string="Dealer" context="{'group_by': 'branch_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action window -->
+        <record id="eps_request_form_action" model="ir.actions.server">
+            <field name="name">Request Form</field>
+            <field name="model_id" ref="model_eps_request_form"/>
+            <field name="state">code</field>
+            <field name="code">
+                action=env['eps.request.form'].eps_request_form_view()
+            </field>
+        </record>
+
+
+        <menuitem id="eps_request_form_menu" name="Request Form" parent="eps_request_form_sub_menu" action="eps_request_form_action" sequence="20" groups="eps_request_form.group_eps_request_form_read"/>
+
+
+        <!-- Line Request -->
+        <record id="eps_request_form_line_tree" model="ir.ui.view">
+            <field name="name">eps.request.form.tree</field>
+            <field name="model">eps.request.form.line</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="eps Request Form Line">
+                    <field name="request_id">
+                        <field name="name" string="Request"/>
+                    </field>
+                    <field name="keterangan"/>
+                    <field name="date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="eps_request_form_line_form_wizard" model="ir.ui.view">
+            <field name="name">eps.request.form.form.wizard</field>
+            <field name="model">eps.request.form.line.wizard</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="eps Request Form Line">
+                    <group>
+                        <group>
+                            <field name="request_id" required="1" domain="[('company_id.id', '=', context.get('company_id'))]"/>
+                            <field name="tipe_form" readonly="1" invisible="1"/>
+                            <field name="sistem_id" attrs="{'invisible':[('tipe_form','!=', 'Sistem')], 'required': [('tipe_form','=', 'Sistem')]}" domain="[('company_id.id', '=', context.get('company_id'))]"/>
+                            <field name="keterangan"/>
+                            <field name="date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Approval">
+                            <field name="approval_ids">
+                               <tree>
+                                    <field name="group_id" string="Groups"/>
+                                    <field name="user_id"/>
+                               </tree>
+                            </field> 
+                       </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_add_only" string="Save" type="object" class="oe_highlight oe_edit_only"/>
+                        <button name="action_add_and_more" string="Add another request" type="object" class="oe_edit_only"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Line Approval -->
+
+        <!-- Tree View -->
+        <record id="eps_request_form_approval_tree" model="ir.ui.view">
+            <field name="name">eps.request.form.tree</field>
+            <field name="model">eps.request.form.approval</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="eps Request Form Line">
+                    <field name="employee_id" options="{'no_create': True,'no_open': True}"/>
+                    <field name="alasan_reject"/>
+                    <field name="job_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <!-- Form Approval -->
+        <record id="eps_request_form_approval_form" model="ir.ui.view">
+            <field name="name">eps.request.form.form</field>
+            <field name="model">eps.request.form.approval</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="eps Request Form Approval">
+                    <group>
+                        <group>
+                            <field name="employee_id" options="{'no_create': True,'no_open': True}"/>
+                            <field name="job_level" required="1"/>
+                            <field name="job_id" readonly="1" force_save="1"/>
+                            <field name="group_id" readonly="1" force_save="1"/>
+                            <field name="user_id" invisible="1"/>
+
+                        </group>
+                        <group>
+                            <field name="state" readonly="1"/>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+        
+    </data>
+</odoo>
