@@ -89,7 +89,8 @@ class ProductProduct(models.Model):
     def create(self,vals):
         if not vals.get('action_api',False):
             vals['action_api'] = 'ADD'
-        vals['tops_product_id'] = self.sudo().get_tops_product_id()
+        if not vals.get('tops_product_id',False):
+            vals['tops_product_id'] = self.sudo().get_tops_product_id()
         ids = super(ProductProduct,self).create(vals)
         return ids
 
