@@ -21,12 +21,19 @@
         <form string="Saved Files Directory">
           <sheet>
                 <group>
+                    <field name="company_id" options="{'no_create':True,'no_open':True}"/>
+                    
                     <field name="default_company_vendor_approval_id" options="{'no_create':True,'no_open':True}"/>
                     <field name="default_branch_vendor_approval_id" options="{'no_create':True,'no_open':True}" domain="[('company_id','=',default_company_vendor_approval_id)]"/>
                     <field name="default_divisi_vendor_approval_id" options="{'no_create':True,'no_open':True}" domain="[('company_id','=',default_company_vendor_approval_id)]"/>
+
                     <field name="default_company_initiatives_approval_id" options="{'no_create':True,'no_open':True}"/>
                     <field name="default_branch_initiatives_approval_id" options="{'no_create':True,'no_open':True}" domain="[('company_id','=',default_company_initiatives_approval_id)]"/>
                     <field name="default_divisi_initiatives_approval_id" options="{'no_create':True,'no_open':True}" domain="[('company_id','=',default_company_initiatives_approval_id)]"/>
+                    
+                    <field name="default_company_product_approval_id" options="{'no_create':True,'no_open':True}"/>
+                    <field name="default_branch_product_approval_id" options="{'no_create':True,'no_open':True}" domain="[('company_id','=',default_company_product_approval_id)]"/>
+                    <field name="default_divisi_product_approval_id" options="{'no_create':True,'no_open':True}" domain="[('company_id','=',default_company_product_approval_id)]"/>
                 </group>
                 <notebook>
                   <page string="Audit Trail">

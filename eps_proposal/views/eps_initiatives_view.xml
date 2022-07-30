@@ -73,11 +73,11 @@
 						</group>
 						<notebook>
                             <page string="Initiatives Lines">
-								<field name="initiatives_line_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}" options="{'reload_on_button': True}">
+								<field name="initiatives_line_ids" nolabel="1" readonly="1" options="{'reload_on_button': True}">
                                     <tree editable='top' edit='false'>
                                     	<field name="branch_id" options="{'no_create': True,'no_open': True}" domain="[('company_id','=',parent.company_id)]"/>
                                         <field name="supplier_id" options="{'no_create': True,'no_open': True}"/>
-                                        <field name="product_id" options="{'no_create': True,'no_open': True}"/>
+                                        <field name="product_id" options="{'no_create': True,'no_open': True}" domain="[('state','=','approved')]"/>
                                         <field name="quantity"/>
                                         <field name="price_unit"/>
                                         <field
@@ -147,7 +147,7 @@
 												<page string="Quotation Lines" attrs="{'invisible': [('state','not in',('proposed','won'))]}">
 													<field name="quotation_line_ids" nolabel="1" attrs="{'readonly': ['|',('initiatives_state','!=','approved'),('state','!=','proposed')]}">
 					                                    <tree editable='top' edit='false'>
-					                                        <field name="product_id" options="{'no_create': True,'no_open': True}"/>
+					                                        <field name="product_id" options="{'no_create': True,'no_open': True}" domain="[('state','=','approved')]"/>
 					                                        <field name="product_type" required="1"/>
 					                                        <field name="name"/>
 					                                        <field name="categ_id" options="{'no_create': True,'no_open': True}" domain="[('parent_id','!=',False)]"/>
@@ -277,7 +277,7 @@
 				}</field>
 		</record>
 
-		<menuitem id="eps_initiatives_menuitem" name="Initiatives" sequence="2" parent="eps_menu.eps_proposal_top_menu" action="eps_initiatives_action"/>  
+		<menuitem id="eps_initiatives_menuitem" name="Initiatives" sequence="3" parent="eps_menu.eps_proposal_top_menu" action="eps_initiatives_action"/>  
 
 		<!-- Wizard new quotation -->
 

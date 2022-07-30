@@ -404,6 +404,15 @@ class ProposalLine(models.Model):
         for rec in self:
             rec.reserved_amount = sum(x.amount_total for x in rec.initiatives_ids.filtered(lambda y: y.state=='done'))
 
+    @api.depends('initiatives_ids.state')
+    def _compute_initiatives_state(self):
+        for rec in self:
+            initiatives_list = ''
+            for initiative in rec.initiatives_ids:
+                initiatives_list+="%s (%s)\n" % (initiative.name,initiative.state)
+            rec.initiatives_list = initiatives_list
+
+
 
     proposal_id = fields.Many2one('eps.proposal', string='Proposal', ondelete='cascade')
     categ_id = fields.Many2one('eps.category', string='Proposal Category', required=True)
@@ -418,6 +427,7 @@ class ProposalLine(models.Model):
     department_id = fields.Many2one('hr.department', related='proposal_id.department_id', string='Department', store=True, readonly=True)
     branch_id = fields.Many2one('res.branch', related='proposal_id.branch_id', string='Branch', store=True, readonly=True)
     nama_proposal = fields.Char(related='proposal_id.nama_proposal', string='Nama Proposal', store=True, readonly=True)
+    initiatives_list = fields.Text('Status Initiatives', compute=_compute_initiatives_state)
 
     @api.constrains('price')
     def _check_price(self):
@@ -465,6 +475,35 @@ class ProposalLine(models.Model):
             self.env['eps.config.files'].upload_file(filename_penawaran_up, file_penawaran)
             vals['filename_upload_penawaran']=filename_penawaran_up
         return super(ProposalLine,self).write(vals)
+
+    def action_view_initiatives(self, initiatives=False):
+        """This function returns an action that display existing initatives of
+        given proposal ids. When only one found, show the initatives
+        immediately.
+        """
+        if not initiatives:
+            # initiatives_ids may be filtered depending on the user. To ensure we get all
+            # initiatives related to the proposal, we read them in sudo to fill the
+            # cache.
+            self.sudo()._read(['initiatives_ids'])
+            initiatives = self.initiatives_ids
+
+        result = self.env['ir.actions.act_window']._for_xml_id('eps_proposal.eps_initiatives_action')
+        # choose the view_mode accordingly
+        if len(initiatives) > 1:
+            result['domain'] = [('id', 'in', initiatives.ids)]
+        # elif len(initiatives) == 1:
+        else:
+            res = self.env.ref('eps_proposal.eps_initiatives_form_view', False)
+            form_view = [(res and res.id or False, 'form')]
+            if 'views' in result:
+                result['views'] = form_view + [(state, view) for state, view in result['views'] if view != 'form']
+            else:
+                result['views'] = form_view
+            result['res_id'] = initiatives.id
+        
+
+        return result
 
 class ProductLine(models.Model):
     _name = "eps.proposal.product.line"

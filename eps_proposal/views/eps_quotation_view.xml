@@ -53,7 +53,7 @@
                             <page string="Quotation Lines" attrs="{'invisible': [('state','not in',('proposed','won'))]}">
 								<field name="quotation_line_ids" nolabel="1" attrs="{'readonly': ['|',('initiatives_state','!=','approved'),('state','!=','proposed')]}">
                                     <tree editable='top' edit='false'>
-                                        <field name="product_id" options="{'no_create': True,'no_open': True}"/>
+                                        <field name="product_id" options="{'no_create': True,'no_open': True}" domain="[('state','=','approved')]"/>
                                         <field name="product_type" required="1"/>
                                         <field name="name"/>
                                         <field name="categ_id" options="{'no_create': True,'no_open': True}" domain="[('parent_id','!=',False)]"/>
@@ -137,6 +137,6 @@
 			<field name="view_mode">tree,form</field>
 		</record>
 
-		<menuitem id="eps_quotation_menuitem" name="Quotation" sequence="3" parent="eps_menu.eps_proposal_top_menu" action="eps_quotation_action"/>  
+		<menuitem id="eps_quotation_menuitem" name="Quotation" sequence="4" parent="eps_menu.eps_proposal_top_menu" action="eps_quotation_action"/>  
 	</data>
 </odoo> 

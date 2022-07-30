@@ -1,5 +1,5 @@
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 import json
 import requests
 from odoo.http import request
@@ -87,7 +87,8 @@ class Partner(models.Model):
     def create(self,vals):
         if not vals.get('action_api',False):
             vals['action_api'] = 'I'
-        vals['code'] = self.sudo().get_sequence()
+        if not vals.get('code',False):
+            vals['code'] = self.sudo().get_sequence()
         ids = super(Partner,self).create(vals)
         return ids
 

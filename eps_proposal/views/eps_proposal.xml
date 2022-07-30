@@ -102,7 +102,7 @@
 								<field name="proposal_product_line_ids" nolabel="1" attrs="{'readonly': [('state','!=','draft')]}" context="{'branch_id': branch_id}">
                                     <tree editable='top' edit='false'>
                                     	<field name="branch_id" options="{'no_create': True,'no_open': True}" domain="[('company_id','=',company_id)]"/>
-                                        <field name="product_id" options="{'no_create': True,'no_open': True}"/>
+                                        <field name="product_id" options="{'no_create': True,'no_open': True}" domain="[('state','=','approved')]"/>
                                         <field name="quantity"/>
                                         <field name="supplier_id" readonly="1" force_save="1"/>
                                         <field name="price_unit" readonly="1" force_save="1"/>
@@ -196,7 +196,9 @@
                     <field name='categ_id'/>
                     <field name='price'/>
                     <field name='reserved_amount'/>
-                    <field name="initiatives_ids"><tree><field name="state"/></tree></field>
+                    <field name="initiatives_list"></field>
+                    <button name="action_view_initiatives" type="object" string="View Details" attrs="{'invisible': [('initiatives_ids','=',[])]}"/>
+                    <field name='initiatives_ids' invisible="1"/>
 
 				</tree>
 			</field>
@@ -212,8 +214,8 @@
                     <field name="branch_id"/>
                     <field name="department_id"/>
                     <field name="categ_id"/>
-					<!-- <filter string="Draft" name="state_draft" domain="[('state','=','draft')]" />
-					<filter string="Waiting for Approval" name="state_wfa" domain="[('state','=','waiting_for_approval')]" />
+					<filter string="Unprocessed" name="unprocessed" domain="[('initiatives_ids','=',False)]" />
+					<!-- <filter string="Waiting for Approval" name="state_wfa" domain="[('state','=','waiting_for_approval')]" />
 					<filter string="Approved" name="state_approved" domain="[('state','=','approved')]" /> -->
                     <group expand="0" string="Group By">
                         <filter string="Company" name="company_group" icon="terp-personal" domain="[]" context="{'group_by':'company_id'}"/>
@@ -228,6 +230,7 @@
 			<field name="res_model">eps.proposal.line</field>
 			<field name="view_mode">tree</field>
 			<field name="context"></field>
+			<field name="domain">[('proposal_id.state','not in',('done','cancel'))]</field>
 		</record>
 
 		<menuitem id="eps_proposal_line_menuitem" name="Proposal Detail" sequence="2" parent="eps_menu.eps_proposal_top_menu" action="eps_proposal_line_action"/>  
