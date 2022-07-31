@@ -41,6 +41,9 @@ class Area(models.Model):
 
     def write(self, vals): 
         write = super(Area, self).write(vals)
+        if vals.get('company_ids', False):
+            for user in self.env['res.users'].search([('area_id','=',self.id)]):
+                user.write({'company_ids' : [(6,0,[t.id for t in self.company_ids])]})
         self.env['ir.rule'].clear_caches()
         self.clear_caches()
         return write
