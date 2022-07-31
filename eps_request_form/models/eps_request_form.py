@@ -714,7 +714,7 @@ class RequestFormLine(models.Model):
         """ Override to set alias of tickets to their team if any. """
         aliases = self.mapped('teams_id')._notify_get_reply_to(default=default, records=None, company=company, doc_names=None)
         res = {request.id: aliases.get(request.teams_id.id) for request in self}
-        leftover = self.filtered(lambda rec: not rec.team_id)
+        leftover = self.filtered(lambda rec: not rec.teams_id)
         if leftover:
             res.update(super(RequestFormLine, leftover)._notify_get_reply_to(default=default, records=None, company=company, doc_names=doc_names))
         return res
