@@ -75,7 +75,7 @@ class Quotation(models.Model):
                                                                         ('initiatives_id.state','=','done')
                                                                     ])
                 if check_record:
-                    raise ValidationError('Vendor %s sudah pernah dipakai untuk transaksi one time purchase, jika ingin menggunakan vendor ini silahkan lengkapi dokumen persyaratan untuk menjadi recurring vendor')
+                    raise ValidationError('Vendor %s sudah pernah dipakai untuk transaksi one time purchase, jika ingin menggunakan vendor ini silahkan lengkapi dokumen persyaratan untuk menjadi recurring vendor' % (record.supplier_id.name))
 
     @api.constrains('quotation_amount')
     def _check_quotation_amount(self):

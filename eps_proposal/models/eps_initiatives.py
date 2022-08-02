@@ -58,7 +58,7 @@ class Initiatives(models.Model):
     divisi_id = fields.Many2one('eps.divisi', string='Divisi', required=True, tracking=True, domain="[('company_id','=',company_id)]")
     department_id = fields.Many2one('hr.department', domain="[('company_id','=',company_id)]", string='Department', required=True, tracking=True)
     proposal_id = fields.Many2one('eps.proposal', required=True, string='Proposal', domain="[('company_id','=',company_id),('branch_id','=',branch_id),('divisi_id','=',divisi_id),('department_id','=',department_id),('state','=','approved')]", tracking=True)
-    proposal_line_id = fields.Many2one('eps.proposal.line', domain="[('proposal_id','=',proposal_id)]", string='Category', tracking=True, required=True)
+    proposal_line_id = fields.Many2one('eps.proposal.line', domain="[('proposal_id','=',proposal_id),('state','=','open')]", string='Category', tracking=True, required=True)
     remarks = fields.Text('Remarks')
     initiatives_line_ids = fields.One2many('eps.initiatives.line', 'initiatives_id', string='Detail Initiatives')
     type = fields.Selection([('One Time Purchase','One Time Purchase'),('Kontrak Payung','Kontrak Payung'),('Tender','Tender')], string='Type', required=True, default='One Time Purchase')
@@ -250,6 +250,8 @@ class Initiatives(models.Model):
                     self.env['purchase.order'].create(value)
 
             rec.write({'state': 'done'})
+            rec.proposal_line_id.check_all_initiatives_state()
+            rec.proposal_id.check_all_line_state()
 
     def action_view_tender(self, tender=False):
         """This function returns an action that display existing tender of
