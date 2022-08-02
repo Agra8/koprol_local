@@ -170,7 +170,8 @@ class Proposal(models.Model):
         }
         params = '/web?#%s' % url_encode(url_params)
         full_url = base_url + params
-        # full_url = full_url.replace('#','%23').replace('&','%26')
+        full_url = full_url.replace('#','%23').replace('&','%26')
+        # print (full_url,"<<<<<<<<<<<<<<<<<<<")
         return full_url
 
     def generate_qr_code(self, text, img_name, template):
