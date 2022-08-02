@@ -394,6 +394,11 @@ class Proposal(models.Model):
         state = state.replace('WAITING FOR APPROVAL', 'WFA')
         return state
 
+    def check_all_line_state(self):
+        if all(line.state=='done' for line in self.proposal_line_ids):
+            self.write({'state':'done'})
+
+
 class ProposalLine(models.Model):
     _name = 'eps.proposal.line'
     _description = 'Proposal Line'
@@ -428,6 +433,7 @@ class ProposalLine(models.Model):
     branch_id = fields.Many2one('res.branch', related='proposal_id.branch_id', string='Branch', store=True, readonly=True)
     nama_proposal = fields.Char(related='proposal_id.nama_proposal', string='Nama Proposal', store=True, readonly=True)
     initiatives_list = fields.Text('Status Initiatives', compute=_compute_initiatives_state)
+    state = fields.Selection(selection=[('open','Open'),('done','Done')], default='open',  string='State',  help='', tracking=True)
 
     @api.constrains('price')
     def _check_price(self):
@@ -504,6 +510,11 @@ class ProposalLine(models.Model):
         
 
         return result
+
+    def check_all_initiatives_state(self):
+        for rec in self:
+            if all(initiative.state=='done' for initiative in rec.initiatives_ids):
+                rec.write({'state':'done'})
 
 class ProductLine(models.Model):
     _name = "eps.proposal.product.line"
