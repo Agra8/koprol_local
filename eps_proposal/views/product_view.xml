@@ -43,6 +43,21 @@
                 <field name="company_id" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
+                <xpath expr="//page[@name='general_information']" position="after">
+                    <page string="Approval">
+                        <field name="approval_ids">
+                            <tree string="Approval" editable="bottom" create="false" edit="false" delete="false" >
+                                <field name="matrix_sequence"/>
+                                <field name="group_id"/>
+                                <field name="limit"/>
+                                <field name="state"/>
+                                <field name="reason"/>
+                                <field name="user_id"/>
+                                <field name="tanggal"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
             </field>
         </record>
     </data>
