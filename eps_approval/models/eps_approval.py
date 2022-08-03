@@ -263,15 +263,15 @@ class eps_matrix_approval_line(models.Model):
                             if approval_line.model_id.id in proposal_model:
                                 self.send_notif_email(approval_line)
 
-                    elif approval_line.state=='IWA':
-                        if prev_state_2 == 'OK':
-                            approval_line.write({
-                                      'state':'IN',
-                                      'approval_start_date': date.today(),
-                                      'expected_date': date.today() + timedelta(days = approval_line.sla_days),
-                                    })
-                            if approval_line.model_id.id in proposal_model:
-                                self.send_notif_email(approval_line)
+                if approval_line.state=='IWA':
+                    if prev_state_2 == 'OK':
+                        approval_line.write({
+                                  'state':'IN',
+                                  'approval_start_date': date.today(),
+                                  'expected_date': date.today() + timedelta(days = approval_line.sla_days),
+                                })
+                        if approval_line.model_id.id in proposal_model:
+                            self.send_notif_email(approval_line)
 
                 prev_sequence_2 = approval_line.matrix_sequence
                 prev_state_2 = approval_line.state
@@ -325,7 +325,7 @@ class eps_matrix_approval_line(models.Model):
         
         reject_all = False
         for approval_line in approval_lines_ids:
-            if approval_line.state in ('IN','WA'):
+            if approval_line.state in ('IN','WA','IWA'):
                 reject_all = True
                 approval_line.write({
                   'state':'CANCEL',
