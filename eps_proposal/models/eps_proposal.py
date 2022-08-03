@@ -174,6 +174,20 @@ class Proposal(models.Model):
         # print (full_url,"<<<<<<<<<<<<<<<<<<<")
         return full_url
 
+    def get_full_url_link(self):
+        self.ensure_one()
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        url_params = {
+            'id': self.id,
+            'view_type': 'form',
+            'model': self._name,
+            'menu_id': self.env.ref('eps_menu.eps_proposal_top_menu').id,
+            'action': self.env.ref('eps_proposal.eps_proposal_action').id,
+        }
+        params = '/web?#%s' % url_encode(url_params)
+        full_url = base_url + params
+        return full_url
+
     def generate_qr_code(self, text, img_name, template):
         qr = qrcode.QRCode(
             version=1,
@@ -303,7 +317,9 @@ class Proposal(models.Model):
 
         if self.type=='product' and self.proposal_product_line_ids:
             if self.proposal_line_ids:
-                self._cr.execute('delete from eps_proposal_line where proposal_id=%s' % self.id)
+                # self._cr.execute('delete from eps_proposal_line where proposal_id=%s' % self.id)
+                for line in self.proposal_line_ids:
+                    line.unlink()
             proposal_line = self._prepare_proposal_line(self.proposal_product_line_ids)
             self.proposal_line_ids = proposal_line
 
@@ -397,7 +413,7 @@ class Proposal(models.Model):
 
     def check_all_line_state(self):
         if all(line.state=='done' for line in self.proposal_line_ids):
-            self.write({'state':'done'})
+            self.write({'state':'done','closed_by': self._uid, 'closed_on': datetime.now()})
 
 
 class ProposalLine(models.Model):
