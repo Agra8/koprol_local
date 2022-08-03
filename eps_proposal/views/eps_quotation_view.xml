@@ -53,7 +53,7 @@
                             <page string="Quotation Lines" attrs="{'invisible': [('state','not in',('proposed','won'))]}">
 								<field name="quotation_line_ids" nolabel="1" attrs="{'readonly': ['|',('initiatives_state','!=','approved'),('state','!=','proposed')]}">
                                     <tree editable='top' edit='false'>
-                                        <field name="product_id" options="{'no_create': True,'no_open': True}" domain="[('state','=','approved')]"/>
+                                        <field name="product_id" options="{'no_create': True,'no_open': True}" domain="[('state','=','approved')]" required="1"/>
                                         <field name="product_type" required="1"/>
                                         <field name="name"/>
                                         <field name="categ_id" options="{'no_create': True,'no_open': True}" domain="[('parent_id','!=',False)]"/>

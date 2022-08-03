@@ -159,9 +159,9 @@ class Quotation(models.Model):
             if not record.quotation_line_ids:
                 raise ValidationError('Detail quotation masih kosong!')
             for line in record.quotation_line_ids:
-                if not line.product_id:
-                    product = line.create_product_from_quotation()
-                    line.write({'product_id': product.id})
+                # if not line.product_id:
+                #     product = line.create_product_from_quotation()
+                #     line.write({'product_id': product.id})
                 to_initiative.append([0, False, line._prepare_initiatives_line()])
 
             if to_initiative and record.initiatives_id:
