@@ -55,18 +55,16 @@ class eps_matrix_approval_line(models.Model):
     _name = "eps.matrix.approval.line"
     _order = "id asc"
 
+    approval_id = fields.Many2one('eps.matrix.approval', string='Matrix Approval')
     matrix_sequence = fields.Integer(string='Sequence', default=10)
     limit = fields.Float(string='Limit')
-    sla_days = fields.Integer('SLA Approval Days')
-
-    # Relation field
-    approval_id = fields.Many2one('eps.matrix.approval', string='Matrix Approval')
     group_id = fields.Many2one('res.groups')
     model_id = fields.Many2one(related='approval_id.model_id', readonly=True)
     company_id = fields.Many2one(related='approval_id.company_id', readonly=True)
     branch_id = fields.Many2one(related='approval_id.branch_id', readonly=True)
     divisi_id = fields.Many2one(related='approval_id.divisi_id', readonly=True)
     department_id = fields.Many2one(related='approval_id.department_id', readonly=True)
+    sla_days = fields.Integer('SLA Approval Days')
 
     def request_by_value(self,object,value,view_id=None):
         matrix_data = []
@@ -180,8 +178,11 @@ class eps_matrix_approval_line(models.Model):
         approve_all = False
         user_limit = 0
         prev_sequence = 1
+        prev_sequence_2 = 1
         prev_state = ''
+        prev_state_2 = ''
         last_approval = False
+        proposal_model = [x.id for x in self.env['ir.model'].sudo().search([('model','in',('eps.proposal', 'eps.initiatives','eps.tender'))])]
 
         for approval_line in approval_lines_ids:
             if approval_line.state == 'IN':
@@ -207,6 +208,8 @@ class eps_matrix_approval_line(models.Model):
                               'approval_start_date': date.today(),
                               'expected_date': date.today() + timedelta(days = approval_line.sla_days),
                             })
+                    if approval_line.model_id.id in proposal_model:
+                        self.send_notif_email(approval_line)
 
                 if approval_line.group_id in user_groups:
                     if approval_line.limit > user_limit:
@@ -220,6 +223,8 @@ class eps_matrix_approval_line(models.Model):
                               'approval_start_date': date.today(),
                               'expected_date': date.today() + timedelta(days = approval_line.sla_days),
                             })
+                    if approval_line.model_id.id in proposal_model:
+                        self.send_notif_email(approval_line)
                 elif prev_state in ('IN','WA') and prev_sequence == approval_line.matrix_sequence:
                     approval_line.write({
                               'state':'WA',
@@ -229,7 +234,7 @@ class eps_matrix_approval_line(models.Model):
             prev_sequence = approval_line.matrix_sequence
             prev_state = approval_line.state
         
-        proposal_model = self.env['ir.model'].sudo().search([('model','in',('eps.proposal', 'eps.initiatives','eps.tender'))])
+        
         if user_limit:
             for approval_line in approval_lines_ids:
                 if approval_line.state in ('IN','WA'):
@@ -248,13 +253,28 @@ class eps_matrix_approval_line(models.Model):
                       })
                         last_approval = approval_line.group_id
                     
-                    if approval_line.state == 'IN':
-                        approval_line.approval_start_date = date.today()
-                        for x in proposal_model:
-                            if approval_line.model_id.id == x.id:
+                    if approval_line.state=='WA':
+                        if prev_state_2 == 'OK':
+                            approval_line.write({
+                                      'state':'IN',
+                                      'approval_start_date': date.today(),
+                                      'expected_date': date.today() + timedelta(days = approval_line.sla_days),
+                                    })
+                            if approval_line.model_id.id in proposal_model:
                                 self.send_notif_email(approval_line)
-                        
-                prev_sequence = approval_line.matrix_sequence
+
+                    elif approval_line.state=='IWA':
+                        if prev_state_2 == 'OK':
+                            approval_line.write({
+                                      'state':'IN',
+                                      'approval_start_date': date.today(),
+                                      'expected_date': date.today() + timedelta(days = approval_line.sla_days),
+                                    })
+                            if approval_line.model_id.id in proposal_model:
+                                self.send_notif_email(approval_line)
+
+                prev_sequence_2 = approval_line.matrix_sequence
+                prev_state_2 = approval_line.state
     
         if approve_all:
             return 1
@@ -336,7 +356,7 @@ class eps_matrix_approval_line(models.Model):
             last_approval_user = "-"
         
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
-        qr_code = base_url+"/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s" % ('QR', quote(transaksi.get_full_url()), 150, 150)
+        qr_code = base_url+"/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s" % ('QR', transaksi.get_full_url(), 150, 150)
         url_discuss = {
             'action': self.env['ir.actions.actions'].sudo().search([('name','=','Discuss')], limit=1).id,
         }
@@ -367,7 +387,7 @@ class eps_matrix_approval_line(models.Model):
                     <tr>
                         <td>Document No.</td>
                         <td>: </td>
-                        <td><a href="%s">%s</a> </td> """ % (transaksi.get_full_url(),str(transaksi.name)) +"""
+                        <td><a href="%s">%s</a> </td> """ % (transaksi.get_full_url_link(),str(transaksi.name)) +"""
                     </tr>
                     <tr>
                         <td>Unit Bisnis</td>
@@ -402,7 +422,7 @@ class eps_matrix_approval_line(models.Model):
                 </tbody>
             </table>
             Please click on the link or QR Code below to Approve or Reject the transactions.<br/>
-            <a href='%s'>%s<a> """%(transaksi.get_full_url(),transaksi.get_full_url())+"""<br/>
+            <a href='%s'>%s<a> """%(transaksi.get_full_url_link(),transaksi.get_full_url_link())+"""<br/>
             <img  width="100" height="100"  src="%s" /> """ % qr_code +"""<br/><br/>
             Regards,<br/>
             <b>Administratror</b>
