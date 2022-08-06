@@ -26,12 +26,33 @@
                     <sheet>
                         <group>
                             <group>
-                                <field name="name" required="1"/>        
+                                <field name="name" required="1"/>      
+                                <field name="use_alias"/>      
                             </group>
                             <group>
                                 <field name="company_id" required="1"/>
                                 <field name="company_ids" required="1" widget="many2many_tags"/>
                             </group>
+                            <div class="col-lg-6 o_setting_box" id="alias_channels">
+                                <div class="o_setting_right_pane">
+                                    <div attrs="{'invisible': [('use_alias','=',False)]}" class="mt16">
+                                        <div class="oe_edit_only" attrs="{'invisible': [('alias_domain', '=', False)]}">
+                                            <label for="alias_id" string="Choose an Email:"/>
+                                            <field name="alias_name"/>@<field name="alias_domain" class="oe_inline" readonly="1"/>
+                                            to create aliases mail 
+                                        </div>
+                                        <p class="oe_read_only" attrs="{'invisible': [('alias_domain', '=', False)]}">Send emails to
+                                            <strong>
+                                                <field name="alias_id" class="oe_read_only oe_inline" required="False"/>
+                                            </strong>
+                                            to create aliases mail
+                                        </p>
+                                        <p attrs="{'invisible': [('alias_domain', '!=', False)]}">
+                                            <a type="action" name="%(base_setup.action_general_configuration)d"><i class="fa fa-arrow-right"/> Configure domain name</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </group>
                         <field name="teams_line_ids">
                             <tree string="Anggota" editable="bottom">
