@@ -708,7 +708,39 @@ class RequestFormLine(models.Model):
                 'readonly_by_pass': 1
             }
         }
+
     
+    @api.model
+    def message_new(self, msg, custom_values=None):
+        values = dict(custom_values or {}, partner_email=msg.get('from'), partner_id=msg.get('author_id'))
+        ticket = super(RequestFormLine, self).message_new(msg, custom_values=values)
+        partner_ids = [x for x in ticket._find_partner_from_emails(self._ticket_email_split(msg)) if x]
+        if partner_ids:
+            ticket.message_subscribe(partner_ids)
+        return ticket
+
+
+    def message_update(self, msg, update_vals=None):
+        partner_ids = [x for x in self._find_partner_from_emails(self._ticket_email_split(msg)) if x]
+        if partner_ids:
+            self.message_subscribe(partner_ids)
+        return super(RequestFormLine, self).message_update(msg, update_vals=update_vals)
+
+    def _message_post_after_hook(self, message, *args, **kwargs):
+        if self.partner_email and self.partner_id and not self.partner_id.email:
+            self.partner_id.email = self.partner_email
+
+        if self.partner_email and not self.partner_id:
+            # we consider that posting a message with a specified recipient (not a follower, a specific one)
+            # on a document without customer means that it was created through the chatter using
+            # suggested recipients. This heuristic allows to avoid ugly hacks in JS.
+            new_partner = message.partner_ids.filtered(lambda partner: partner.email == self.partner_email)
+            if new_partner:
+                self.search([
+                    ('partner_id', '=', False),
+                    ('partner_email', '=', new_partner.email),
+                    ('stage_id.fold', '=', False)]).write({'partner_id': new_partner.id})
+        return super(RequestFormLine, self)._message_post_after_hook(message, *args, **kwargs)
 
     def _notify_get_reply_to(self, default=None, records=None, company=None, doc_names=None):
         """ Override to set alias of tickets to their team if any. """
