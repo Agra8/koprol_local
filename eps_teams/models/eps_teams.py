@@ -126,7 +126,7 @@ class EpsTeamsLine(models.Model):
 
     # 8: Relational Fields
     teams_id = fields.Many2one(comodel_name='eps.teams.master', string='Teams')
-    employee_id = fields.Many2one(comodel_name='hr.employee', string='Employee')
+    member_id = fields.Many2one(comodel_name='res.users', string='Member')
     job_id = fields.Many2one(comodel_name='hr.job', string='Job', compute='_change_job_name')
 
     def copy(self):
@@ -146,10 +146,10 @@ class EpsTeamsLine(models.Model):
             res.append((record.id,name))
         return res            
     
-    @api.onchange('employee_id')
+    @api.onchange('member_id')
     def _change_job_name(self):
-        if self.employee_id:
-            for user in self.employee_id:
+        if self.member_id:
+            for user in self.member_id:
                 self.job_id = user.job_id
 
     @api.model

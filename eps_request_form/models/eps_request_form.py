@@ -314,6 +314,9 @@ class RequestFormLine(models.Model):
     user_request = fields.Char(
         String='User Request', related='request_form_id.name_pegawai')
     reason = fields.Char(string='Alasan Reject')
+
+    # Used in message_get_default_recipients, so if no partner is created, email is sent anyway
+    email = fields.Char(related='partner_email', string='Email on Customer', readonly=False)
     email_penerima = fields.Char()
     penerima = fields.Char()
     token_penerima = fields.Char()
@@ -321,7 +324,7 @@ class RequestFormLine(models.Model):
     reject_url = fields.Char()
     request_state = fields.Selection(related='request_form_id.state')
     jumlah_task = fields.Char(string='Jumlah Task PIC')
-    email = fields.Char(related='request_form_id.email')
+    partner_email = fields.Char(related='request_form_id.email')
     # Audit trail
     request_uid = fields.Many2one(
         comodel_name='res.users', string='Requested by', related="request_form_id.request_uid")
