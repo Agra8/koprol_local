@@ -56,7 +56,7 @@
                         </group>
                         <field name="teams_line_ids">
                             <tree string="Anggota" editable="bottom">
-                                <field name="employee_id"/>
+                                <field name="member_id"/>
                                 <field name="job_id" readonly="1"/>
                             </tree>
                         </field>
