@@ -150,7 +150,7 @@ class EpsTeamsLine(models.Model):
     def _change_job_name(self):
         if self.member_id:
             for user in self.member_id:
-                self.job_id = user.job_id
+                self.job_id = user.employee_id.job_id
 
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
