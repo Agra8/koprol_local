@@ -45,7 +45,7 @@ class WebsiteForm(Home):
         employee = request.env['hr.employee'].sudo().search(
             [('job_id.name', 'like', '%Manager%')])
         requestjrf = request.env['eps.master.jrf.arf'].sudo().search([])
-        tipe_sistem = request.env['eps.sistem.master'].sudo().search([])
+        tipe_sistem = request.env['eps.sistem.master'].sudo().search([], order='sequence asc')
         return request.render("website_request_form.website_request_form", {
             'company': company,
             'branch': branch,
