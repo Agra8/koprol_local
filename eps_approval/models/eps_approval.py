@@ -542,6 +542,7 @@ class eps_approval_transaction(models.Model):
             for user in group_obj.users:
                 proposal_model = self.env['ir.model'].sudo().search([('model','=','eps.proposal')])
                 trxs = self.search([('approval_start_date','!=',date.today()), ('state','=','IN'), ('group_id','=',group_obj.id), ('model_id','=',proposal_model.id), ('company_id', 'in', [c.id for c in user.company_ids]), ('branch_id', 'in', [c.id for c in user.branch_ids])])
+                print (trxs,"<<<<<<<<<<<<<<<<<schedule_notification_outstanding_proposal_approval")
                 count = 1
                 ins_trx = []
                 base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
@@ -557,96 +558,97 @@ class eps_approval_transaction(models.Model):
 
                 qr_code = base_url+"/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s" % ('QR', quote(full_url), 150, 150)
                 now = datetime.now() + timedelta(hours=7)
-                messages+="""
-                    <table>
-                        <tr>
-                            <td colspan="3">
-                                <p>Good %s</p>"""% self.get_part_of_day(now.hour) +"""
-                                <br/>
-                                <table>
-                                    <tr>
-                                        <td>Nama</td>
-                                        <td>:</td>
-                                        <td>%s</td> """ %user.name+"""
-                                    </tr>
-                                    <tr>
-                                        <td>Role</td>
-                                        <td>:</td>
-                                        <td>%s</td> """ %group_obj.name+"""
-                                    </tr>
-                                    <tr>
-                                        <td>Total Outstanding</td>
-                                        <td>:</td>
-                                        <td>%s</td> """ %str(len(trxs))+"""
-                                    </tr>
-                                </table>
-                            </td>
-                            <td colspan="3" align="center">
-                                <img width="100" height="100" src="%s" /> """ % qr_code +"""
-                                <br/>
-                                <i>Scan QR Code for detail & Approval</i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="6">
-                                <br/>
-                            </td>
-                        <tr>
-                        <tr>
-                            <td colspan="6">
-                                <p>Here's your outstanding approval on KOPROL:</p>
-                            </td>
-                        <tr>
-                            <td style="border:1px solid black; padding:10px">No.</td>
-                            <td style="border:1px solid black; padding:10px">Ticket #</td>
-                            <td style="border:1px solid black; padding:10px">Subject</td>
-                            <td style="border:1px solid black; padding:10px">Expected Date</td>
-                            <td style="border:1px solid black; padding:10px">Total</td>
-                            <td style="border:1px solid black; padding:10px">Aging</td>
-                        </tr>
-                """
-                for trx in trxs:
-                    transaksi = self.env[trx.model_id.model].sudo().browse(trx.transaction_id)
-                    get_usr = self.env['eps.approval.transaction'].sudo().search([('model_id','=',trx.model_id.id), ('transaction_id','=',trx.transaction_id), ('state','=','OK')], order = 'sequence DESC', limit = 1)
-                    if get_usr:
-                        last_approval_user = get_usr.user_id.name
-                    else:
-                        last_approval_user = "-"
-                    selisih = date.today() - trx.approval_start_date
-                    aging_ticket = int(selisih.days) - int(trx.sla_days)
-                    if aging_ticket < 0:
-                        aging_ticket = 0
+                if trxs:
                     messages+="""
+                        <table>
                             <tr>
-                                <td style="border:1px solid black; padding:10px">%s </td> """ % str(count) +"""
-                                <td style="border:1px solid black; padding:10px">%s </td> """ % str(transaksi.name) +"""
-                                <td style="border:1px solid black; padding:10px">%s </td> """ % str(transaksi.nama_proposal) +"""
-                                <td style="border:1px solid black; padding:10px">%s </td> """ % str(trx.expected_date) +"""
-                                <td style="border:1px solid black; padding:10px">Rp. %s </td> """ % str(trx.value) +"""
-                                <td style="border:1px solid black; padding:10px">%s days </td> """ % str(aging_ticket) +"""
+                                <td colspan="3">
+                                    <p>Good %s</p>"""% self.get_part_of_day(now.hour) +"""
+                                    <br/>
+                                    <table>
+                                        <tr>
+                                            <td>Nama</td>
+                                            <td>:</td>
+                                            <td>%s</td> """ %user.name+"""
+                                        </tr>
+                                        <tr>
+                                            <td>Role</td>
+                                            <td>:</td>
+                                            <td>%s</td> """ %group_obj.name+"""
+                                        </tr>
+                                        <tr>
+                                            <td>Total Outstanding</td>
+                                            <td>:</td>
+                                            <td>%s</td> """ %str(len(trxs))+"""
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td colspan="3" align="center">
+                                    <img width="100" height="100" src="%s" /> """ % qr_code +"""
+                                    <br/>
+                                    <i>Scan QR Code for detail & Approval</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <br/>
+                                </td>
+                            <tr>
+                            <tr>
+                                <td colspan="6">
+                                    <p>Here's your outstanding approval on KOPROL:</p>
+                                </td>
+                            <tr>
+                                <td style="border:1px solid black; padding:10px">No.</td>
+                                <td style="border:1px solid black; padding:10px">Ticket #</td>
+                                <td style="border:1px solid black; padding:10px">Subject</td>
+                                <td style="border:1px solid black; padding:10px">Expected Date</td>
+                                <td style="border:1px solid black; padding:10px">Total</td>
+                                <td style="border:1px solid black; padding:10px">Aging</td>
                             </tr>
                     """
-                    trx.reminder_counter += 1
-                    count += 1
-                    ins_trx.append([4, trx.id, False])
+                    for trx in trxs:
+                        transaksi = self.env[trx.model_id.model].sudo().browse(trx.transaction_id)
+                        get_usr = self.env['eps.approval.transaction'].sudo().search([('model_id','=',trx.model_id.id), ('transaction_id','=',trx.transaction_id), ('state','=','OK')], order = 'sequence DESC', limit = 1)
+                        if get_usr:
+                            last_approval_user = get_usr.user_id.name
+                        else:
+                            last_approval_user = "-"
+                        selisih = date.today() - trx.approval_start_date
+                        aging_ticket = int(selisih.days) - int(trx.sla_days)
+                        if aging_ticket < 0:
+                            aging_ticket = 0
+                        messages+="""
+                                <tr>
+                                    <td style="border:1px solid black; padding:10px">%s </td> """ % str(count) +"""
+                                    <td style="border:1px solid black; padding:10px">%s </td> """ % str(transaksi.name) +"""
+                                    <td style="border:1px solid black; padding:10px">%s </td> """ % str(transaksi.nama_proposal) +"""
+                                    <td style="border:1px solid black; padding:10px">%s </td> """ % str(trx.expected_date) +"""
+                                    <td style="border:1px solid black; padding:10px">Rp. %s </td> """ % str(trx.value) +"""
+                                    <td style="border:1px solid black; padding:10px">%s days </td> """ % str(aging_ticket) +"""
+                                </tr>
+                        """
+                        trx.reminder_counter += 1
+                        count += 1
+                        ins_trx.append([4, trx.id, False])
+                        
+                    messages+="""
+                            </table>
+                            <br/>
+                        <hr />
+                        <i>This message is automaticaly generated by KOPROL System</i>
+                    """
                     
-                messages+="""
-                        </table>
-                        <br/>
-                    <hr />
-                    <i>This message is automaticaly generated by KOPROL System</i>
-                """
-                
-                self.env['eps.notification.center'].sudo().create({
-                    'approval_transaction_ids': ins_trx,
-                    'form_id': trxs[0].view_id.id,
-                    'transaction_id': trxs[0].transaction_id,
-                    'subject' : "Outstanding Approval on KOPROL System per "+str(date.today()),
-                    'message': messages,
-                    'notify_to': user.id,
-                    'tipe_email': 'reminder'
-                })
-                messages=""
+                    self.env['eps.notification.center'].sudo().create({
+                        'approval_transaction_ids': ins_trx,
+                        'form_id': trxs[0].view_id.id,
+                        'transaction_id': trxs[0].transaction_id,
+                        'subject' : "Outstanding Approval on KOPROL System per "+str(date.today()),
+                        'message': messages,
+                        'notify_to': user.id,
+                        'tipe_email': 'reminder'
+                    })
+                    messages=""
 
     def get_transaction(self):  
         query = """
