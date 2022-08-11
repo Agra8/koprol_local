@@ -11,6 +11,7 @@ from odoo import models, fields, api
 
 # 4:  imports from odoo modules
 from odoo.exceptions import Warning
+from odoo.tools.safe_eval import safe_eval
 
 # 5: local imports
 
@@ -18,19 +19,27 @@ from odoo.exceptions import Warning
 
 class EpsTeamsMaster(models.Model):
     _name="eps.teams.master"
+    _inherit = ['mail.alias.mixin', 'mail.thread']
     _description="eps Master Teams"
 
     # 7: defaults methods
 
     # 8: fields
     name = fields.Char(string='Name')
-    
+    alias_name = fields.Char(string='Alias Email', help='Digunakan untuk membuat alias email')
+    use_alias = fields.Boolean(string='use Alias Email?', default=True)
     # Audit Trail
 
     # 8: Relational Fields
     company_id = fields.Many2one(comodel_name='res.company', string='Company')
     company_ids = fields.Many2many('res.company', 'eps_teams_company_rel', 'eps_teams_id', 'company_id', 'Allowed Company', copy=False)
     teams_line_ids = fields.One2many(comodel_name='eps.teams.line', inverse_name='teams_id' )
+    alias_id = fields.Many2one(comodel_name="mail.alias",string="Email",ondelete="restrict",required=True,
+    help="The email address associated with \
+          this channel. New emails received will \
+          automatically create new tickets assigned \
+          to the channel.",
+    )
 
     
     def copy(self):
@@ -56,6 +65,33 @@ class EpsTeamsMaster(models.Model):
                 'readonly_by_pass': 1
             }
         }
+    
+    @api.onchange('use_alias', 'name')
+    def _onchange_use_alias(self):
+        """
+        Membuat email alias otomatis dari Name teams dan memasukkan Email yang akan dijadikan aliases
+        """
+        if not self.alias_name and self.name and self.use_alias:
+            self.alias_name = self.env['mail.alias']._clean_and_check_unique(self.name)
+        if not self.use_alias:
+            self.alias_name = False
+    
+    def _alias_get_creation_values(self):
+        """
+        Override method bawaan untuk input alias_model_id, alias_defaults dan team_id ketika membuat team serta
+        membentuk aliases Email 
+        """
+        values = super()._alias_get_creation_values()
+        values["alias_model_id"] = self.env.ref("eps_request_form.model_eps_request_form_line").id
+        values["alias_defaults"] = defaults = safe_eval(self.alias_defaults or "{}")
+        defaults["team_id"] = self.id
+        return values
+
+    def get_alias_values(self):
+        values = super(EpsTeamsMaster, self).get_alias_values()
+        values['alias_defaults'] = {'team_id': self.id}
+        return values
+
       
     
     def name_get(self):
@@ -90,7 +126,7 @@ class EpsTeamsLine(models.Model):
 
     # 8: Relational Fields
     teams_id = fields.Many2one(comodel_name='eps.teams.master', string='Teams')
-    employee_id = fields.Many2one(comodel_name='hr.employee', string='Employee')
+    member_id = fields.Many2one(comodel_name='res.users', string='Member')
     job_id = fields.Many2one(comodel_name='hr.job', string='Job', compute='_change_job_name')
 
     def copy(self):
@@ -110,11 +146,11 @@ class EpsTeamsLine(models.Model):
             res.append((record.id,name))
         return res            
     
-    @api.onchange('employee_id')
+    @api.onchange('member_id')
     def _change_job_name(self):
-        if self.employee_id:
-            for user in self.employee_id:
-                self.job_id = user.job_id
+        if self.member_id:
+            for user in self.member_id:
+                self.job_id = user.employee_id.job_id
 
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
