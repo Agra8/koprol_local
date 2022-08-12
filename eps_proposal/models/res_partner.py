@@ -163,6 +163,7 @@ class Partner(models.Model):
             }
 
             vals = self._prepare_data_api()
+            print (vals,"<<<<<<<<<<<<<<<<<<<")
             request_time = self.start_end_date_request()
             response = requests.get(url+end_point, data = vals,headers=headers,verify=True)
             status_code = (response.status_code)
@@ -230,7 +231,7 @@ class Partner(models.Model):
         CompanyName = self.name
         if self.child_ids:
             ContactName = self.child_ids[0].name
-            ContactTitle = self.child_ids[0].title.name
+            ContactTitle = self.child_ids[0].title.name or 'Bpk.'
         else:
             ContactName = self.name
             ContactTitle = self.title.name or 'Bpk.'
@@ -238,7 +239,7 @@ class Partner(models.Model):
         Phone = self.phone or ''
         Mobile = self.mobile or ''
         if self.bank_ids and len(self.bank_ids)==1:
-            AccountBank = self.bank_ids[0].bank_id.name
+            AccountBank = self.bank_ids[0].bank_id.bic
             AccountName = self.bank_ids[0].acc_holder_name
             AccountNumber = self.bank_ids[0].acc_number
             BankBranch = self.bank_ids[0].branch
@@ -254,12 +255,12 @@ class Partner(models.Model):
         # PKPDate = self.
         SupplierShowroom = 1 if self.is_supplier_showroom else 0
         JenisBarang = 'Barang'
-        SupplierVerifikasi = 'N'
+        SupplierVerifikasi = 'C'
         SupplierBengkel = 1 if self.is_supplier_bengkel else 0
         SupplierUmum = 1 if self.is_supplier_umum else 0
         
         if self.bank_ids and len(self.bank_ids)==2:
-            AccountBank2 = self.bank_ids[1].bank_id.name
+            AccountBank2 = self.bank_ids[1].bank_id.bic
             AccountName2 = self.bank_ids[1].acc_holder_name
             AccountNumber2 = self.bank_ids[1].acc_number
             BankBranch2 = self.bank_ids[1].branch
@@ -270,7 +271,7 @@ class Partner(models.Model):
             BankBranch2 = ''
 
         if self.bank_ids and len(self.bank_ids)==3:
-            AccountBank3 = self.bank_ids[2].bank_id.name
+            AccountBank3 = self.bank_ids[2].bank_id.bic
             AccountName3 = self.bank_ids[2].acc_holder_name
             AccountNumber3 = self.bank_ids[2].acc_number
             BankBranch3 = self.bank_ids[2].branch
