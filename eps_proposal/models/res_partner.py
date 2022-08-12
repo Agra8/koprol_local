@@ -163,7 +163,6 @@ class Partner(models.Model):
             }
 
             vals = self._prepare_data_api()
-            print (vals,"<<<<<<<<<<<<<<<<<<<")
             request_time = self.start_end_date_request()
             response = requests.get(url+end_point, data = vals,headers=headers,verify=True)
             status_code = (response.status_code)
