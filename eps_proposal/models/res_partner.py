@@ -85,9 +85,9 @@ class Partner(models.Model):
 
     @api.model
     def create(self,vals):
-        if not vals.get('action_api',False):
+        if not vals.get('action_api',False) and not vals.get('parent_id', False):
             vals['action_api'] = 'I'
-        if not vals.get('code',False):
+        if not vals.get('code',False) and not vals.get('parent_id', False):
             vals['code'] = self.sudo().get_sequence()
         ids = super(Partner,self).create(vals)
         return ids
@@ -104,7 +104,7 @@ class Partner(models.Model):
         or vals.get('is_supplier_showroom')\
         or vals.get('is_supplier_bengkel')\
         or vals.get('is_supplier_umum')\
-        or vals.get('nib_validity')) and self.status_api=='done':
+        or vals.get('nib_validity')) and self.status_api=='done' and not self.parent_id:
 
             vals['action_api'] = 'U'
             vals['status_api'] = 'draft'
