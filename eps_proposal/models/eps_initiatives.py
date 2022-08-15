@@ -50,6 +50,14 @@ class Initiatives(models.Model):
             purchase_count = len(self.env['purchase.order'].search([('initiatives_id','=',record.id)]))
             record.purchase_count = purchase_count
 
+    @api.depends('purchase_order_ids.state')
+    def _compute_purchase_order_state(self):
+        for rec in self:
+            purchase_order_list = ''
+            for purchase in rec.purchase_order_ids:
+                purchase_order_list+="%s (%s)\n" % (purchase.name,purchase.state)
+            rec.purchase_order_list = purchase_order_list
+
 
     name = fields.Char('Name', required=True, default='/')
     date = fields.Date('Date', required=True, tracking=True, default=_get_default_date)
@@ -76,6 +84,9 @@ class Initiatives(models.Model):
     purchase_count = fields.Integer(compute="_compute_purchase", string='Tender Count', default=0)
     proposal_amount = fields.Float(related='proposal_line_id.price', store=True, string='Proposal Amount')
     reserved_amount = fields.Float(related='proposal_line_id.reserved_amount', store=True,string='Reserved Amount')
+    purchase_order_ids = fields.One2many('purchase.order','initiatives_id', string='Purchase Orders')
+    purchase_order_id = fields.Many2one('purchase.order',related='purchase_order_ids.product_id', string='Purchase Order')
+    purchase_order_list = fields.Text('Purchase Order Status', compute=_compute_purchase_order_state)
 
     @api.onchange('proposal_line_id')
     def _onchange_proposal_line(self):

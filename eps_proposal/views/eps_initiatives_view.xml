@@ -15,6 +15,7 @@
                     <field name='proposal_line_id'/>
                     <field name='amount_total'/>
                     <field name='state'/>
+                    <field name='purchase_order_list'/>
 				</tree>
 			</field>
 		</record>
@@ -251,6 +252,7 @@
                     <field name='type'/>
                     <field name='proposal_id'/>
                     <field name='proposal_line_id'/>
+                    <field name='purchase_order_ids' string="Purchase Order"/>
 					<filter string="Draft" name="state_draft" domain="[('state','=','draft')]" />
 					<filter string="Waiting for Approval" name="state_wfa" domain="[('state','=','waiting_for_approval')]" />
 					<filter string="Approved" name="state_approved" domain="[('state','=','approved')]" />
