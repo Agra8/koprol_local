@@ -8,10 +8,10 @@
             <field name="arch" type="xml">
                 <group name="first" position="after">
                     <group name="proposal" >
-                        <group string="Proposal Config" groups="eps_menu.group_sys_admin">
+                        <group string="Proposal Config" >
                             <field name="proposal_categ_id"/>
                             <field name="asset_category_id"/>
-                            <field name="tops_parent_id"/>
+                            <field name="tops_parent_id" groups="eps_menu.group_sys_admin"/>
                             <field name="is_asset_building"/>
                         </group>
                     </group>
