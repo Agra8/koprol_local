@@ -3,6 +3,12 @@
     <data noupdate="1">  	
 
         <!-- Configuration -->
+
+        <record id="group_eps_ga_administrator_config" model="res.groups">
+            <field name="category_id" ref="eps_menu.eps_role"/>
+            <field name="name">Koprol - GA Administrator</field> 
+        </record>
+
         <record id="group_eps_koprol_config" model="res.groups">
             <field name="category_id" ref="eps_menu.eps_role"/>
             <field name="name">Koprol Configuration Access</field> 
