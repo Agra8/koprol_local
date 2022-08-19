@@ -343,7 +343,7 @@ class Initiatives(models.Model):
             'view_type': 'form',
             'model': self._name,
             'menu_id': self.env.ref('eps_menu.eps_proposal_top_menu').id,
-            'action': self.env.ref('eps_proposal.eps_proposal_action').id,
+            'action': self.env.ref('eps_proposal.eps_initiatives_action').id,
         }
         params = '/web?#%s' % url_encode(url_params)
         full_url = base_url + params
