@@ -208,7 +208,7 @@ class eps_matrix_approval_line(models.Model):
                               'approval_start_date': date.today(),
                               'expected_date': date.today() + timedelta(days = approval_line.sla_days),
                             })
-                    if approval_line.model_id.id in proposal_model:
+                    if approval_line.model_id.id in proposal_model and not approve_all:
                         self.send_notif_email(approval_line)
 
                 if approval_line.group_id in user_groups:
@@ -260,7 +260,7 @@ class eps_matrix_approval_line(models.Model):
                                       'approval_start_date': date.today(),
                                       'expected_date': date.today() + timedelta(days = approval_line.sla_days),
                                     })
-                            if approval_line.model_id.id in proposal_model:
+                            if approval_line.model_id.id in proposal_model and not approve_all:
                                 self.send_notif_email(approval_line)
 
                 if approval_line.state=='IWA':
