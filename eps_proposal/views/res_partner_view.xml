@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="base.view_partner_tree"/>
             <field name="arch" type="xml">
                 <field name="company_id" position="replace">
-                    <field name="state"/>
+                    <field name="state" readonly="1"/>
                 </field>
             </field>
         </record>
@@ -118,7 +118,7 @@
                 </xpath>
                 <field name="vat" position="attributes">
                     <attribute name="string">NPWP</attribute>
-                    <attribute name="attrs">{'readonly':[('state','!=','draft')],'required':[('company_type','=','company')]}</attribute>
+                    <attribute name="attrs">{'readonly':[('state','!=','draft')],'required':[('pkp','=',True)]}</attribute>
                 </field>
                 <field name="vat" position="before">
                     <field name="nik" attrs="{'readonly':[('state','!=','draft')]}"/>
