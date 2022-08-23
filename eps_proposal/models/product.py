@@ -151,7 +151,7 @@ class ProductProduct(models.Model):
         ID = self.tops_product_id
         description = self.name
         parent_id = self.categ_id.tops_parent_id
-        price_per_piece = 0
+        price_per_piece = self.list_price or 0
         unit = 'UNIT'
         if self.active:
             is_active = 1
