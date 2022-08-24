@@ -84,7 +84,6 @@ function addRow(value) {
 		changeAddRequest();
 		tbl('#request_tbl', 'keyup', "input[name='requestform_id']");
 		numberRow();
-		$(`.select_field_${index + 1}`).select2();
 	}
 }
 
@@ -210,6 +209,7 @@ function changeAddRequest() {
 	// document.getElementById(`request_id_${index}`).disabled = true;
 	document.getElementById(`request_id_${index}`).style.display = 'none';
 	$(`#request_id_${index}`).prop('selectedIndex', 0);
+
 }
 
 $(document).on('change', '.input-types', function() {
