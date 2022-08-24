@@ -208,7 +208,7 @@ class eps_matrix_approval_line(models.Model):
                               'approval_start_date': date.today(),
                               'expected_date': date.today() + timedelta(days = approval_line.sla_days),
                             })
-                    if approval_line.model_id.id in proposal_model:
+                    if approval_line.model_id.id in proposal_model and not approve_all:
                         self.send_notif_email(approval_line)
 
                 if approval_line.group_id in user_groups:
@@ -260,18 +260,25 @@ class eps_matrix_approval_line(models.Model):
                                       'approval_start_date': date.today(),
                                       'expected_date': date.today() + timedelta(days = approval_line.sla_days),
                                     })
-                            if approval_line.model_id.id in proposal_model:
+                            if approval_line.model_id.id in proposal_model and not approve_all:
                                 self.send_notif_email(approval_line)
 
                 if approval_line.state=='IWA':
-                    if prev_state_2 == 'OK':
+                    if approve_all:
                         approval_line.write({
-                                  'state':'IN',
-                                  'approval_start_date': date.today(),
-                                  'expected_date': date.today() + timedelta(days = approval_line.sla_days),
-                                })
-                        if approval_line.model_id.id in proposal_model:
-                            self.send_notif_email(approval_line)
+                        'state':'OK',
+                        'user_id':self._uid,
+                        'tanggal':datetime.now(),
+                      })
+                    else:
+                        if prev_state_2 == 'OK':
+                            approval_line.write({
+                                      'state':'IN',
+                                      'approval_start_date': date.today(),
+                                      'expected_date': date.today() + timedelta(days = approval_line.sla_days),
+                                    })
+                            if approval_line.model_id.id in proposal_model:
+                                self.send_notif_email(approval_line)
 
                 prev_sequence_2 = approval_line.matrix_sequence
                 prev_state_2 = approval_line.state

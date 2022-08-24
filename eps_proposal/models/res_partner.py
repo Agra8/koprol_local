@@ -310,7 +310,7 @@ class Partner(models.Model):
         'OperationalAddress':'',
         'SupplierShowroom':SupplierShowroom,
         'JenisBarang':JenisBarang, # Barang/Jasa
-        'SupplierVerifikasi':'N',
+        'SupplierVerifikasi':SupplierVerifikasi,
         'SupplierBengkel':SupplierBengkel,
         'SupplierUmum':SupplierUmum,
         'AccountBank2':AccountBank2,

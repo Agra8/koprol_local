@@ -74,7 +74,7 @@
 						</group>
 						<notebook>
                             <page string="Initiatives Lines">
-								<field name="initiatives_line_ids" nolabel="1" readonly="1" options="{'reload_on_button': True}">
+								<field name="initiatives_line_ids" nolabel="1" readonly="1" options="{'reload_on_button': True}" force_save="1">
                                     <tree editable='top' edit='false'>
                                     	<field name="branch_id" options="{'no_create': True,'no_open': True}" domain="[('company_id','=',parent.company_id)]"/>
                                         <field name="supplier_id" options="{'no_create': True,'no_open': True}"/>
