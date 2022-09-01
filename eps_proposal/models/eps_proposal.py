@@ -451,6 +451,7 @@ class ProposalLine(models.Model):
     nama_proposal = fields.Char(related='proposal_id.nama_proposal', string='Nama Proposal', store=True, readonly=True)
     initiatives_list = fields.Text('Status Initiatives', compute=_compute_initiatives_state)
     state = fields.Selection(selection=[('open','Open'),('done','Done')], default='open',  string='State',  help='', tracking=True)
+    date = fields.Date(related='proposal_id.date', string='Date', store=True, readonly=True)
 
     @api.constrains('price')
     def _check_price(self):
