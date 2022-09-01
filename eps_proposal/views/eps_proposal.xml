@@ -190,6 +190,7 @@
 			<field name="arch" type="xml">
 				<tree string="Proposal Detail" create="0" edit="0" delete="0">
                     <field name='proposal_id'/>
+                    <field name='date'/>
                     <field name='company_id'/>
                     <field name='department_id'/>
                     <field name='nama_proposal'/>
@@ -210,6 +211,7 @@
             <field name="arch" type="xml">
                 <search string="Search Detail Proposal">
                     <field name="proposal_id"/>
+                    <field name='date'/>
                     <field name="company_id"/>
                     <field name="branch_id"/>
                     <field name="department_id"/>

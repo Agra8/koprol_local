@@ -114,7 +114,10 @@ class Initiatives(models.Model):
 
     def action_request_approval(self):
         self.validity_check()
-        amount_approval = sum(q.quotation_amount for q in self.quotation_line_ids.filtered(lambda x:x.state=='proposed'))
+        if not self.initiatives_line_ids:
+            amount_approval = sum(q.quotation_amount for q in self.quotation_line_ids.filtered(lambda x:x.state=='proposed'))
+        else:
+            amount_approval = self.amount_total
         koprol_setting = self.env['eps.koprol.setting'].sudo().search([])
         if not koprol_setting:
             raise ValidationError('Konfigurasi registrasi vendor belum lengkap, silahkan setting terlebih dahulu')
