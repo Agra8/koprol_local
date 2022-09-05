@@ -110,7 +110,6 @@ class WebsiteForm(Home):
         if 'request_sistem_ids' in value:
             del value['request_sistem_ids']
         
-        request_id = request.env[model_record.model].sudo().create(value)
         try:
             request_id = request.env[model_record.model].sudo().create(value)
         except Exception as err:
