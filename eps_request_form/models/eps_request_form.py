@@ -625,11 +625,11 @@ class RequestFormLine(models.Model):
 
     @api.onchange('teams_id')
     def _onchange_employee_pic(self):
-        domain = {'employee_id': [('id', '!=', False)]}
+        domain = {'member_id': [('id', '!=', False)]}
         if self.teams_id:
-            employee_ids = [
-                employee.employee_id.id for employee in self.teams_id.teams_line_ids]
-            domain = {'employee_id': [('id', 'in', employee_ids)]}
+            member_ids = [
+                member.member_id.id for member in self.teams_id.teams_line_ids]
+            domain = {'member_id': [('id', 'in', member_ids)]}
         return {'domain': domain}
 
     def get_full_url(self):
