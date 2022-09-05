@@ -111,6 +111,12 @@ class WebsiteForm(Home):
             del value['request_sistem_ids']
         
         request_id = request.env[model_record.model].sudo().create(value)
+        try:
+            request_id = request.env[model_record.model].sudo().create(value)
+        except Exception as err:
+            _logger.error(err)
+            return False, f'Error saat create Ticket: {err}, \
+                mohon cek data - data'
         if data['attachments']:
             attachment = data['attachments']
             id_record = [
