@@ -405,13 +405,14 @@ class RequestFormLine(models.Model):
             if vals.get('value_approval') != self.value_approval:
                 self._message_log(body=_('<b>Value Approval Changed ! </b> From %d to %d') %
                                   (self.value_approval, int(vals.get('value_approval'))))
-        if vals.get('employee_id', False):
-            if vals.get('employee_id') != self.employee_id:
-                employee_obj = self.env['hr.employee'].suspend_security().browse(
-                    vals.get('employee_id'))
-                employee_obj.message_subscribe(employee_obj.partner_id.ids)
-                self._message_log(body=_('<b>PIC Changed!</b> From %s to %s') %
-                                  (self.employee_id.name, employee_obj.name))
+        # TODO: Cek di member_id
+        # if vals.get('employee_id', False):
+        #     if vals.get('employee_id') != self.employee_id:
+        #         employee_obj = self.env['hr.employee'].suspend_security().browse(
+        #             vals.get('employee_id'))
+        #         employee_obj.message_subscribe(employee_obj.partner_id.ids)
+        #         self._message_log(body=_('<b>PIC Changed!</b> From %s to %s') %
+        #                           (self.employee_id.name, employee_obj.name))
         if vals.get('state', False):
             if not self.employee_id and vals.get('state') != 'approved':
                 raise Warning(
@@ -625,11 +626,11 @@ class RequestFormLine(models.Model):
 
     @api.onchange('teams_id')
     def _onchange_employee_pic(self):
-        domain = {'employee_id': [('id', '!=', False)]}
+        domain = {'member_id': [('id', '!=', False)]}
         if self.teams_id:
-            employee_ids = [
-                employee.employee_id.id for employee in self.teams_id.teams_line_ids]
-            domain = {'employee_id': [('id', 'in', employee_ids)]}
+            member_ids = [
+                member.member_id.id for member in self.teams_id.teams_line_ids]
+            domain = {'member_id': [('id', 'in', member_ids)]}
         return {'domain': domain}
 
     def get_full_url(self):
