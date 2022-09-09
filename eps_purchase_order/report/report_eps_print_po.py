@@ -9,7 +9,7 @@ class EpsPrintPo(models.AbstractModel):
 
     @api.model
     def _get_report_values(self, docids, data=None):
-        sp_obj = self.env['purchase.order'].sudo().browse(data['id'])
+        sp_obj = self.env['purchase.order'].sudo().browse(docids)
         snk = self.env['eps.snk.po'].sudo().search([('parent_id','=',False)])
         alp_up_string = string.ascii_uppercase
         alp_up = list(alp_up_string)
