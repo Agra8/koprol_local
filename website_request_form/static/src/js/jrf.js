@@ -278,19 +278,90 @@ function numberRow() {
 	}
 }
 
-// function functionDebug() {
-// 	// document.querySelector('#main_form').addEventListener('submit', (e) => {
-// 	// e.preventDefault();
-// 	var forms = document.querySelectorAll('form');
-// 	console.log(forms);
-// 	var jrfLines = [];
-// 	[ ...forms ].forEach((form) => {
-// 		var formsVals = {};
-// 		[ ...document.querySelectorAll(`[form='${form.id}']`) ].forEach((field) => {
-// 			formsVals[field.name] = field.value;
-// 		});
-// 		console.log(formsVals);
-// 		jrfLines.push(formsVals);
-// 	});
-// 	console.log(jrfLines);
-// }
+// ? Function auto fill form request
+
+function searchNik() {
+	
+	// data ini diambil dari
+	const nik = document.getElementById("search_nik").value
+	const data = { nik: nik };
+	const url = location.origin
+	
+	// TOOD: setelah mendapatkan data masukan semua value dari data tersebut ke field field
+	fetch(`${url}/get_profile`, {
+	  method: 'POST', 
+	  headers: {
+		'Content-Type': 'application/json',
+	  },
+	  body: JSON.stringify(data),
+	})
+	  .then((response) => response.json())
+	  .then((data) => {
+			if ( data['result'][0] == 400) {
+				document.getElementById("info_search").innerHTML = data['result'][1];
+				document.getElementById("info_search").style.display = "block";
+			} 
+			else {
+				// Company ID
+				changeCompanyByAutoFill(data['result'][1]["company_id"])
+				// Branch ID
+				changeBranchByAutoFill(data['result'][1]["branch_id"])
+				// Department ID
+				changeDepartmentByAutoFill(data['result'][1]["department_id"])
+				// Job ID
+				changeJobByAutoFill(data['result'][1]["job_id"])
+				// name
+				document.getElementById("7b7qknsi30q").value = data['result'][1]["name"]
+				// NIK
+				document.getElementById("2hvgthz7mmr").value = data['result'][1]["nik"]
+				// Email
+				document.getElementById("8kk85gkl467").value = data['result'][1]["email"]
+
+			}
+			console.log('Success:', data);
+			return false;
+	  })
+	  .catch((error) => {
+		  console.error('Error:', error);
+		  return false;
+	  });
+	
+	return false;
+}
+function changeCompanyByAutoFill(company_id){
+	$(document).ready(function(){
+		  const value = company_id
+		  $('#imwez0wfsx').val(value).trigger("change");
+		  text = $('#imwez0wfsx option:selected').text()
+		  let result = text.replace(/^\s+|\s+$/gm,'');
+		  document.getElementById("select2-imwez0wfsx-container").innerHTML = result
+		});
+}
+function changeBranchByAutoFill(branch_id){
+	$(document).ready(function(){
+		  const value = branch_id
+		  $('#branch').val(value).trigger("change");
+		  text = $('#branch option:selected').text()
+		  let result = text.replace(/^\s+|\s+$/gm,'');
+		  document.getElementById("select2-branch-container").innerHTML = result
+		});
+}
+
+function changeDepartmentByAutoFill(department_id){
+	$(document).ready(function(){
+		  const value = department_id
+		  $('#department').val(value).trigger("change");
+		  text = $('#department option:selected').text()
+		  let result = text.replace(/^\s+|\s+$/gm,'');
+		  document.getElementById("select2-department-container").innerHTML = result
+		});
+}
+function changeJobByAutoFill(job_id){
+	$(document).ready(function(){
+		  const value = job_id
+		  $('#imwez0wfsxb').val(value).trigger("change");
+		  text = $('#imwez0wfsxb option:selected').text()
+		  let result = text.replace(/^\s+|\s+$/gm,'');
+		  document.getElementById("select2-imwez0wfsxb-container").innerHTML = result
+		});
+}
