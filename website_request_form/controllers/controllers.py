@@ -110,7 +110,12 @@ class WebsiteForm(Home):
         if 'request_sistem_ids' in value:
             del value['request_sistem_ids']
         
-        request_id = request.env[model_record.model].sudo().create(value)
+        try:
+            request_id = request.env[model_record.model].sudo().create(value)
+        except Exception as err:
+            _logger.error(err)
+            return False, f'Error saat create Ticket: {err}, \
+                mohon cek data - data'
         if data['attachments']:
             attachment = data['attachments']
             id_record = [
@@ -471,3 +476,33 @@ class WebsiteForm(Home):
             [('Content-Type', "text/javascript; charset=utf-8"),
              ('Content-Length', len(js_code))]
         )
+
+    @http.route('/get_profile', methods=['POST'],type='json', auth='public', website=True, csrf=False)
+    def get_profile(self, **post):
+        post = request.jsonrequest
+        # import ipdb; ipdb.set_trace()
+        if not post.get('nik'):
+            return 400,'Harus ada NIK(Nomor Induk Karyawan) !'
+
+        nik = post.get('nik')
+        employee_obj = request.env['hr.employee'].suspend_security().search([('nip','=',nik)],limit=1)
+        if not employee_obj:
+            return 400,'NIK (%s) belum terdaftar di sistem, silahkan isi manual form dibawah' %(post.get('nik'))
+        name = employee_obj.name
+        nik = employee_obj.nip
+        company_id = employee_obj.company_id.id or None
+        branch_id = employee_obj.branch_id.id or None
+        department_id = employee_obj.department_id.id or None
+        email = employee_obj.work_email or None
+        job_id = employee_obj.job_id.id or None
+
+        data_employee = {
+            'name': name,
+            'nik': nik,
+            'company_id': company_id,
+            'branch_id': branch_id,
+            'department_id': department_id,
+            'email': email,
+            'job_id': job_id
+        }
+        return 200, data_employee

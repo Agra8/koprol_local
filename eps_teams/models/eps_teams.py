@@ -44,9 +44,10 @@ class EpsTeamsMaster(models.Model):
     
     def copy(self):
         raise Warning("Data Tidak dapat di duplicate !")
-
-    def unlink(self):
-        raise Warning("Data Tidak dapat di hapus !")
+    
+    #TODO: Bakal dihidupkan kembali 
+    # def unlink(self):
+    #     raise Warning("Data Tidak dapat di hapus !")
 
     def eps_teams_view(self):
         name = "Master Teams"

@@ -140,6 +140,22 @@
                               </div>
                             </form>
                           </section> -->
+
+                  <p class="card-text">Silahkan cari NIK dan tekan "enter" untuk pengisian otomatis :</p>
+                  <form onsubmit="return searchNik()" method="POST" role="form">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"></input>
+                    <div class="container">
+                      <div class="row s_nb_column_fixed" style="margin: auto; text-align:center;">
+                        <div class="form form-field col-lg-12 pb32">
+                            <div class="col-lg-12 s_title pt16 pb16">
+                              <input type="text" class="form-control" name="search_nik" placeholder="search..." id="search_nik" />
+                              <p style="display: none; color: red;" id="info_search"></p>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  
                   <p class="card-text">Jika anda ingin melakukan request, Silahkan isi formulir dibawah ini :</p>
                   <section class="s_website_form pt16 pb16 o_colored_level" data-vcss="001" data-snippet="s_website_form" data-name="Form" style="">
                     <div class="container-fluid">
@@ -224,7 +240,7 @@
                           </div>
                           <div class="form-group s_website_form_field col-12 s_website_form_custom s_website_form_required" data-type="many2one" data-name="Field">
                             <div class="row s_col_no_resize s_col_no_bgcolor">
-                              <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
+                              <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsxb">
                                 <span class="s_website_form_label_content">Job</span>
                                 <span class="s_website_form_mark"> *</span>
                               </label>
@@ -256,7 +272,7 @@
                               </label>
                               <button type="button" class="btn custom-btn-primary rounded-circle buttonx custom-btn-close" style="font-size: 0.75rem; display:none;" onclick="deleteRow(this.parentElement.parentElement)">X</button>
                               <div class="w3-col m1 w3-container m4 l3">
-                                <select id="requestform_id_1" name="request_line_ids" class="form-control select_field s_website_form_input input-types" placeholder="" required="true">
+                                <select id="requestform_id_1" name="request_line_ids" class="form-control select_fields s_website_form_input input-types" placeholder="" required="true">
                                   <option value="">Pilih Tipe Request</option>
                                 </select>
                               </div>
