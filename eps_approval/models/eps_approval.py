@@ -549,7 +549,6 @@ class eps_approval_transaction(models.Model):
             for user in group_obj.users:
                 proposal_model = self.env['ir.model'].sudo().search([('model','=','eps.proposal')])
                 trxs = self.search([('approval_start_date','!=',date.today()), ('state','=','IN'), ('group_id','=',group_obj.id), ('model_id','=',proposal_model.id), ('company_id', 'in', [c.id for c in user.company_ids]), ('branch_id', 'in', [c.id for c in user.branch_ids])])
-                print (trxs,"<<<<<<<<<<<<<<<<<schedule_notification_outstanding_proposal_approval")
                 count = 1
                 ins_trx = []
                 base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
@@ -628,7 +627,7 @@ class eps_approval_transaction(models.Model):
                         messages+="""
                                 <tr>
                                     <td style="border:1px solid black; padding:10px">%s </td> """ % str(count) +"""
-                                    <td style="border:1px solid black; padding:10px">%s </td> """ % str(transaksi.name) +"""
+                                    <td style="border:1px solid black; padding:10px"><a href="%s">%s</a> </td> """ % (transaksi.get_full_url_link(),str(transaksi.name)) +"""
                                     <td style="border:1px solid black; padding:10px">%s </td> """ % str(transaksi.nama_proposal) +"""
                                     <td style="border:1px solid black; padding:10px">%s </td> """ % str(trx.expected_date) +"""
                                     <td style="border:1px solid black; padding:10px">Rp. %s </td> """ % str(trx.value) +"""

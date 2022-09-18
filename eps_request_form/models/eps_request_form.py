@@ -8,7 +8,7 @@ from odoo.exceptions import Warning
 from email import header
 import string
 import random
-import cryptocode
+# import cryptocode
 import os
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta, date
