@@ -5,17 +5,20 @@ import functools
 import logging
 from http.client import UNAUTHORIZED
 from json_checker import Checker, MissKeyCheckerError
+import werkzeug.urls
+import werkzeug.utils
 
-from odoo.http import request
 from odoo import api, http, SUPERUSER_ID, _
-from odoo.exceptions import AccessDenied
 from odoo import registry as registry_get
+from odoo.http import request
+from odoo.exceptions import AccessDenied
 
+from odoo.addons.web.controllers.main import set_cookie_and_redirect, login_and_redirect
 from odoo.addons.auth_oauth.controllers.main import OAuthController as Oauth
 from odoo.addons.web.controllers.main import set_cookie_and_redirect
+from odoo.addons.eps_base_api.controllers.response import Respapi
 
 from .definitions import *
-from .response import Respapi
 
 _logger = logging.getLogger(__name__)
 
@@ -42,36 +45,6 @@ def fragment_to_query_string(func):
             </script></head><body></body></html>"""
         return func(self, *a, **kw)
     return wrapper
-PREFIX = 'Bearer'
-
-def get_token_from_bearer(header):
-    bearer, _, token = header.partition(' ')
-    if bearer != PREFIX:
-        return '__Invalid Token'
-
-    return token
-
-def check_valid_token(func):
-    @functools.wraps(func)
-    def wrap(self, *args, **kwargs):
-
-        access_token = get_token_from_bearer(request.httprequest.headers['Authorization']) if 'Authorization' in request.httprequest.headers else False
-        if not access_token:
-            return Respapi.error(UNAUTHORIZED, error=ERR_TOKEN_NOT_FOUND_HEADER)
-        try:
-            checktoken = request.env['auth.oauth.multi.token'].sudo().search([('oauth_access_token', '=', access_token)])
-            if not checktoken:
-                return Respapi.error(UNAUTHORIZED, error=ERR_TOKEN_NOT_FOUND_DATABASE)
-            checktoken.ensure_one()
-            validation = request.env['res.users'].sudo().verify_token(checktoken.user_id.oauth_provider_id.id, access_token)
-            if validation != checktoken.user_id.oauth_uid:
-                return Respapi.error(UNAUTHORIZED)
-            return func(self, *args, **kwargs)
-        except ValueError as ve:
-            return Respapi.error(UNAUTHORIZED, error=ERR_TOKEN_MULTY)
-        except Exception as e:
-            return Respapi.error(UNAUTHORIZED, errorDescription=str(e))
-    return wrap
 
 class OauthProviderController(Oauth):
     @http.route('/oauth/signin', type='json', auth='public', methods=['POST'], csrf=False)
@@ -101,8 +74,14 @@ class OauthProviderController(Oauth):
                     if not emp:
                         raise AccessDenied()
                        
-                    # Successful response:
                     job = emp.job_id
+                    # TODO
+                    resp = login_and_redirect(*(dbname, login, access_token), redirect_url='/')
+                    # Since /web is hardcoded, verify user has right to land on it
+                    if werkzeug.urls.url_parse(resp.location).path == '/web' and not request.env.user.has_group('base.group_user'):
+                        resp.location = '/'
+
+                    # Successful response:
                     response = Respapi.success(
                         {
                             'id': user.id,
@@ -134,4 +113,3 @@ class OauthProviderController(Oauth):
             # url = "/web/login?oauth_error=2"
             return Respapi.error(code=UNAUTHORIZED, error=str(e.args[0]['code']) if 'code' in e.args[0] else "Error", errorDescription=str(e.args[0]['message']) if 'message' in e.args[0] else e)
         return set_cookie_and_redirect(url)
-

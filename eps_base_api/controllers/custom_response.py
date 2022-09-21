@@ -77,4 +77,3 @@ class RootPath(Root):
 
 Root.get_response = RootPath.get_response
 JsonRequest._json_response = JsonRequestPatch._json_response
-# HttpRequest.make_response = HttpRequestPatch.make_response

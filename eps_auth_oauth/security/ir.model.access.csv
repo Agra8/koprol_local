@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_eps_auth_oauth_eps_auth_oauth,eps_auth_oauth.eps_auth_oauth,model_eps_auth_oauth_eps_auth_oauth,base.group_user,1,1,1,1

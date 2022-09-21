@@ -2,7 +2,6 @@
 # Copyright 2017 Camptocamp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
 from datetime import datetime, timedelta
-from odoo.exceptions import AccessDenied, UserError
 import uuid
 import requests
 
@@ -14,14 +13,6 @@ base.models.res_users.USER_PRIVATE_FIELDS.append('oauth_master_uuid')
 
 class ResUsers(models.Model):
     _inherit = "res.users"
-
-    @api.model
-    def _auth_oauth_rpc(self, endpoint, access_token):
-        if 'graph.microsoft.com' in endpoint:
-            return requests.get(
-                endpoint, headers={'Authorization': 'Bearer {}'.format(access_token)}
-            ).json()
-        return super()._auth_oauth_rpc(endpoint, access_token)
 
     def _generate_oauth_master_uuid(self):
         return uuid.uuid4().hex
@@ -81,7 +72,7 @@ class ResUsers(models.Model):
             # when found > 1
             for mt in multi_token:
                 if mt.user_id.id == user.id:
-                    mt.write({'oauth_access_token': params['access_token']})
+                    mt.write({'oauth_access_token': params['access_token'], 'active_token': True})
                     isFound = True
                     break
                 # logout on null, logout by system
@@ -146,17 +137,4 @@ class ResUsers(models.Model):
         res = super()._get_session_token_fields()
         res.remove('oauth_access_token')
         return res | {'oauth_master_uuid'}
-
-    def verify_token(self, provider, access_token):
-        validation = super()._auth_oauth_validate(provider, access_token)
-        # required check
-        if not validation.get('user_id'):
-            # Workaround: facebook does not send 'user_id' in Open Graph Api
-            if validation.get('id'):
-                validation['user_id'] = validation['id']
-            else:
-                raise AccessDenied()
         
-        return validation['mail'] if 'mail' in validation else validation['email'] if 'email' in validation else False
-
-
