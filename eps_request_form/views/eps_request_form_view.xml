@@ -62,11 +62,11 @@
                                     <field name="keterangan" readonly="1"/>
                                     <field name="date" readonly="1"/>
                                     <field name="value_approval" invisible="1"/>
-                                    <field name="employee_id" invisible="1"/>
+                                    <field name="current_pic_id" invisible="1"/>
                                     <field name="state"/>
                                     <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','approved','rejected','open','done', 'cancel']), ('value_approval', '=', '0')]}"/>
                                     <button name="action_reject" string="Reject" class="oe_higlight" type="object"  attrs="{'invisible': ['|',('state', 'in', ['draft','approved','rejected','open','done', 'cancel']), ('value_approval', '=', '0')]}"/>
-                                    <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','approved','rejected','open','done']), ('employee_id', '!=', False)]}"/>
+                                    <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','approved','rejected','open','done']), ('current_pic_id', '!=', False)]}"/>
                                     
                                 </tree>
                                 </field>
@@ -158,7 +158,7 @@
                     <notebook>
                         <page string="Approval">
                             <field name="approval_ids">
-                               <tree>
+                               <tree create="false">
                                     <field name="group_id" string="Groups"/>
                                     <field name="user_id"/>
                                </tree>
