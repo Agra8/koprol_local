@@ -163,12 +163,12 @@
                         <div class="row s_col_no_bgcolor s_website_form_rows">
                           <div class="form-group s_website_form_field col-12 s_website_form_custom s_website_form_required" data-type="many2one" data-name="Field">
                             <div class="row s_col_no_resize s_col_no_bgcolor">
-                              <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
+                              <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="company">
                                 <span class="s_website_form_label_content">Company</span>
                                 <span class="s_website_form_mark"> *</span>
                               </label>
                               <div class="col-sm">
-                                <select class="form-control s_website_form_input select_field input-company" name="company_id" id="imwez0wfsx" style="" required="" onchange="changeByCompany()">
+                                <select class="form-control s_website_form_input select_field input-company" name="company_id" id="company" style="" required="" onchange="changeByCompany()">
                                   <option value="">(Silahkan Pilih)</option>
                                   <t t-foreach="company" t-as="company">
                                     <option t-attf-value="#{company.id}">
@@ -240,12 +240,12 @@
                           </div>
                           <div class="form-group s_website_form_field col-12 s_website_form_custom s_website_form_required" data-type="many2one" data-name="Field">
                             <div class="row s_col_no_resize s_col_no_bgcolor">
-                              <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsxb">
+                              <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="job_id">
                                 <span class="s_website_form_label_content">Job</span>
                                 <span class="s_website_form_mark"> *</span>
                               </label>
                               <div class="col-sm">
-                                <select class="form-control s_website_form_input select_field" name="job_title" id="imwez0wfsxb" style="" required="1">
+                                <select class="form-control s_website_form_input select_field" name="job_title" id="job_id" style="" required="1">
                                   <option value="">(Silahkan Pilih)</option>
                                   <t t-foreach="job" t-as="job">
                                     <option t-attf-value="#{job.id}">
@@ -284,7 +284,7 @@
                             </div>
                             <div class="form-group s_website_form_field col-12 s_website_form_custom s_website_form_required" data-name="Field" style="padding-top: 15px;">
                               <div class="row s_col_no_resize s_col_no_bgcolor">
-                                <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
+                                <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="company">
                                   <span class="s_website_form_label_content"></span>
                                   <span class="s_website_form_mark"></span>
                                 </label>
@@ -295,7 +295,7 @@
                             </div>
                             <div class="form-group s_website_form_field s_website_form_custom" data-name="Field" style="padding-top: 15px;">
                               <div class="row s_col_no_resize s_col_no_bgcolor">
-                                <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
+                                <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="company">
                                   <span class="s_website_form_label_content">Lampiran</span>
                                   <span class="s_website_form_mark"></span>
                                 </label>

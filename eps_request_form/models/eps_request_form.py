@@ -91,16 +91,18 @@ class RequestForm(models.Model):
             ).get_per_doc_code(doc_code, 'RF')
             vals['divisi_id'] = self.env['eps.divisi'].suspend_security().search([
                 ('name', '=', 'Umum')]).id
-            partner = self.env['res.partner'].sudo().search([('default_code','=',nik)],limit=1)
-            if not partner:
-                partner = self.env['res.partner'].sudo().create({
-                    'name': vals.get('name_pegawai'),
-                    'default_code':vals.get('nik'),
-                    'email': vals.get('email'),
-                    'type': 'contact',
-                    'is_branch': False
+            employee_obj = self.env['hr.employee'].sudo().search([('nip','=',nik)],limit=1)
+            if not employee_obj:
+                # create employee also create partner
+                create_employee =self.env['hr.employee'].sudo().create({
+                    'name': vals.get('name_pegawai',None),
+                    'work_email': vals.get('email',None),
+                    'branch_id': vals.get('branch_id',None),
+                    'department_id': vals.get('department_id',None),
+                    'job_id': vals.get('job_title',None),
+                    'company_id': vals.get('company_id',None)
                 })
-            vals['partner_id'] = partner.id
+            vals['partner_id'] = create_employee.partner_id.id if create_employee.partner_id else ''
             create = super(RequestForm, self).create(vals)
             template_mail = request.env.ref(
                 'eps_request_form.template_mail_request_form_notif_accept')
@@ -314,6 +316,10 @@ class RequestFormLine(models.Model):
     user_request = fields.Char(
         String='User Request', related='request_form_id.name_pegawai')
     reason = fields.Char(string='Alasan Reject')
+    assign_date = fields.Datetime(string='First assignation date')
+    assign_hours = fields.Integer(string='Time to first assignation (hours)', compute='_compute_assign_hours', store=True)
+    close_date = fields.Datetime(string='Close date')
+    close_hours = fields.Integer(string='Open Time (hours)', compute='_compute_close_hours', store=True)
 
     # Used in message_get_default_recipients, so if no partner is created, email is sent anyway
     email = fields.Char(related='partner_email', string='Email on Customer', readonly=False)
@@ -354,7 +360,8 @@ class RequestFormLine(models.Model):
         comodel_name='hr.department', string='Department', related='request_form_id.department_id', store=False)
     request_id = fields.Many2one(
         comodel_name='eps.master.jrf.arf', string='Tipe Request')
-    employee_id = fields.Many2one(comodel_name='hr.employee', string='PIC')
+    previous_pic_id = fields.Many2one(comodel_name='res.users', string='Previous PIC')
+    current_pic_id = fields.Many2one(comodel_name='res.users', string='PIC')
     sistem_id = fields.Many2one(
         comodel_name='eps.sistem.master', string='Master Sistem')
     approval_ids = fields.One2many(comodel_name='eps.approval.transaction',
@@ -405,16 +412,21 @@ class RequestFormLine(models.Model):
             if vals.get('value_approval') != self.value_approval:
                 self._message_log(body=_('<b>Value Approval Changed ! </b> From %d to %d') %
                                   (self.value_approval, int(vals.get('value_approval'))))
-        # TODO: Cek di member_id
-        # if vals.get('employee_id', False):
-        #     if vals.get('employee_id') != self.employee_id:
-        #         employee_obj = self.env['hr.employee'].suspend_security().browse(
-        #             vals.get('employee_id'))
-        #         employee_obj.message_subscribe(employee_obj.partner_id.ids)
-        #         self._message_log(body=_('<b>PIC Changed!</b> From %s to %s') %
-        #                           (self.employee_id.name, employee_obj.name))
+        # TODO: Cek di current_pic_id
+        if vals.get('current_pic_id', False):
+            if vals.get('current_pic_id') != self.current_pic_id:
+                vals['previous_pic_id'] = self.current_pic_id
+                member_obj = self.env['res.users'].suspend_security().browse(
+                    vals.get('current_pic_id'))
+                self.message_subscribe(member_obj.partner_id.ids)
+                if self.current_pic_id == False:
+                    self.assign_date = self.request_form_id._get_default_date()
+                    self._message_log(body=_('<b>First Assigned By</b> %s') %
+                                    (self.env.user.name))
+                self._message_log(body=_('<b>PIC Changed!</b> From %s to %s') %
+                                  (self.current_pic_id.name, member_obj.name))
         if vals.get('state', False):
-            if not self.employee_id and vals.get('state') != 'approved':
+            if not self.current_pic_id and vals.get('state') != 'approved':
                 raise Warning(
                     'PIC belum ditambahkan ! \nSilahkan lakukan assign terlebih dahulu')
             if vals.get('state') != self.state:
@@ -591,7 +603,7 @@ class RequestFormLine(models.Model):
         line_obj = self.env['eps.request.form.line'].browse(
             self._context['res_id'])
         line_obj.write({
-            'employee_id': self.employee_id,
+            'current_pic_id': self.current_pic_id,
             'state': 'open'
         })
         header_open = self.env['eps.request.form.line'].search(
@@ -618,19 +630,36 @@ class RequestFormLine(models.Model):
             'views': [(form_id, 'form')]
         }
 
-    @api.onchange('employee_id')
+    
+    @api.depends('assign_date')
+    def _compute_assign_hours(self):
+        for data in self:
+            if not data.create_date:
+                continue;
+            time_difference = datetime.now() - fields.Datetime.from_string(data.create_date)
+            data.assign_hours = (time_difference.seconds) / 3600 + time_difference.days * 24
+
+    @api.depends('close_date')
+    def _compute_close_hours(self):
+        for data in self:
+            if not data.create_date:
+                continue;
+            time_difference = datetime.now() - fields.Datetime.from_string(data.create_date)
+            data.close_hours = (time_difference.seconds) / 3600 + time_difference.days * 24
+
+    @api.onchange('current_pic_id')
     def onchange_jumlah_task(self):
         jumlah_task = self.search(
-            [('employee_id', '=', self.employee_id.id), ('state', '!=', 'done')])
+            [('current_pic_id', '=', self.current_pic_id.id), ('state', '!=', 'done')])
         self.jumlah_task = len(jumlah_task)
 
     @api.onchange('teams_id')
     def _onchange_employee_pic(self):
-        domain = {'member_id': [('id', '!=', False)]}
+        domain = {'current_pic_id': [('id', '!=', False)]}
         if self.teams_id:
-            member_ids = [
-                member.member_id.id for member in self.teams_id.teams_line_ids]
-            domain = {'member_id': [('id', 'in', member_ids)]}
+            current_pic_ids = [
+                member.current_pic_id.id for member in self.teams_id.teams_line_ids]
+            domain = {'current_pic_id': [('id', 'in', current_pic_ids)]}
         return {'domain': domain}
 
     def get_full_url(self):
@@ -717,15 +746,15 @@ class RequestFormLine(models.Model):
     @api.model
     def message_new(self, msg, custom_values=None):
         values = dict(custom_values or {}, partner_email=msg.get('from'), partner_id=msg.get('author_id'))
-        ticket = super(RequestFormLine, self).message_new(msg, custom_values=values)
-        partner_ids = [x for x in ticket._find_partner_from_emails(self._ticket_email_split(msg)) if x]
+        data = super(RequestFormLine, self).message_new(msg, custom_values=values)
+        partner_ids = [x for x in data._find_partner_from_emails(self._data_email_split(msg)) if x]
         if partner_ids:
-            ticket.message_subscribe(partner_ids)
-        return ticket
+            data.message_subscribe(partner_ids)
+        return data
 
 
     def message_update(self, msg, update_vals=None):
-        partner_ids = [x for x in self._find_partner_from_emails(self._ticket_email_split(msg)) if x]
+        partner_ids = [x for x in self._find_partner_from_emails(self._data_email_split(msg)) if x]
         if partner_ids:
             self.message_subscribe(partner_ids)
         return super(RequestFormLine, self).message_update(msg, update_vals=update_vals)
@@ -747,7 +776,7 @@ class RequestFormLine(models.Model):
         return super(RequestFormLine, self)._message_post_after_hook(message, *args, **kwargs)
 
     def _notify_get_reply_to(self, default=None, records=None, company=None, doc_names=None):
-        """ Override to set alias of tickets to their team if any. """
+        """ Override to set alias of datas to their team if any. """
         aliases = self.mapped('teams_id')._notify_get_reply_to(default=default, records=None, company=company, doc_names=None)
         res = {request.id: aliases.get(request.teams_id.id) for request in self}
         leftover = self.filtered(lambda rec: not rec.teams_id)

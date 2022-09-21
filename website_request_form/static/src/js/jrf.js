@@ -57,7 +57,7 @@ function addRow(value) {
                                     </div>
                                     <div class="form-group s_website_form_field col-12 s_website_form_custom s_website_form_required" data-name="Field" style="padding-top: 15px;">
                                       <div class="row s_col_no_resize s_col_no_bgcolor">
-                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="company">
                                           <span class="s_website_form_label_content"></span>
                                           <span class="s_website_form_mark"> </span>
                                         </label>
@@ -68,7 +68,7 @@ function addRow(value) {
                                     </div>
                                   <div class="form-group s_website_form_field s_website_form_custom" data-name="Field" style="padding-top: 15px;">
                                       <div class="row s_col_no_resize s_col_no_bgcolor">
-                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="imwez0wfsx">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="company">
                                           <span class="s_website_form_label_content">Lampiran</span>
                                           <span class="s_website_form_mark"> </span>
                                         </label>
@@ -107,7 +107,7 @@ function changeByCompany() {
 	request = document.getElementById('branchdropdown').children;
 	requestDepartment = document.getElementById('departmentdropdown').children;
 	request_tipe = document.getElementById('requestform_id').children;
-	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
+	company_id = document.getElementById('company').selectedOptions[0].value;
 	requestForm = document.querySelector(otherSelector);
 	requestFormDepartment = document.querySelector(otherSelectorDepartment);
 	requestForm.innerHTML = '';
@@ -185,7 +185,7 @@ function changeAddRequest() {
 	var index = document.querySelectorAll('.w3-row').length;
 	selectorTipeForm = `select[id="requestform_id_${index}"]`;
 	request_tipe = document.getElementById('requestform_id').children;
-	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
+	company_id = document.getElementById('company').selectedOptions[0].value;
 	requestTipeForm = document.querySelector(selectorTipeForm);
 	requestTipeForm.innerHTML = '';
 
@@ -214,7 +214,7 @@ function changeAddRequest() {
 
 $(document).on('change', '.input-types', function() {
 	idRequest = this.id.split('_');
-	company_id = document.getElementById('imwez0wfsx').selectedOptions[0].value;
+	company_id = document.getElementById('company').selectedOptions[0].value;
 	requestTipeSistem = document.getElementById('tipe_sistem').children;
 	valueRequest = this.value.split('-');
 	selectorTipeSistem = `select[id="request_id_${idRequest[2]}"]`;
@@ -303,13 +303,14 @@ function searchNik() {
 			} 
 			else {
 				// Company ID
-				changeCompanyByAutoFill(data['result'][1]["company_id"])
+				
+				autoFill('company',data['result'][1]["company_id"])
 				// Branch ID
-				changeBranchByAutoFill(data['result'][1]["branch_id"])
+				autoFill('branch',data['result'][1]["branch_id"])
 				// Department ID
-				changeDepartmentByAutoFill(data['result'][1]["department_id"])
+				autoFill('department',data['result'][1]["department_id"])
 				// Job ID
-				changeJobByAutoFill(data['result'][1]["job_id"])
+				autoFill('job_id',data['result'][1]["job_id"])
 				// name
 				document.getElementById("7b7qknsi30q").value = data['result'][1]["name"]
 				// NIK
@@ -317,6 +318,7 @@ function searchNik() {
 				// Email
 				document.getElementById("8kk85gkl467").value = data['result'][1]["email"]
 
+				document.getElementById("info_search").style.display = "none";
 			}
 			console.log('Success:', data);
 			return false;
@@ -328,40 +330,13 @@ function searchNik() {
 	
 	return false;
 }
-function changeCompanyByAutoFill(company_id){
+function autoFill(view,company_id){
 	$(document).ready(function(){
-		  const value = company_id
-		  $('#imwez0wfsx').val(value).trigger("change");
-		  text = $('#imwez0wfsx option:selected').text()
-		  let result = text.replace(/^\s+|\s+$/gm,'');
-		  document.getElementById("select2-imwez0wfsx-container").innerHTML = result
-		});
-}
-function changeBranchByAutoFill(branch_id){
-	$(document).ready(function(){
-		  const value = branch_id
-		  $('#branch').val(value).trigger("change");
-		  text = $('#branch option:selected').text()
-		  let result = text.replace(/^\s+|\s+$/gm,'');
-		  document.getElementById("select2-branch-container").innerHTML = result
-		});
-}
-
-function changeDepartmentByAutoFill(department_id){
-	$(document).ready(function(){
-		  const value = department_id
-		  $('#department').val(value).trigger("change");
-		  text = $('#department option:selected').text()
-		  let result = text.replace(/^\s+|\s+$/gm,'');
-		  document.getElementById("select2-department-container").innerHTML = result
-		});
-}
-function changeJobByAutoFill(job_id){
-	$(document).ready(function(){
-		  const value = job_id
-		  $('#imwez0wfsxb').val(value).trigger("change");
-		  text = $('#imwez0wfsxb option:selected').text()
-		  let result = text.replace(/^\s+|\s+$/gm,'');
-		  document.getElementById("select2-imwez0wfsxb-container").innerHTML = result
-		});
+		const view = view  
+		const value = company_id
+		$(`#${view}`).val(value).trigger("change");
+		text = $(`#${view} option:selected`).text()
+		let result = text.replace(/^\s+|\s+$/gm,'');
+		document.getElementById(`select2-${view}-container`).innerHTML = result
+	});
 }

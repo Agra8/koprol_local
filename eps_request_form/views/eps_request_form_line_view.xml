@@ -12,10 +12,10 @@
                     <field name="name" />
                     <field name="request_id" />
                     <field name="user_request" string="User Request" />
-                    <field name="employee_id" />
+                    <field name="current_pic_id" />
                     <field name="create_date" string="Date" />
                     <field name="state" />
-                    <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('employee_id', '!=', False)]}" />
+                    <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('current_pic_id', '!=', False)]}" />
                 </tree>
             </field>
         </record>
@@ -30,8 +30,8 @@
                     <header>
                         <button name="action_approve" string="Approve" class="oe_highlight" type="object" attrs="{'invisible': ['|','|',('state', 'in', ['open','approved','rejected','done']), ('value_approval', '=', '0'), ('request_state', '=', 'draft')]}" />
                         <button name="action_reject" string="Reject" class="oe_higlight" type="object" attrs="{'invisible': ['|','|',('state', 'in', ['open','approved','rejected','done']), ('value_approval', '=', '0'), ('request_state', '=', 'draft')]}" />
-                        <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('employee_id', '!=', False)]}" />
-                        <button name="action_assign" type="object" string="Delegate" attrs="{'invisible': ['|', ('state', 'in', ['rejected','done']),('employee_id', '=', False)]}" class="oe_stat_button" />
+                        <button name="action_assign" string="Assign" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('current_pic_id', '!=', False)]}" />
+                        <button name="action_assign" type="object" string="Delegate" attrs="{'invisible': ['|', ('state', 'in', ['rejected','done']),('current_pic_id', '=', False)]}" class="oe_stat_button" />
                         <button name="action_done" type="object" string="Done" class="oe_stat_button" attrs="{'invisible': [('state', 'in', ['draft','approved','rejected','done'])]}" />
                         <button name="action_cancel" string="Cancel" states="draft,open,approved" class="oe_stat_button" type="object" />
                         <field name="state" widget="statusbar" statusbar_visible="draft,approved,open,done" />
@@ -48,7 +48,7 @@
                                 <field name="teams_id" options="{'no_open':True,'no_create':True}" />
                                 <field name="request_form_id" invisible="1" />
                                 <field name="request_state" invisible="1" />
-                                <field name="employee_id" />
+                                <field name="current_pic_id" />
                                 <field name="date" readonly="1" />
                                 <field name="value_approval" />
                                 <field name="type_file" invisible="1" />
@@ -61,7 +61,7 @@
                         </group>
                         <notebook>
                             <page string="Approval" attrs="{'invisible': [('value_approval', '=', '0')]}">
-                                <field name="approval_ids">
+                                <field name="approval_ids" create="false">
                                     <tree>
                                         <field name="group_id" />
                                         <field name="user_id" />
@@ -157,7 +157,7 @@
                             <group>
                                 <field name="company_id" invisible="1" />
                                 <field name="teams_id" options="{'no_create': True, 'no_open': True}" domain="[('company_ids', 'in', company_id)]" />
-                                <field name="employee_id" options="{'no_create': True,'no_open': True}" />
+                                <field name="current_pic_id" options="{'no_create': True,'no_open': True}" />
                                 <field name="jumlah_task" string="Outstanding Task" readonly="1" />
                             </group>
                         </group>
@@ -226,7 +226,7 @@
                     <field name="state" />
                     <field name="request_form_id" />
                     <field name="company_id" groups="eps_request_form.eps_request_form_line_multi_rule" />
-                    <field name="employee_id" />
+                    <field name="current_pic_id" />
                     <field name="request_id" />
                     <field name="keterangan" />
                     <field name="date" />
@@ -256,7 +256,7 @@
                                         <li>
                                             PIC:
                                             <b>
-                                                <field name="employee_id"></field>
+                                                <field name="current_pic_id"></field>
                                             </b>
                                         </li>
                                         <li>
@@ -266,7 +266,7 @@
                                     </ul>
                                 </div>
                                 <a type="button">
-                                    <button name="action_assign" style="color: green;" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('employee_id', '!=', False)]}">
+                                    <button name="action_assign" style="color: green;" class="oe_highlight" type="object" attrs="{'invisible': ['|',('state', 'in', ['draft','rejected','open','done']), ('current_pic_id', '!=', False)]}">
                                         <span>
                                         Assign
                                     </span>
