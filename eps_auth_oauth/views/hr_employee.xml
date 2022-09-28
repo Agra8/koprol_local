@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    	<record model="ir.ui.view" id="auth_oauth_hr_employee_form">
+		    <field name="name">auth_oauth.hr.employee.form</field>
+		    <field name="model">hr.employee</field>
+		    <field name="type">form</field>
+		    <field name="inherit_id" ref="eps_hr_employee.eps_hr_employee_form_view"/>
+		    <field name="arch" type="xml">
+				<field name="is_user" position="after">
+					<field name="is_oauth" attrs="{'invisible':[('is_user','=',False)]}"/>
+                    <field name="oauth_provider_id" ref="user_id.oauth_provider_id" attrs="{'invisible':['|',('is_oauth','=',False), ('is_user','=',False)], 'required':[('is_oauth','=',True)]}" />
+				</field>
+                
+			</field>
+		</record>
+    </data>
+</odoo>

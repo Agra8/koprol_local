@@ -10,11 +10,10 @@
     "summary": """Allow multiple connection with the same OAuth account""",
     "category": "Tool",
     "website": "https://github.com/OCA/server-auth/",
-    "depends": ["eps_base_api","eps_auth_oauth"],
+    "depends": ["eps_auth_oauth"],
     "data": [
         "security/ir.model.access.csv",
         "views/auth_oauth_multi_token.xml",
         "views/res_users.xml"
-    ],
-    "installable": True,
+    ]
 }

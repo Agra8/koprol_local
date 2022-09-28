@@ -20,13 +20,13 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','auth_oauth','eps_base_api'],
+    'depends': ['base','auth_oauth','eps_base_api','eps_hr_employee'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         'data/config_azure.xml',
-        'views/views.xml',
+        'views/hr_employee.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

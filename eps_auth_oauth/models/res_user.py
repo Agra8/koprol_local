@@ -1,5 +1,9 @@
+from http.client import UNAUTHORIZED
 import json
 import requests
+
+from ...eps_auth_oauth.controllers.definitions import ERR_TOKEN_NOT_FOUND_DATABASE
+from ...eps_base_api.controllers.response import Respapi
 
 from odoo.exceptions import AccessDenied, UserError
 from odoo import api,  models
@@ -37,9 +41,18 @@ class ResUsers(models.Model):
        
 
     # is verify (True/False)
-    def verify_token(self, provider, access_token, oauth_uid):
-        validation = super()._auth_oauth_validate(provider, access_token)
-        # required check
+    def verify_token(self, access_token):
+
+        user = self.env['res.users'].sudo().search(
+                    [('oauth_access_token', '=', access_token)], order='id DESC', limit=1)
+
+        if not user:
+            return Respapi.error(UNAUTHORIZED, error=ERR_TOKEN_NOT_FOUND_DATABASE)
+        user.ensure_one()
+
+        # validation provider
+        validation = super()._auth_oauth_validate(user.oauth_provider_id.id, access_token)
+        
         if not validation.get('user_id'):
             # Workaround: facebook does not send 'user_id' in Open Graph Api
             if validation.get('id'):
@@ -48,5 +61,23 @@ class ResUsers(models.Model):
                 raise AccessDenied()
         
         email = validation['mail'] if 'mail' in validation else validation['email'] if 'email' in validation else False
+        return user.oauth_access_token if email == user.oauth_uid else False
 
-        return email == oauth_uid
+    # old
+    # def verify_token(self, provider, access_token, oauth_uid):
+
+    #     validation = super()._auth_oauth_validate(provider, access_token)
+    #     # required check
+    #     if not validation.get('user_id'):
+    #         # Workaround: facebook does not send 'user_id' in Open Graph Api
+    #         if validation.get('id'):
+    #             validation['user_id'] = validation['id']
+    #         else:
+    #             raise AccessDenied()
+        
+    #     email = validation['mail'] if 'mail' in validation else validation['email'] if 'email' in validation else False
+
+    #     return email == oauth_uid
+        
+
+    
