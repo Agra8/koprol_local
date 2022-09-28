@@ -2,11 +2,14 @@
 # Copyright 2017 Camptocamp
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
 from datetime import datetime, timedelta
+from http.client import UNAUTHORIZED
 import uuid
-import requests
+from ...auth_oauth_multi_token.controllers.definitions import ERR_TOKEN_NOT_FOUND_DATABASE
+from ...eps_base_api.controllers.response import Respapi
 
 from odoo import api, exceptions, fields, models
 from odoo.addons import base
+from odoo.exceptions import AccessDenied, UserError
 
 base.models.res_users.USER_PRIVATE_FIELDS.append('oauth_master_uuid')
 
@@ -44,12 +47,13 @@ class ResUsers(models.Model):
     def _auth_oauth_signin(self, provider, validation, params):
         """Override to handle sign-in with multi token."""
 
-        email =  validation['email'] if 'email' in validation else validation['mail']
-        device_id =  params['device_id'] if 'device_id' in params else f'web_{email}'
-        device_type =  params['device_type'] if 'device_type' in params else 'web'
+        email = validation['email'] if 'email' in validation else validation['mail']
+        device_id = params['device_id'] if 'device_id' in params else f'web_{email}'
+        device_type = params['device_type'] if 'device_type' in params else 'web'
 
         # Lookup for user by oauth uid and provider
-        user = self.search([('oauth_uid', '=', email), ('oauth_provider_id', '=', provider)])
+        user = self.search(
+            [('oauth_uid', '=', email), ('oauth_provider_id', '=', provider)])
 
         if not user:
             raise exceptions.AccessDenied()
@@ -65,49 +69,52 @@ class ResUsers(models.Model):
         #     insert access_token
 
         # search device id
-        multi_token = self.multi_token_model.sudo().search([('device_id', '=', device_id)])
+        multi_token = self.multi_token_model.sudo().search(
+            [('device_id', '=', device_id)])
         # device found
         if multi_token:
             isFound = False
             # when found > 1
             for mt in multi_token:
                 if mt.user_id.id == user.id:
-                    mt.write({'oauth_access_token': params['access_token'], 'active_token': True})
+                    mt.write(
+                        {'oauth_access_token': params['access_token'], 'active_token': True})
                     isFound = True
                     break
                 # logout on null, logout by system
                 elif not mt.logout_on:
                     mt.write({'device_id': f'LOGOUT_BY_SYSTEM_{mt.device_id}'})
                     self.multi_token_model.sudo().create({
-                        'oauth_access_token':params['access_token'],
+                        'oauth_access_token': params['access_token'],
                         'active_token': True,
-                        'device_id':device_id,
-                        'device_type':device_type,
-                        'user_id':user.id
+                        'device_id': device_id,
+                        'device_type': device_type,
+                        'user_id': user.id
                     })
                     isFound = True
                     break
                 # last login < 24 hours
                 elif datetime.now() - mt.logout_on >= timedelta(days=1):
                     self.multi_token_model.sudo().create({
-                        'oauth_access_token':params['access_token'],
+                        'oauth_access_token': params['access_token'],
                         'active_token': True,
-                        'device_id':device_id,
-                        'device_type':device_type,
-                        'user_id':user.id
+                        'device_id': device_id,
+                        'device_type': device_type,
+                        'user_id': user.id
                     })
                     isFound = True
                     break
 
             if not isFound:
-                raise exceptions.AccessError('Cant login new user, waiting 24hours after last logout or please login with your last account')
+                raise exceptions.AccessError(
+                    'Cant login new user, waiting 24hours after last logout or please login with your last account')
         else:
             self.multi_token_model.sudo().create({
-                'oauth_access_token':params['access_token'],
+                'oauth_access_token': params['access_token'],
                 'active_token': True,
-                'device_id':device_id,
-                'device_type':device_type,
-                'user_id':user.id
+                'device_id': device_id,
+                'device_type': device_type,
+                'user_id': user.id
             })
         return user.login
 
@@ -119,7 +126,7 @@ class ResUsers(models.Model):
 
     @api.model
     def _check_credentials(self, password, env):
-        """Override to check credentials against multi tokens."""
+        """Override to check credentials against multi tokenss."""
         try:
             return super()._check_credentials(password, env)
         except exceptions.AccessDenied:
@@ -137,4 +144,29 @@ class ResUsers(models.Model):
         res = super()._get_session_token_fields()
         res.remove('oauth_access_token')
         return res | {'oauth_master_uuid'}
-        
+
+    # is verify (True/False)
+    @api.model
+    def verify_token(self, device_id, access_token):
+
+        # check token from db
+        checktoken = self.env['auth.oauth.multi.token'].sudo().search(
+            [('oauth_access_token', '=', access_token), ('device_id', '=', device_id)], order='id DESC')
+
+        if not checktoken:
+            return Respapi.error(UNAUTHORIZED, error=ERR_TOKEN_NOT_FOUND_DATABASE)
+        checktoken.ensure_one()
+
+        # validation provider
+        validation = super()._auth_oauth_validate(
+            checktoken.user_id.oauth_provider_id.id, access_token)
+
+        if not validation.get('user_id'):
+            # Workaround: facebook does not send 'user_id' in Open Graph Api
+            if validation.get('id'):
+                validation['user_id'] = validation['id']
+            else:
+                raise AccessDenied()
+
+        email = validation['mail'] if 'mail' in validation else validation['email'] if 'email' in validation else False
+        return checktoken if email == checktoken.user_id.oauth_uid else False

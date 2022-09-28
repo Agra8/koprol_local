@@ -16,35 +16,11 @@ from odoo.exceptions import AccessDenied
 from odoo.addons.web.controllers.main import set_cookie_and_redirect, login_and_redirect
 from odoo.addons.auth_oauth.controllers.main import OAuthController as Oauth
 from odoo.addons.web.controllers.main import set_cookie_and_redirect
-from odoo.addons.eps_base_api.controllers.response import Respapi
+from ...eps_base_api.controllers.response import Respapi
 
 from .definitions import *
 
 _logger = logging.getLogger(__name__)
-
-#----------------------------------------------------------
-# helpers
-#----------------------------------------------------------
-def fragment_to_query_string(func):
-    @functools.wraps(func)
-    def wrapper(self, *a, **kw):
-        kw.pop('debug', False)
-        if not kw:
-            return """<html><head><script>
-                var l = window.location;
-                var q = l.hash.substring(1);
-                var r = l.pathname + l.search;
-                if(q.length !== 0) {
-                    var s = l.search ? (l.search === '?' ? '' : '&') : '?';
-                    r = l.pathname + l.search + s + q;
-                }
-                if (r == l.pathname) {
-                    r = '/';
-                }
-                window.location = r;
-            </script></head><body></body></html>"""
-        return func(self, *a, **kw)
-    return wrapper
 
 class OauthProviderController(Oauth):
     @http.route('/oauth/signin', type='json', auth='public', methods=['POST'], csrf=False)
