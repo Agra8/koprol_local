@@ -7,7 +7,7 @@
     "description": """
         Approval for EPS
     """,
-    "depends":["eps_menu","eps_branch","base_suspend_security"],
+    "depends":["eps_menu","eps_branch","base_suspend_security","eps_base_api"],
     "init_xml":[],
     "demo_xml":[],
     "data":[
