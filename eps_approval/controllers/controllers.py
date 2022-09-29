@@ -15,6 +15,7 @@ from ...eps_auth_oauth.controllers.check_token import AuthOauthCheckToken as aut
 _logger = logging.getLogger(__name__)
 version = API_VERSION
 
+
 class EpsApproval(http.Controller):
 
     @http.route(f'{version}/approvals/version', auth='public', csrf=False)
@@ -84,7 +85,8 @@ class EpsApproval(http.Controller):
 
             if(request.httprequest.path == f'{version}/approvals/history'):
                 # TODO: history condition has not clear
-                conditions = [('model_id', '!=', False), ('tanggal', '!=', False)]
+                conditions = [('model_id', '!=', False),
+                              ('tanggal', '!=', False)]
 
             # pagination
             offset = int(params['offset']) if "offset" in params else 0
@@ -98,14 +100,16 @@ class EpsApproval(http.Controller):
                 ['transaction_no', 'like', params['search']])) if "search" in params else False
 
             # filter
-            conditions.append(tuple(['department_id', 'in', literal_eval(
-                params['department_id'])]))if "department_id" in params else False
-            conditions.append(tuple(['divisi_id', 'in', literal_eval(
-                params['divisi_id'])])) if "divisi_id" in params else False
-            conditions.append(tuple(['company_id', 'in', literal_eval(
-                params['company_id'])])) if "company_id" in params else False
+            conditions.append(tuple(['state', 'in', params['state'].split(',')])) \
+                if "state" in params else False
+            conditions.append(tuple(['department_id', 'in', params['department_id'].split(',')])) \
+                if "department_id" in params else False
+            conditions.append(tuple(['divisi_id', 'in', params['divisi_id'].split(',')])) \
+                if "divisi_id" in params else False
+            conditions.append(tuple(['company_id', 'in', params['company_id'].split(',')])) \
+                if "company_id" in params else False
             # conditions.append(tuple(['branch_id','in',literal_eval(params['branch_id'])])) if "branch_id" in params else False
-
+            
             # filter by session
             user = request.env['res.users'].browse(request.session.uid)
             branches = user.area_id.sudo().branch_ids
@@ -215,4 +219,3 @@ class EpsApproval(http.Controller):
             return Respapi.error(errorDescription=str(me))
         except Exception as e:
             return Respapi.error(errorDescription=str(e))
-
