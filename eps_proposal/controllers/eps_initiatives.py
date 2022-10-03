@@ -308,3 +308,79 @@ class EpsInitiative(http.Controller):
             return Respapi.error(errorDescription=err[0])
         except Exception as e:
             return Respapi.error(errorDescription=str(e))
+
+    @http.route([f'{version}/initiatives/<id>/message'], type="http", auth="public", methods=['GET'], csrf=False)
+    @auth.check_token
+    def thread(self, id=None, **params):
+        try:
+            # user
+            user = request.env['res.users'].browse(request.session.uid)
+
+            # initiative detail
+            initiative = request.env['eps.initiatives'].browse(int(id))
+            data = [{
+                'id':message['id'],
+                'user':{
+                    "id":message['author_id'][0],
+                    "name":message['author_id'][1],
+                },
+                'email_from':message['email_from'],
+                'message_type':message['message_type'],
+
+                'created_at':message['date'].strftime("%Y-%m-%d %H:%M:%S") if message['date'] else None,
+                'record_name':message['record_name'],
+                'body':message['body'] if message['body'] else None,
+                'subtype':{
+                    "id":message['subtype_id'][0],
+                    "name":message['subtype_id'][1]
+                },
+                'tracking_value_ids':message['tracking_value_ids'],
+                'is_discussion':message['is_discussion']
+
+            } for message in initiative.message_ids.message_format() ]
+            return Respapi.success(data)
+        except MissKeyCheckerError as ae:
+            return Respapi.error(error=str(ae.args[0]['code']) if 'code' in ae.args[0] else "Error", errorDescription=str(ae.args[0]['message']) if 'message' in ae.args[0] else ae)
+        except MissingError as me:
+            err = str(me).split('\n')
+            return Respapi.error(errorDescription=err[0])
+        except Exception as e:
+            return Respapi.error(errorDescription=str(e))
+
+    @http.route([f'{version}/initiatives/<id>/message/send'], type="json", auth="public", methods=['POST'], csrf=False)
+    @auth.check_token
+    def post(self, id=None, **params):
+        expected_schema = {'body': str}
+        try:
+            state = request.jsonrequest
+            checker = Checker(expected_schema)
+            result = checker.validate(state)
+            assert result == state
+
+            # initiative detail
+            initiative = request.env['eps.initiatives'].browse(int(id))
+            data= {
+                'body':state['body'],
+                'model':'eps.initiatives',
+                'res_id':initiative.id,
+                'message_type':'comment',
+                'subtype_id':1,
+                'record_name':initiative.name
+            }
+            initiative.message_ids.create(data)
+    
+            return Respapi.success({"message": "Message send"})
+            
+        except MissKeyCheckerError as ae:
+            return Respapi.error(error=str(ae.args[0]['code']) if 'code' in ae.args[0] else "Error", errorDescription=str(ae.args[0]['message']) if 'message' in ae.args[0] else ae)
+        except MissingError as me:
+            err = str(me).split('\n')
+            return Respapi.error(errorDescription=err[0])
+        except Exception as e:
+            return Respapi.error(errorDescription=str(e))
+
+    # def remove_html_tags(text):
+    #     """Remove html tags from a string"""
+    #     import re
+    #     clean = re.compile('<.*?>')
+    #     return re.sub(clean, '', text)

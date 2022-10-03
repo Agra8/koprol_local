@@ -9,7 +9,7 @@ from json_checker import Checker, MissKeyCheckerError
 
 from ...eps_base_api.controllers.response import Respapi
 from ...eps_base_api.controllers.definitions import API_VERSION
-from ...eps_auth_oauth.controllers.check_token import AuthOauthCheckToken as Auth
+from ...eps_auth_oauth.controllers.check_token import AuthOauthCheckToken as auth
 
 _logger = logging.getLogger(__name__)
 version = API_VERSION
@@ -18,7 +18,7 @@ version = API_VERSION
 class EpsProposal(http.Controller):
 
     @http.route([f'{version}/proposals'], type="http", auth="public", methods=['GET'], csrf=False)
-    @Auth.check_token
+    @auth.check_token
     def list(self, id=None, **params):
         try:
 
@@ -72,7 +72,7 @@ class EpsProposal(http.Controller):
             return Respapi.error(errorDescription=str(e))
 
     @http.route([f'{version}/proposal/<id>'], type="http", auth="public", methods=['GET'], csrf=False)
-    @Auth.check_token
+    @auth.check_token
     def detail(self, id=None, **params):
         try:
             # user
@@ -184,7 +184,7 @@ class EpsProposal(http.Controller):
             return Respapi.error(errorDescription=str(e))
 
     @http.route([f'{version}/proposal/approve'], type="json", auth="public", methods=['POST'], csrf=False)
-    @Auth.check_token
+    @auth.check_token
     def approve(self, **_):
         expected_schema = {'id': int}
         try:
@@ -216,7 +216,7 @@ class EpsProposal(http.Controller):
             return Respapi.error(errorDescription=str(e))
 
     @http.route([f'{version}/proposal/reject'], type="json", auth="public", methods=['POST'], csrf=False)
-    @Auth.check_token
+    @auth.check_token
     def reject(self, **_):
         expected_schema = {'id': int, 'reason': str}
         try:
@@ -257,7 +257,7 @@ class EpsProposal(http.Controller):
             return Respapi.error(errorDescription=str(e))
 
     @http.route([f'{version}/proposal/cancel'], type="json", auth="public", methods=['POST'], csrf=False)
-    @Auth.check_token
+    @auth.check_token
     def cancel(self, **_):
         expected_schema = {'id': int, 'reason': str}
         try:
@@ -288,6 +288,77 @@ class EpsProposal(http.Controller):
                 'message': 'Proposal Canceled',
                 'reason': state['reason']})
 
+        except MissKeyCheckerError as ae:
+            return Respapi.error(error=str(ae.args[0]['code']) if 'code' in ae.args[0] else "Error", errorDescription=str(ae.args[0]['message']) if 'message' in ae.args[0] else ae)
+        except MissingError as me:
+            err = str(me).split('\n')
+            return Respapi.error(errorDescription=err[0])
+        except Exception as e:
+            return Respapi.error(errorDescription=str(e))
+
+    @http.route([f'{version}/proposal/<id>/message'], type="http", auth="public", methods=['GET'], csrf=False)
+    @auth.check_token
+    def thread(self, id=None, **params):
+        try:
+            # user
+            user = request.env['res.users'].browse(request.session.uid)
+
+            # proposal detail
+            proposal = request.env['eps.proposal'].browse(int(id))
+            # import ipdb; ipdb.set_trace()
+            data = [{
+                'id':message['id'],
+                'user':{
+                    "id":message['author_id'][0],
+                    "name":message['author_id'][1],
+                },
+                'email_from':message['email_from'],
+                'message_type':message['message_type'],
+
+                'created_at':message['date'].strftime("%Y-%m-%d %H:%M:%S") if message['date'] else None,
+                'record_name':message['record_name'],
+                'body':message['body'] if message['body'] else None,
+                'subtype':{
+                    "id":message['subtype_id'][0],
+                    "name":message['subtype_id'][1]
+                },
+                'tracking_value_ids':message['tracking_value_ids'],
+                'is_discussion':message['is_discussion']
+
+            } for message in proposal.message_ids.message_format() ]
+            return Respapi.success(data)
+        except MissKeyCheckerError as ae:
+            return Respapi.error(error=str(ae.args[0]['code']) if 'code' in ae.args[0] else "Error", errorDescription=str(ae.args[0]['message']) if 'message' in ae.args[0] else ae)
+        except MissingError as me:
+            err = str(me).split('\n')
+            return Respapi.error(errorDescription=err[0])
+        except Exception as e:
+            return Respapi.error(errorDescription=str(e))
+
+    @http.route([f'{version}/proposal/<id>/message/send'], type="json", auth="public", methods=['POST'], csrf=False)
+    @auth.check_token
+    def post(self, id=None, **params):
+        expected_schema = {'body': str}
+        try:
+            state = request.jsonrequest
+            checker = Checker(expected_schema)
+            result = checker.validate(state)
+            assert result == state
+            
+            # proposal detail
+            proposal = request.env['eps.proposal'].browse(int(id))
+            data= {
+                'body':state['body'],
+                'model':'eps.proposal',
+                'res_id':proposal.id,
+                'message_type':'comment',
+                'subtype_id':1,
+                'record_name':proposal.name
+            }
+            proposal.message_ids.create(data)
+
+            return Respapi.success({"message": "Message send"})
+            
         except MissKeyCheckerError as ae:
             return Respapi.error(error=str(ae.args[0]['code']) if 'code' in ae.args[0] else "Error", errorDescription=str(ae.args[0]['message']) if 'message' in ae.args[0] else ae)
         except MissingError as me:
